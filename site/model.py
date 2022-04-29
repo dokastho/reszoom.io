@@ -3,8 +3,9 @@ import hashlib
 import sqlite3
 import uuid
 import pathlib
-import flask
 import site
+import flask
+
 
 def dict_factory(cursor, row):
     """Convert database row objects to a dictionary keyed on column name.
