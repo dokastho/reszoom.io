@@ -1,6 +1,6 @@
 """REST API for other routes."""
 import flask
-import site
+import rsite as site
 
 
 @site.app.route('/api/v1/', methods=['GET'])

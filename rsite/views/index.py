@@ -5,15 +5,15 @@ URLs include:
 /
 """
 import flask
-import insta485
+import rsite as site
 
 
-@insta485.app.route('/')
+@site.app.route('/')
 def show_index():
     """Serve index html for logged in user."""
-    with insta485.app.app_context():
+    with site.app.app_context():
         # logname must exist in session
-        logname = insta485.model.check_session()
+        logname = site.model.check_session()
         if not logname:
             return flask.redirect("/accounts/login/")
 

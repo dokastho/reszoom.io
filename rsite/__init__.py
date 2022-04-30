@@ -15,6 +15,6 @@ app.config.from_envvar('SITE_SETTINGS', silent=True)
 # circular import, which is naughty, but Flask was designed that way.
 # (Reference http://flask.pocoo.org/docs/patterns/packages/)  We're
 # going to tell pylint and pycodestyle to ignore this coding style violation.
-import site.api  # noqa: E402  pylint: disable=wrong-import-position
-import site.views  # noqa: E402  pylint: disable=wrong-import-position
-import site.model  # noqa: E402  pylint: disable=wrong-import-position
+import rsite.api  # noqa: E402  pylint: disable=wrong-import-position
+import rsite.views  # noqa: E402  pylint: disable=wrong-import-position
+import rsite.model  # noqa: E402  pylint: disable=wrong-import-position

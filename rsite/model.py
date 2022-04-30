@@ -3,7 +3,7 @@ import hashlib
 import sqlite3
 import uuid
 import pathlib
-import site
+import rsite as site
 import flask
 
 

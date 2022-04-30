@@ -1,5 +1,6 @@
 #!/bin/bash
+./bin.sitedb "destroy"
 ./bin/sitedb "create"
 export FLASK_ENV=development
-export FLASK_APP=site
+export FLASK_APP=rsite
 flask run --host 0.0.0.0 --port 8000

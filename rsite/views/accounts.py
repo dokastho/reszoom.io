@@ -2,7 +2,7 @@
 import uuid
 import hashlib
 import os
-import site
+import rsite as site
 import arrow
 from flask import abort, redirect, render_template, request, session
 

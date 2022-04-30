@@ -8,9 +8,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='Resume site',
+    name='rsite',
     version='0.1.0',
-    packages=['site'],
+    packages=['rsite'],
     author="Thomas Dokas",
     author_email="dokastho@umich.edu",
     url="https://github.com/dokastho/resume",
