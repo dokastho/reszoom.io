@@ -152,21 +152,6 @@ def do_delete(connection):
         filename[0]['filename'])
     )
 
-    # fetch all posts owned by uname
-    cur = connection.execute(
-        "SELECT filename "
-        "FROM posts "
-        "WHERE owner == ?",
-        (uname,)
-    )
-    posts = cur.fetchall()
-
-    for post in posts:
-        os.remove(os.path.join(
-            site.app.config['UPLOAD_FOLDER'],
-            post['filename'])
-        )
-
     # delete users entry and all related ones
     cur = connection.execute(
         "DELETE FROM users "

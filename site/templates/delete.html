@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>insta485</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    </head>
+    <body>
+        <div class="stuff">
+            <h1><a href="/">home</a></h1>
+            <h2>
+                <a href="/users/{{logname}}/">{{logname}}</a>
+                | 
+                <a href="/explore/">explore</a>
+            </h2>
+            <div class="site">
+                <form action="/accounts/?target=/accounts/create/" method="post" enctype="multipart/form-data">
+                    <input type="submit" name="delete" value="confirm delete account"/>
+                    <input type="hidden" name="operation" value="delete"/>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
