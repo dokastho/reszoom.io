@@ -2,19 +2,19 @@
 import uuid
 import hashlib
 import os
-import rsite as site
+import rsite
 import arrow
 from flask import abort, redirect, render_template, request, session
 
 
-@site.app.route('/accounts/', methods=['POST'])
+@rsite.app.route('/accounts/', methods=['POST'])
 def accounts():
     """/accounts/?target=URL Immediate redirect. No screenshot."""
-    with site.app.app_context():
-        connection = site.model.get_db()
+    with rsite.app.app_context():
+        connection = rsite.model.get_db()
 
         # check if target is unspecified or blank
-        target = site.model.get_target()
+        target = rsite.model.get_target()
         # get operation
         operation = request.form.get('operation')
 
@@ -81,7 +81,7 @@ def accounts():
 
 def do_login(uname, pword):
     """Login user with username and password."""
-    logname = site.model.check_authorization(uname, pword)
+    logname = rsite.model.check_authorization(uname, pword)
     if not logname:
         abort(403)
 
@@ -98,7 +98,7 @@ def do_create(connection, info):
     local = utc.to('US/Pacific')
     timestamp = local.format()
 
-    pp_str = site.model.get_uuid(info['file'].filename)
+    pp_str = rsite.model.get_uuid(info['file'].filename)
     pw_str = create_hashed_password(info['password'])
 
     cur = connection.execute(
@@ -112,7 +112,7 @@ def do_create(connection, info):
         abort(409)
 
     # save image
-    path = site.app.config["UPLOAD_FOLDER"]/pp_str
+    path = rsite.app.config["UPLOAD_FOLDER"]/pp_str
     info['file'].save(path)
 
     cur = connection.execute(
@@ -148,7 +148,7 @@ def do_delete(connection):
 
     # delete filename
     os.remove(os.path.join(
-        site.app.config['UPLOAD_FOLDER'],
+        rsite.app.config['UPLOAD_FOLDER'],
         filename[0]['filename'])
     )
 
@@ -177,7 +177,7 @@ def do_edit_account(connection, info):
     )
     cur.fetchall()
     if info['file'] is not None and info['file'].filename != "":
-        pp_str = site.model.get_uuid(info['file'].filename)
+        pp_str = rsite.model.get_uuid(info['file'].filename)
 
         # delete old image
         cur = connection.execute(
@@ -188,12 +188,12 @@ def do_edit_account(connection, info):
         )
         filename = cur.fetchall()
         os.remove(os.path.join(
-            site.app.config['UPLOAD_FOLDER'],
+            rsite.app.config['UPLOAD_FOLDER'],
             filename[0]['filename'])
         )
 
         # save image
-        path = site.app.config["UPLOAD_FOLDER"]/pp_str
+        path = rsite.app.config["UPLOAD_FOLDER"]/pp_str
         info['file'].save(path)
 
         cur = connection.execute(
@@ -225,7 +225,7 @@ def do_update_password(connection, info):
     salt = old_pw_hash['password'].split("$")
     if len(salt) > 1:
         salt = salt[1]
-        pw_str = site.model.encrypt(salt, info['old'])
+        pw_str = rsite.model.encrypt(salt, info['old'])
     else:
         pw_str = info['old']
 
@@ -253,10 +253,10 @@ def do_update_password(connection, info):
     user = cur.fetchall()
 
 
-@site.app.route('/accounts/login/')
+@rsite.app.route('/accounts/login/')
 def login():
     """Render login page."""
-    with site.app.app_context():
+    with rsite.app.app_context():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
@@ -267,14 +267,14 @@ def login():
         return redirect('/')
 
 
-@site.app.route('/accounts/logout/', methods=['POST'])
+@rsite.app.route('/accounts/logout/', methods=['POST'])
 def logout():
     """Log out user and redirects to login."""
     session.clear()
     return redirect('/accounts/login/')
 
 
-@site.app.route('/accounts/create/', methods=['GET'])
+@rsite.app.route('/accounts/create/', methods=['GET'])
 def create():
     """Render create page if not logged in."""
     if 'logname' in session:
@@ -283,7 +283,7 @@ def create():
     return render_template('create.html')
 
 
-@site.app.route('/accounts/delete/')
+@rsite.app.route('/accounts/delete/')
 def delete():
     """Render delete page if logged in."""
     if 'logname' not in session:
@@ -295,17 +295,17 @@ def delete():
     return render_template('delete.html', **context)
 
 
-@site.app.route('/accounts/edit/')
+@rsite.app.route('/accounts/edit/')
 def edit():
     """Render edit page if logged in."""
-    with site.app.app_context():
+    with rsite.app.app_context():
         # similar to structure found in comments to get logname
-        logname = site.model.check_session()
+        logname = rsite.model.check_session()
         if not logname:
             return redirect("/accounts/login/")
 
         # get existing user info as seen in comments
-        connection = site.model.get_db()
+        connection = rsite.model.get_db()
         cur = connection.execute(
             "SELECT fullname, email "
             "FROM users "
@@ -326,7 +326,7 @@ def edit():
     return render_template('edit.html', **context)
 
 
-@site.app.route('/accounts/password/')
+@rsite.app.route('/accounts/password/')
 def password():
     """Render page to update password if logged in."""
     if 'logname' not in session:

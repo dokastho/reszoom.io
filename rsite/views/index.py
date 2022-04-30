@@ -5,15 +5,15 @@ URLs include:
 /
 """
 import flask
-import rsite as site
+import rsite
 
 
-@site.app.route('/')
+@rsite.app.route('/')
 def show_index():
     """Serve index html for logged in user."""
-    with site.app.app_context():
+    with rsite.app.app_context():
         # logname must exist in session
-        logname = site.model.check_session()
+        logname = rsite.model.check_session()
         if not logname:
             return flask.redirect("/accounts/login/")
 
