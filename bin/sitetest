@@ -1,0 +1,11 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+# run eslint
+npx eslint --ext jsx site/js/
+
+# OG p2 tests
+pycodestyle site
+pydocstyle site
+pylint --disable=cyclic-import --unsafe-load-any-extension=y --disable=assigning-non-slot site
+pytest -v tests
