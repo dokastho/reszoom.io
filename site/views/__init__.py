@@ -8,3 +8,4 @@
 # from insta485.views.uploads import get_image
 # from insta485.views.explore import show_explore
 # from insta485.views.accounts import login, accounts
+from site.views.accounts import login, accounts
