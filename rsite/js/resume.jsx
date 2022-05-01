@@ -10,4 +10,14 @@ class ResumeBuilder extends React.Component {
 
     };
   }
+
+  render()
+  {
+    return( <div>resume content 😊</div> );
+  }
 }
+
+render(
+  <ResumeBuilder/>,
+  document.getElementById('resume-start'),
+)

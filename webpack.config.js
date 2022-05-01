@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   mode: "development",
-  entry: "./rsite/js/main.jsx",
+  entry: "./rsite/js/resume.jsx",
   output: {
     path: path.join(__dirname, "/rsite/static/js/"),
     filename: "bundle.js",

@@ -19,9 +19,7 @@ def show_index():
             context["logname"] = "Sign In"
             context["logname_link"] = "/accounts/login/"
         else:
-            context = {
-                "logname": logname,
-                "logname_link": f"/users/{logname}/"
-            }
+            context["logname"] = logname
+            context["logname_link"] = f"/accounts/{logname}/"
 
     return flask.render_template("index.html", **context)
