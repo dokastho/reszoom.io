@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./bin/autotag.sh
+./bin/autotag.sh push
 npx webpack
