@@ -79,7 +79,22 @@ def check_session():
     """Check if logname exists in session."""
     if 'logname' not in flask.session:
         return False
-    return flask.session['logname']
+    username = flask.session['logname']
+    connection = get_db()
+    cur = connection.execute(
+        "SELECT username "
+        "FROM users "
+        "WHERE username == ?",
+        (username, )
+    )
+
+    # user must exist
+    user = cur.fetchall()
+    if len(user) == 0:
+        flask.session.clear()
+        return False
+
+    return username
 
 
 def check_authorization(username=None, password=None):
