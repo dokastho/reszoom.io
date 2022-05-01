@@ -2,3 +2,4 @@
 
 ./bin/autotag.sh
 npx webpack
+./bin/autotag.sh push
