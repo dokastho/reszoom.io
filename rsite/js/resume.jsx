@@ -43,7 +43,13 @@ class resumePage extends React.Component {
   }
 
   render() {
-    return (<div>resume content 😊</div>);
+    // Render number of post image and post owner
+    return (
+      <div id="resume-content" className="list">
+        <div className="resume-list" />
+        <p>resume content 😊</p>
+      </div>
+    );
   }
 }
 

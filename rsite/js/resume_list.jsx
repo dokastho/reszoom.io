@@ -13,15 +13,15 @@ class ResumeList extends React.Component {
 
   render() {
     const { resumes } = this.state;
-    return(
+    return (
       <div>
         {
           resumes.map((r) => (
-            <p>r.</p>
+            <p>{r.name}</p>
           ))
         }
       </div>
-    )
+    );
   }
 }
 
