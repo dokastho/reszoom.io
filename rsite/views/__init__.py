@@ -1,6 +1,6 @@
 """Views of site server-side dynamic project."""
 # example code pasted from p3
-# from insta485.views.user import show_user
+from rsite.views.user import show_user
 # from insta485.views.posts import show_post, posts
 # from insta485.views.likes import likes
 # from insta485.views.comments import comments
