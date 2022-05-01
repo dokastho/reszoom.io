@@ -1,18 +1,17 @@
 """
-Site index (main) view.
+Site main resume content view.
 
 URLs include:
-/
+/resume/
 """
 import flask
 import rsite
 
 
-@rsite.app.route('/')
-def show_index():
-    """Serve index html for logged in user."""
+@rsite.app.route('/resume/')
+def show_resume():
+    """Render react content for main resume page"""
     with rsite.app.app_context():
-        # logname must exist in session
         logname = rsite.model.get_logname()
         context = {}
         if not logname:
@@ -22,4 +21,4 @@ def show_index():
             context["logname"] = logname
             context["logname_link"] = f"/accounts/{logname}/"
 
-    return flask.render_template("index.html", **context)
+    return flask.render_template('resume.html', **context)
