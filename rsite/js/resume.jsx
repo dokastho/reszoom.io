@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from 'react-dom';
 
-class ResumeBuilder extends React.Component {
+class Resumes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,13 +11,24 @@ class ResumeBuilder extends React.Component {
     };
   }
 
-  render()
-  {
-    return( <div>resume content 😊</div> );
+  fetchMoreData
+
+  render() {
+    return (<div>resume content 😊</div>);
   }
 }
 
+Resumes.propTypes = {
+  resumes: PropTypes.instanceOf(Array).isRequired,
+};
+
+/**
+ * History State Definition:
+ * @property {array} resumes contains all acquired post results from /posts/ calls
+ */
+
+
 render(
-  <ResumeBuilder/>,
+  <ResumeBuilder />,
   document.getElementById('resume-start'),
 )
