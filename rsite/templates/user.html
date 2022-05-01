@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Site</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    </head>
+    <body>
+        <div class="stuff">
+            <h1><a href="/">home</a></h1>
+            <h2>
+                <a href="/users/{{logname}}/">{{logname}}</a>
+            </h2>
+            <div class="site">
+                <div class="post">
+                    <h1>{{username}}</h1>
+                    <p>{{fullname}}</p>
+                    {% if username == logname %}
+                    <div id="account-actions" class="create-post">
+                        <a href="/accounts/password/"><b>Change password</b></a>
+                        <a href="/accounts/edit/"><b>Edit profile</b></a>
+                        <a href="/accounts/delete/"><b>Delete account</b></a>
+                        <form action="/accounts/logout/" method="post">
+                            <input type="hidden" name="logout" value="{{logname}}"/>
+                            <button name="logout">logout</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
