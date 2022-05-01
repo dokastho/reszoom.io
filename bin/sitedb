@@ -16,8 +16,8 @@ case $1 in
   "create")
   ## TODO avoid clobbering an existing database?
     mkdir -p var/uploads
-    sqlite3 var/resume.sqlite3 < sql/data.sql
     sqlite3 var/resume.sqlite3 < sql/schema.sql
+    sqlite3 var/resume.sqlite3 < sql/data.sql
     cp sql/uploads/* var/uploads/
     ;;
 
@@ -27,8 +27,8 @@ case $1 in
   "reset")
     rm -rf var/resume.sqlite3 var/uploads
     mkdir -p var/uploads
-    sqlite3 var/resume.sqlite3 < sql/data.sql
     sqlite3 var/resume.sqlite3 < sql/schema.sql
+    sqlite3 var/resume.sqlite3 < sql/data.sql
     cp sql/uploads/* var/uploads/
     ;;
   "users") sqlite3 -batch -line var/resume.sqlite3 'select * from users';;
