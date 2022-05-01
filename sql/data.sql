@@ -11,8 +11,8 @@ VALUES ('jag', 'H.V. Jagadish', 'jag@umich.edu', '73ab33bd357c3fd42292487b825880
 INSERT INTO users(username, fullname, email, filename, password)
 VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', '.jpg', 'password');
 -- add a resume to tdokas
-INSERT INTO resumes(owner, typename, snapshot)
-VALUES ('tdokas', 1, '.jpg');
+INSERT INTO resumes(owner, name, typename, snapshot)
+VALUES ('tdokas', 'resume 1', 1, '.jpg');
 -- add some entries for the resume
 INSERT INTO entries(resumeid, header, content)
 VALUES (1, 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
