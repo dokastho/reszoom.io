@@ -14,12 +14,14 @@ def show_index():
     with rsite.app.app_context():
         # logname must exist in session
         logname = rsite.model.get_logname()
+        context = {}
         if not logname:
-            return flask.redirect("/accounts/login/")
-
-        context = {
-            "logname": logname,
-            "logname_link": f"/users/{logname}/"
-        }
+            context["logname"] = "Sign In"
+            context["logname_link"] = "/accounts/login/"
+        else:
+            context = {
+                "logname": logname,
+                "logname_link": f"/users/{logname}/"
+            }
 
     return flask.render_template("index.html", **context)
