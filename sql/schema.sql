@@ -38,3 +38,4 @@ CREATE TABLE entries_to_tags(
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
 );
+-- todo education table
