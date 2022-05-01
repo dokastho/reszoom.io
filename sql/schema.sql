@@ -9,7 +9,3 @@ CREATE TABLE users(
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(username)
 );
-
-CREATE TABLE tags(
-  entryid INTEGER()
-);
