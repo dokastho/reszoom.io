@@ -24,3 +24,5 @@ render(
   <ResumeBuilder />,
   document.getElementById('make-resume'),
 );
+
+export default ResumeBuilder;
