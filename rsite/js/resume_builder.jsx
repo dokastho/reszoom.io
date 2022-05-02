@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 // import PropTypes from 'prop-types';
 
 class ResumeBuilder extends React.Component {
@@ -19,10 +19,5 @@ class ResumeBuilder extends React.Component {
 }
 
 ResumeBuilder.propTypes = {};
-
-render(
-  <ResumeBuilder />,
-  document.getElementById('make-resume'),
-);
 
 export default ResumeBuilder;
