@@ -22,6 +22,7 @@ CREATE TABLE resumes(
 CREATE TABLE entries(
   resumeid INTEGER NOT NULL,
   entryid INTEGER PRIMARY KEY AUTOINCREMENT,
+  owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
   content VARCHAR(256),
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
