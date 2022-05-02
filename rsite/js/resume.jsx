@@ -1,6 +1,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import ReactDOM, { render } from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import ResumeList from './resume_list';
 import Sidebar from './resume_sidebar';
 // import Sidebar from './resume_sidebar';
@@ -42,7 +43,9 @@ class ResumePage extends React.Component {
         );
         // render the floating sidebar
         ReactDOM.render(
-          <Sidebar />,
+          <Router>
+            <Sidebar />
+          </Router>,
           post.querySelector('.sidebar'),
         );
       })
