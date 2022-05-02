@@ -4,11 +4,11 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './rsite/js/resume.jsx',
-    edit: './rsite/js/resume.jsx',
+    make: './rsite/js/resume.jsx',
   },
   output: {
     path: path.join(__dirname, '/rsite/static/js/'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   module: {
     rules: [
