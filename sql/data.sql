@@ -14,7 +14,7 @@ VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', '.jpg', 'password');
 INSERT INTO resumes(owner, name, typename, snapshot)
 VALUES ('tdokas', 'resume 1', 1, '.jpg');
 -- add some entries for the resume
-INSERT INTO entries(resumeid, owner, header, content)
-VALUES (1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
-INSERT INTO entries(resumeid, owner, header, content)
-VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
+INSERT INTO entries(resumeid, owner, frequency, header, content)
+VALUES (1, 'tdokas', 1, 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
+INSERT INTO entries(resumeid, owner, frequency, header, content)
+VALUES (1, 'tdokas', 2, 'project', 'Built and managed my own server for remote development');

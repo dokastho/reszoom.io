@@ -37,13 +37,15 @@ def load_resumes():
             cur = database.execute(
                 "SELECT * "
                 "FROM entries "
-                "WHERE owner == ?",
+                "WHERE resumeid == ?",
                 (logname, )
             )
             entries = cur.fetchall()
             if len(entries) == 0:
                 flask.abort(500)
             data = {'entries': entries}
+        else:
+            flask.abort(403)
         return flask.jsonify(data), 201
 
 

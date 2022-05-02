@@ -3,6 +3,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Button } from 'semantic-ui-react';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -16,9 +17,9 @@ class Sidebar extends React.Component {
   render() {
     return (
       <Link to="/resume/new/">
-        <button type="button">
+        <Button>
           <p>Create a new resume</p>
-        </button>
+        </Button>
       </Link>
     );
   }
