@@ -47,6 +47,7 @@ class ResumePage extends React.Component {
           <Router>
             <Sidebar />
             <Routes>
+              <Route path="/resume" component={<ResumePage />} />
               <Route path="/resume/new" component={<ResumeBuilder />} />
             </Routes>
           </Router>,
