@@ -1,11 +1,14 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  mode: "development",
-  entry: "./rsite/js/resume.jsx",
+  mode: 'development',
+  entry: {
+    main: './rsite/js/resume.jsx',
+    edit: './rsite/js/resume.jsx',
+  },
   output: {
-    path: path.join(__dirname, "/rsite/static/js/"),
-    filename: "bundle.js",
+    path: path.join(__dirname, '/rsite/static/js/'),
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -14,15 +17,15 @@ module.exports = {
         test: /\.jsx?$/,
         // Exclude external modules from loader tests
         exclude: /node_modules/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         options: {
-          presets: ["@babel/preset-env", "@babel/preset-react"],
-          plugins: ["@babel/transform-runtime"],
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: ['@babel/transform-runtime'],
         },
       },
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: ['.js', '.jsx'],
   },
 };

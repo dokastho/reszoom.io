@@ -149,6 +149,19 @@ def check_authorization(username=None, password=None):
     return username
 
 
+def show_username() -> dict:
+    """Handle the rendering of the username/sign in link."""
+    logname = rsite.model.get_logname()
+    context = {}
+    if not logname:
+        context["logname"] = "Sign In"
+        context["logname_link"] = "/accounts/login/"
+    else:
+        context["logname"] = logname
+        context["logname_link"] = f"/accounts/{logname}/"
+    return context
+
+
 def encrypt(salt, password):
     """One way decryption given the plaintext pw and salt from user db."""
     algorithm = 'sha512'

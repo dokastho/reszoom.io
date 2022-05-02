@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Site</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    </head>
+    <body>
+        <div class="nav">
+            <h1><a href="/">go home</a></h1>
+            <h2>
+                <a href="/users/{{logname}}/">{{logname}}</a>
+            </h2>
+        </div>
+        <div id="make-resume" class="site">
+
+        </div>
+        <div id="reactEntry" class="site">
+            <!-- Load JavaScript -->
+            <script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+        </div>
+    </body>
+</html>

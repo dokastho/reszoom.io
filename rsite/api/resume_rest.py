@@ -17,7 +17,7 @@ def load_resumes():
         if not logname:
             flask.abort(403)
         
-        op = flask.request.args.get("get",default="resume", type=str)
+        op = flask.request.args.get("fetch",default="resume", type=str)
 
         database = rsite.model.get_db()
 
