@@ -19,7 +19,7 @@ def show_resume():
 
 
 @rsite.app.route('/resume/new/')
-def show_resume():
+def show_maker():
     """Render react content for new/edit resume page"""
     with rsite.app.app_context():
         context = show_username()

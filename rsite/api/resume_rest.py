@@ -48,7 +48,7 @@ def load_resumes():
 
 
 @rsite.app.route('/api/v1/resume/new/', methods=['GET'])
-def load_resumes():
+def load_userinfo():
     """Return data for a new resume, if they exist."""
     with rsite.app.app_context():
         logname = rsite.model.get_logname()
