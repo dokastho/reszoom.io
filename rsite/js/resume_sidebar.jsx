@@ -16,7 +16,7 @@ class Sidebar extends React.Component {
   render() {
     return (
       <Link to="/resume/new/">
-        <button type="button">
+        <button>
           <p>Create a new resume</p>
         </button>
       </Link>
