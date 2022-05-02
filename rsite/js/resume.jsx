@@ -1,9 +1,10 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { render, ReactDOM } from 'react-dom';
+import { render } from 'react-dom';
+import ReactDOM from 'react-dom'
 import ResumeList from './resume_list';
 
-class resumePage extends React.Component {
+class ResumePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,6 +60,6 @@ class resumePage extends React.Component {
  */
 
 render(
-  <resumePage />,
+  <ResumePage />,
   document.getElementById('resume-start'),
 );
