@@ -7,7 +7,7 @@ URLs include:
 """
 import flask
 import rsite
-from model import show_username
+from rsite.model import show_username
 
 
 @rsite.app.route('/resume/')

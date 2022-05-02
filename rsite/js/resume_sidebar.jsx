@@ -2,7 +2,7 @@
 // create
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -15,11 +15,7 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <Link to="/resume/new/">
-        <button type="button">
-          <p>Create a new resume</p>
-        </button>
-      </Link>
+      <button type="button" onClick={() => useNavigate('/resume/new/')}>Create a new resume</button>
     );
   }
 }
