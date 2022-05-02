@@ -9,11 +9,18 @@ class Sidebar extends React.Component {
     this.state = {
       // state attributes go here
     };
+    // this.createNew = this.createNew.bind(this);
+  }
+
+  createNew() {
+    console.log(this);
   }
 
   render() {
     return (
-      <div>foo</div>
+      <div className="floating-sidebar">
+        <button type="button" onSubmit={this.createNew}>Comppile a new resume</button>
+      </div>
     );
   }
 }
