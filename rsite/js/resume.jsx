@@ -2,6 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import ReactDOM, { render } from 'react-dom';
 import ResumeList from './resume_list';
+import Sidebar from './resume_sidebar';
 // import Sidebar from './resume_sidebar';
 
 class ResumePage extends React.Component {
@@ -39,6 +40,11 @@ class ResumePage extends React.Component {
           />,
           post.querySelector('.resume-list'),
         );
+        // render the floating sidebar
+        ReactDOM.render(
+          <Sidebar />,
+          post.querySelector('.sidebar'),
+        );
       })
       .catch((error) => console.log(error));
   }
@@ -48,6 +54,7 @@ class ResumePage extends React.Component {
     return (
       <div id="resume-content" className="list">
         <div className="resume-list" />
+        <div className="sidebar" />
         <p>resume content 😊</p>
       </div>
     );

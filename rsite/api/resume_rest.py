@@ -32,6 +32,7 @@ def load_resumes():
                 {
                     "resumeid": res['resumeid'],
                     "owner": logname,
+                    "name": res['name'],
                     "type": res['typename'],
                     "img": res['snapshot']
                 }
