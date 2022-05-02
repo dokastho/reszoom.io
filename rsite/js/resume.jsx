@@ -45,10 +45,12 @@ class ResumePage extends React.Component {
   render() {
     // Render number of post image and post owner
     return (
-      <div id="resume-content" className="list">
-        <div className="resume-list" />
-        <p>resume content 😊</p>
-      </div>
+      <ResumePage />,
+      document.getElementById('resume-start'),
+        <div id="resume-content" className="list">
+          <div className="resume-list" />
+          <p>resume content 😊</p>
+        </div>
     );
   }
 }
@@ -57,8 +59,3 @@ class ResumePage extends React.Component {
  * History State Definition:
  * @property {array} resumes contains all acquired post results from /posts/ calls
  */
-
-render(
-  <ResumePage />,
-  document.getElementById('resume-start'),
-);
