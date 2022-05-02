@@ -1,19 +1,40 @@
 import React from 'react';
 import { render } from 'react-dom';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class ResumeBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       // state attributes go here
+      entries: props.entries,
     };
     // this.createNew = this.createNew.bind(this);
   }
 
+  componentDidMount() {
+    // Call REST API to get the user's past entries
+    fetch('/api/v1/resume/load/?fetch=userinfo', { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          entries: data.entries,
+        });
+        console.log(this.entries);
+      })
+      .catch((error) => console.log(error));
+  }
+
   render() {
+    // const post = document.getElementById('resume-content'); // check
+    const { entries } = this.state;
     return (
-      <div>foo</div>
+      <div>
+        {entries}
+      </div>
     );
   }
 }
@@ -24,5 +45,9 @@ render(
   <ResumeBuilder />,
   document.getElementById('make-resume'),
 );
+
+ResumeBuilder.propTypes = {
+  entries: PropTypes.instanceOf(Array).isRequired,
+};
 
 export default ResumeBuilder;
