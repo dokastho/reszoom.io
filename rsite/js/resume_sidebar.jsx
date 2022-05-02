@@ -2,7 +2,7 @@
 // create
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 
 class Sidebar extends React.Component {
@@ -16,10 +16,12 @@ class Sidebar extends React.Component {
 
   render() {
     return (
+
       <Link to="/resume/new/">
-        <Button>
+        {/* <Button>
           <p>Create a new resume</p>
-        </Button>
+        </Button> */}
+        <p>create a new resume</p>
       </Link>
     );
   }
