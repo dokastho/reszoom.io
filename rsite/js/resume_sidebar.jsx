@@ -2,8 +2,6 @@
 // create
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -16,11 +14,9 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <Link to="/resume/new/">
-        <Button>
-          <p>Create a new resume</p>
-        </Button>
-      </Link>
+      <button type="button">
+        <a href="/resume/new">Create a new resume</a>
+      </button>
     );
   }
 }
