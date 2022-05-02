@@ -2,6 +2,7 @@
 // create
 import React from 'react';
 // import PropTypes from 'prop-types';
+import Link from 'react-router-dom';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -12,15 +13,13 @@ class Sidebar extends React.Component {
     // this.createNew = this.createNew.bind(this);
   }
 
-  createNew() {
-    console.log(this);
-  }
-
   render() {
     return (
-      <div className="floating-sidebar">
-        <button type="button" onSubmit={this.createNew}>Compile a new resume</button>
-      </div>
+      <Link to="/resume/new/">
+        <button type="button">
+          <p>Create a new resume</p>
+        </button>
+      </Link>
     );
   }
 }

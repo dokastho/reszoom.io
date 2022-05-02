@@ -22,6 +22,7 @@ CREATE TABLE resumes(
 CREATE TABLE entries(
   resumeid INTEGER NOT NULL,
   entryid INTEGER PRIMARY KEY AUTOINCREMENT,
+  frequency INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
   content VARCHAR(256),
