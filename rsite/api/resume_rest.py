@@ -9,6 +9,7 @@ URLs include:
 import flask
 import rsite
 
+
 @rsite.app.route('/api/v1/resume/load/', methods=['GET'])
 def load_resumes():
     """Return resumes from database matching logname."""
@@ -16,8 +17,8 @@ def load_resumes():
         logname = rsite.model.get_logname()
         if not logname:
             flask.abort(403)
-        
-        op = flask.request.args.get("fetch",default="resume", type=str)
+
+        op = flask.request.args.get("fetch", default="resume", type=str)
 
         database = rsite.model.get_db()
 
@@ -31,10 +32,7 @@ def load_resumes():
             resumes = cur.fetchall()
             if len(resumes) == 0:
                 flask.abort(500)
-            data = {'resumes': []}
-            for res in resumes:
-                data['resumes'].append(res)
-            
+            data = {'resumes': resumes}
         elif op == "userinfo":
             cur = database.execute(
                 "SELECT * "
@@ -45,10 +43,9 @@ def load_resumes():
             entries = cur.fetchall()
             if len(entries) == 0:
                 flask.abort(500)
-            data = {'entries': []}
-            for item in entries:
-                data['entries'].append(item)
+            data = {'entries': entries}
         return flask.jsonify(data), 201
+
 
 @rsite.app.route('/api/v1/resume/new/', methods=['GET'])
 def load_resumes():
@@ -68,15 +65,5 @@ def load_resumes():
         resumes = cur.fetchall()
         if len(resumes) == 0:
             flask.abort(500)
-        data = {'resumes': []}
-        for res in resumes:
-            data['resumes'].append(
-                {
-                    "resumeid": res['resumeid'],
-                    "owner": logname,
-                    "name": res['name'],
-                    "type": res['typename'],
-                    "img": res['snapshot']
-                }
-            )
+        data = {'resumes': resumes}
         return flask.jsonify(data), 201
