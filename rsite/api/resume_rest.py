@@ -41,7 +41,18 @@ def load_resumes():
             entries = cur.fetchall()
             if len(entries) == 0:
                 flask.abort(500)
-            data = {'entries': entries}
+
+            # construct entries map
+            data = {}
+            for entry in entries:
+                entries[entry['entryid']] = {
+                    'frequency': entry['frequency'],
+                    'owner': entry['owner'],
+                    'header': entry['header'],
+                    'content': entry['content']
+                }
+            
+
         elif op == "resume":
             # load entries for a specific resume (and implicitly, user)
             rid = flask.request.args.get("id", default=0, type=int)
@@ -57,19 +68,8 @@ def load_resumes():
             )
             eids = cur.fetchall()
 
-            data = {'entries': []}
+            data = {'eids': eids}
 
-            for eid in eids:
-                cur = database.execute(
-                    "SELECT * "
-                    "FROM entries "
-                    "WHERE owner == ?"
-                    "AND entryid == ?",
-                    (logname, eid['entryid'], )
-                )
-                entry = cur.fetchone()
-                data['entries'].append(entry)
-            
         else:
             flask.abort(403)
         return flask.jsonify(data), 201
