@@ -41,12 +41,12 @@ def show_saved(resumeid):
         cur = database.execute(
             "SELECT * "
             "FROM resumes "
-            "WHERE owner == ? AND resumeid == ?",
-            (logname, resumeid, )
+            "WHERE resumeid == ?",
+            (resumeid, )
         )
-        resume = cur.fetchall()
+        resume = cur.fetchone()
 
-        if len(resume) == 0:
-            flask.abort(404)
+        if resume['owner'] != logname:
+            flask.abort(403)
 
         return flask.render_template('view_edit.html', **context)
