@@ -48,5 +48,16 @@ CREATE TABLE resume_to_entry(
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
 );
--- todo education table
--- todo make entry-resumeid two-way table because the id will be different if you reuse an entry
+
+-- education and experience
+-- todo should experience have entries? I think so
+CREATE TABLE experience(
+  owner VARCHAR(20) NOT NULL,
+  location VARCHAR(64) NOT NULL,
+  content VARCHAR(256) NOT NULL,
+  typename BOOLEAN NOT NULL,
+  begin INTEGER NOT NULL,
+  end INTEGER NOT NULL,
+  gpa INTEGER,
+  FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
+);
