@@ -95,7 +95,7 @@ class ResumeBuilder extends React.Component {
   // render entries for the header, as well as edit button and field to add another
   // todo: start suggestion stuff for recommending adding more/less items
   renderEntries(post, query, header) {
-    const { eids, entries } = this.state;
+    const { eids, entries, resumeid } = this.state;
     ReactDOM.render(
       <div>
         <h1>{header}</h1>
@@ -106,6 +106,12 @@ class ResumeBuilder extends React.Component {
               : null
           ))
         }
+        <form action="/entry/?operation=create">
+          <input type="text" name="entrycontent" required />
+          <input type="hidden" name="header" value={resumeid} />
+          <input type="hidden" name="resumeid" value={header} />
+          <input type="submit" name="addentry" value="Add an entry" />
+        </form>
       </div>,
       post.querySelector(query),
     );
@@ -155,8 +161,6 @@ class ResumeBuilder extends React.Component {
     );
   }
 }
-
-ResumeBuilder.propTypes = {};
 
 render(
   <ResumeBuilder />,
