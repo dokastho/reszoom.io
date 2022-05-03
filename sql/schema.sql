@@ -20,7 +20,6 @@ CREATE TABLE resumes(
 );
 
 CREATE TABLE entries(
-  resumeid INTEGER NOT NULL,
   entryid INTEGER PRIMARY KEY AUTOINCREMENT,
   frequency INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
@@ -34,12 +33,20 @@ CREATE TABLE tags(
   tagname VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE entries_to_tags(
+CREATE TABLE entry_to_tag(
   entryid INTEGER NOT NULL,
   tagid INTEGER NOT NULL,
   PRIMARY KEY(entryid, tagid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
+);
+
+CREATE TABLE resume_to_entry(
+  resumeid INTEGER NOT NULL,
+  entryid INTEGER NOT NULL,
+  PRIMARY KEY(entryid, tagid),
+  FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
+  FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
 );
 -- todo education table
 -- todo make entry-resumeid two-way table because the id will be different if you reuse an entry

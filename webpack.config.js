@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './rsite/js/resume.jsx',
-    make: './rsite/js/resume_builder.jsx',
+    make: './rsite/js/new_resume.jsx',
   },
   output: {
     path: path.join(__dirname, '/rsite/static/js/'),

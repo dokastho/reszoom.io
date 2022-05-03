@@ -22,7 +22,7 @@ def load_resumes():
 
         database = rsite.model.get_db()
 
-        if op == "resume":
+        if op == "list":
             cur = database.execute(
                 "SELECT * "
                 "FROM resumes "
@@ -30,8 +30,6 @@ def load_resumes():
                 (logname, )
             )
             resumes = cur.fetchall()
-            if len(resumes) == 0:
-                flask.abort(500) # TODO: this is actually valid when user has no resumes. find better way to deal with
             data = {'resumes': resumes}
         elif op == "userinfo":
             cur = database.execute(
@@ -43,6 +41,21 @@ def load_resumes():
             entries = cur.fetchall()
             if len(entries) == 0:
                 flask.abort(500)
+            data = {'entries': entries}
+        elif op == "resume":
+            rid = flask.request.args.get("id", default="0", type=int)
+
+            if rid == 0:
+                flask.abort(500)
+            
+            cur = database.execute(
+                "SELECT * "
+                "FROM entries "
+                "WHERE owner == ?",
+                "AND resumeid == ?",
+                (logname, rid, )
+            )
+            entries = cur.fetchall()
             data = {'entries': entries}
         else:
             flask.abort(403)

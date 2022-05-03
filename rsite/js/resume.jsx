@@ -23,7 +23,7 @@ class ResumePage extends React.Component {
       post.querySelector('.sidebar'),
     );
     // Call REST API to get the resume information for the user
-    fetch('/api/v1/resume/load/?fetch=resume', { credentials: 'same-origin' })
+    fetch('/api/v1/resume/load/?fetch=list', { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
