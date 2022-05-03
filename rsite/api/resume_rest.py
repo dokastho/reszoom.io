@@ -2,9 +2,8 @@
 Site resume rest api.
 
 URLs include:
-/resume/load/
-/resume/save/
-/resume/delete/
+/api/v1/resume/load/
+/api/v1/resume/
 """
 import flask
 import rsite
@@ -47,7 +46,7 @@ def load_resumes():
 
             if rid == 0:
                 flask.abort(500)
-            
+
             cur = database.execute(
                 "SELECT * "
                 "FROM entries "
@@ -61,3 +60,32 @@ def load_resumes():
             flask.abort(403)
         return flask.jsonify(data), 201
 
+
+@rsite.app.route('/api/v1/resume/', methods=['POST'])
+def load_resumes():
+    """Resolve post requests for the resume."""
+
+    op = flask.request.args.get("operation", default=None, type=str)
+    rid = flask.request.args.get("id", default=0, type=int)
+
+    if rid == 0 or op is None:
+        flask.abort(404)
+
+    if op == "create":
+        pass
+    elif op == "delete":
+        database = rsite.model.get_db()
+        cur = database.execute(
+            "SELECT * "
+            "FROM entries "
+            "WHERE resumeid == ?",
+            (rid, )
+        )
+        entries = cur.fetchall()
+    elif op == "save":
+        pass
+
+
+@rsite.app.route('/api/v1/resume/save/', methods=['DELETE'])
+def load_resumes():
+    """Remove resume from db if the credentials match."""

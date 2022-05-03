@@ -25,7 +25,7 @@ CREATE TABLE entries(
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
   content VARCHAR(256),
-  FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
+  FOREIGN KEY(owner) REFERENCES users(owner) ON DELETE CASCADE
 );
 
 CREATE TABLE tags(
