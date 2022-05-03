@@ -43,7 +43,7 @@ def load_resumes():
                 flask.abort(500)
             data = {'entries': entries}
         elif op == "resume":
-            rid = flask.request.args.get("id", default="0", type=int)
+            rid = flask.request.args.get("id", default=0, type=int)
 
             if rid == 0:
                 flask.abort(500)
