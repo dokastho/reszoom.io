@@ -12,6 +12,7 @@ class ResumeBuilder extends React.Component {
       resumeid: '',
     };
     this.renderResume = this.renderResume.bind(this);
+    this.renderEntries = this.renderEntries.bind(this);
   }
 
   componentDidMount() {
@@ -69,29 +70,51 @@ class ResumeBuilder extends React.Component {
           eids: data.eids,
         });
 
-        const { entries, eids } = this.state;
+        // RENDER THE RESUME
+        // load the dom id's
+        const about = document.getElementById('user-header');
+        const edu = document.getElementById('education-entries');
+        const exp = document.getElementById('experience-entries');
+        const proj = document.getElementById('project-entries');
 
-        console.log(eids);
-
-        // render the resume
-        const post = document.getElementById('resume-content');
-        ReactDOM.render(
-          <div>
-            {
-              eids.map((e) => (
-                <p key={e.entryid}>{entries[e.entryid].content}</p>
-              ))
-            }
-          </div>,
-          post.querySelector('.entries-list'),
-        );
+        // render about me
+        this.renderEntries(about, '.about-me', 'aboutme');
+        // render education
+        this.renderEntries(edu, '.entries-list', 'education');
+        // render experience
+        this.renderEntries(exp, '.entries-list', 'experience');
+        // render project info
+        this.renderEntries(proj, '.entries-list', 'project');
       })
       .catch((error) => console.log(error));
   }
 
+  // render entries for the header, as well as edit button and field to add another
+  // todo: start suggestion stuff for recommending adding more/less items
+  renderEntries(post, query, header) {
+    const { eids, entries } = this.state;
+    ReactDOM.render(
+      <div>
+        <h1>{header}</h1>
+        {
+          eids.map((e) => (
+            entries[e.entryid].header === header
+              ? <p key={e.entryid}>{entries[e.entryid].content}</p>
+              : null
+          ))
+        }
+      </div>,
+      post.querySelector(query),
+    );
+  }
+
   render() {
     return (
-      <div id="resume-content" className="list">
+      <div id="resume-content">
+        <div id="user-header"><div className="about-me" /></div>
+        <div id="education-entries"><div className="entries-list" /></div>
+        <div id="experience-entries"><div className="entries-list" /></div>
+        <div id="project-entries"><div className="entries-list" /></div>
         <div className="entries-list" />
         <div className="edit-form" />
         <p>resume content 😊</p>
