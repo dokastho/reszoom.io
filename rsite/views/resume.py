@@ -24,6 +24,8 @@ def show_new():
     """Render react content for new resume page"""
     with rsite.app.app_context():
         context = show_username()
+        if context['logname'] == "Sign In":
+            return flask.redirect("/accounts/login")
         return flask.render_template('new.html', **context)
 
 
