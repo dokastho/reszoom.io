@@ -50,7 +50,8 @@ CREATE TABLE resume_to_entry(
 );
 
 -- education and experience
--- todo should experience have entries? I think so
+-- todo should experience have entries? I think so... header for those would be experience
+--    and I can load them based on resumeid
 CREATE TABLE experience(
   owner VARCHAR(20) NOT NULL,
   location VARCHAR(64) NOT NULL,
