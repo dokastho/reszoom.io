@@ -9,7 +9,7 @@ class ResumeBuilder extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      resumeid: props.resumeid,
+      resumeid: '',
     };
     // this.createNew = this.createNew.bind(this);
   }
