@@ -8,19 +8,25 @@ class ResumeBuilder extends React.Component {
     this.state = {
       // state attributes go here
       entries: props.entries,
-      // resumeid: props.resumeid,
+      resumeid: props.resumeid,
     };
     // this.createNew = this.createNew.bind(this);
   }
 
   componentDidMount() {
     // get resume id from URL
-    const rid = window.location.href;
-    console.log(rid);
+    let str = window.location.href;
+    str = str.substring(0, str.length - 1);
+    str = str.substring(str.lastIndexOf('/') + 1);
+    console.log(str);
+    this.setState({
+      resumeid: str,
+    });
+
+    const { resumeid } = this.state;
 
     // Call REST API to get the user's past entries
-    // fetch(`/api/v1/resume/load/?fetch=resume?id=${resumeid}`, { credentials: 'same-origin' })
-    fetch('/api/v1/resume/load/?fetch=resume&id=1', { credentials: 'same-origin' })
+    fetch(`/api/v1/resume/load/?fetch=resume&id=${resumeid}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -72,7 +78,7 @@ render(
 
 ResumeBuilder.propTypes = {
   entries: PropTypes.instanceOf(Array).isRequired,
-  // resumeid: PropTypes.number.isRequired,
+  resumeid: PropTypes.number.isRequired,
 };
 
 export default ResumeBuilder;
