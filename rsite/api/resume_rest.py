@@ -108,6 +108,9 @@ def load_resumes():
             )
             entry = cur.fetchone()
 
+            if logname != entry['owner']:
+                flask.abort(403)
+
             entry['frequency'] = entry['frequency'] - 1
             if entry['frequency'] == 0:
                 # delete the entry
@@ -132,8 +135,9 @@ def load_resumes():
         # then delete the resume
         cur = database.execute(
             "DELETE FROM resumes "
-            "WHERE resumeid == ?",
-            (rid,)
+            "WHERE resumeid == ?"
+            "AND owner == ?",
+            (rid, logname, )
         )
         cur.fetchone()
 
