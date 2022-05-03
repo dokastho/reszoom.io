@@ -45,7 +45,7 @@ def load_resumes():
             # construct entries map
             data = {}
             for entry in entries:
-                entries[entry['entryid']] = {
+                data[entry['entryid']] = {
                     'frequency': entry['frequency'],
                     'owner': entry['owner'],
                     'header': entry['header'],
