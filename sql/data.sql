@@ -19,6 +19,8 @@ VALUES ('tdokas', 'resume 2', 0);
 INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
 INSERT INTO entries(frequency, owner, header, content)
+VALUES (1, 'tdokas', 'experience', 'Worked at a lab and received a raise for my abilities');
+INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
 INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Added some content for another resume');
@@ -27,4 +29,6 @@ VALUES (1, 1);
 INSERT INTO resume_to_entry(resumeid, entryid)
 VALUES (1, 2);
 INSERT INTO resume_to_entry(resumeid, entryid)
-VALUES (2, 3);
+VALUES (1, 3);
+INSERT INTO resume_to_entry(resumeid, entryid)
+VALUES (2, 4);
