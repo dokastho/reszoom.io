@@ -71,8 +71,8 @@ def post_resumes():
         # get name and type of resume
         rname = flask.request.form.get('name')
         type = flask.request.form.get('type')
-        if len(rname) == 0:
-            flask.abort(400)
+        # if len(rname) == 0:
+        #     flask.abort(400)
         
         cur = database.execute(
             "INSERT INTO resumes "
