@@ -15,11 +15,11 @@ class ResumeBuilder extends React.Component {
 
   componentDidMount() {
     // get resume id from URL
-    const rid = window.location.href;
-    console.log(rid);
+    const str = window.location.href;
+    console.log(str.substring(0, str.lastIndexOf('/')));
 
     // Call REST API to get the user's past entries
-    // fetch(`/api/v1/resume/load/?fetch=resume?id=${resumeid}`, { credentials: 'same-origin' })
+    // fetch(`/api/v1/resume/load/?fetch=resume&id=${resumeid}`, { credentials: 'same-origin' })
     fetch('/api/v1/resume/load/?fetch=resume&id=1', { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
