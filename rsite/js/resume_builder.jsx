@@ -9,9 +9,9 @@ class ResumeBuilder extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      resumeid: props.resumeid,
+      resumeid: '',
     };
-    // this.createNew = this.createNew.bind(this);
+    this.renderResume = this.renderResume.bind(this);
   }
 
   componentDidMount() {
@@ -50,12 +50,16 @@ class ResumeBuilder extends React.Component {
           </form>,
           post.querySelector('.edit-form'),
         );
+        // render the resume components
+        this.renderResume();
       })
       .catch((error) => console.log(error));
+  }
 
+  renderResume() {
     // render the resume itself
     const { resumeid } = this.state;
-    fetch(`/api/v1/resume/load/?fetch=resume&id=${resumeid}}`, { credentials: 'same-origin' })
+    fetch(`/api/v1/resume/load/?fetch=resume&id=${resumeid}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -66,6 +70,8 @@ class ResumeBuilder extends React.Component {
         });
 
         const { entries, eids } = this.state;
+
+        console.log(eids);
 
         // render the resume
         const post = document.getElementById('resume-content');
@@ -107,7 +113,6 @@ render(
 ResumeBuilder.propTypes = {
   entries: PropTypes.instanceOf(Map).isRequired,
   eids: PropTypes.instanceOf(Array).isRequired,
-  resumeid: PropTypes.number.isRequired,
 };
 
 export default ResumeBuilder;

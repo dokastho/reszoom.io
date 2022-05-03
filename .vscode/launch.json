@@ -26,6 +26,12 @@
             "name": "Launch Edge against localhost",
             "url": "https://dev.dokasfam.com",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Webpack",
+            "program": "${workspaceFolder}/rsite/static/js/edit.bundle.js"
         }
     ]
 }
