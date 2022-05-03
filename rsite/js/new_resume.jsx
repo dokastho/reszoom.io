@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+// import '../static/css/styles.css';
 // import PropTypes from 'prop-types';
 
 class NewResume extends React.Component {
