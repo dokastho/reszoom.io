@@ -62,7 +62,7 @@ def load_resumes():
 
 
 @rsite.app.route('/api/v1/resume/', methods=['POST'])
-def load_resumes():
+def post_resumes():
     """Resolve post requests for the resume."""
     database = rsite.model.get_db()
 
