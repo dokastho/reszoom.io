@@ -9,7 +9,7 @@ class ResumeBuilder extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      resumeid: props.resumeid,
+      resumeid: '',
     };
     // this.createNew = this.createNew.bind(this);
   }
@@ -19,6 +19,7 @@ class ResumeBuilder extends React.Component {
     let str = window.location.href;
     str = str.substring(0, str.length - 1);
     str = str.substring(str.lastIndexOf('/') + 1);
+    this.setState({ resumeid: str });
 
     // Call REST API to get the user's past entries
     fetch('/api/v1/resume/load/?fetch=userinfo', { credentials: 'same-origin' })
@@ -29,7 +30,6 @@ class ResumeBuilder extends React.Component {
       .then((data) => {
         this.setState({
           entries: data,
-          resumeid: str,
         });
         const {
           entries,
