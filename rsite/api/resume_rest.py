@@ -31,7 +31,7 @@ def load_resumes():
             )
             resumes = cur.fetchall()
             if len(resumes) == 0:
-                flask.abort(500)
+                flask.abort(500) # TODO: this is actually valid when user has no resumes. find better way to deal with
             data = {'resumes': resumes}
         elif op == "userinfo":
             cur = database.execute(

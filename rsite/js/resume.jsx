@@ -15,6 +15,13 @@ class ResumePage extends React.Component {
   }
 
   componentDidMount() {
+    const post = document.getElementById('resume-content');
+
+    ReactDOM.render(
+      // render the floating sidebar
+      <Sidebar />,
+      post.querySelector('.sidebar'),
+    );
     // Call REST API to get the resume information for the user
     fetch('/api/v1/resume/load/?fetch=resume', { credentials: 'same-origin' })
       .then((response) => {
@@ -31,7 +38,7 @@ class ResumePage extends React.Component {
         const {
           resumes,
         } = this.state;
-        const post = document.getElementById('resume-content'); // check
+        // check
 
         // render the resumes
         ReactDOM.render(
@@ -39,11 +46,6 @@ class ResumePage extends React.Component {
             resumes={resumes}
           />,
           post.querySelector('.resume-list'),
-        );
-        // render the floating sidebar
-        ReactDOM.render(
-          <Sidebar />,
-          post.querySelector('.sidebar'),
         );
       })
       .catch((error) => console.log(error));

@@ -42,3 +42,4 @@ CREATE TABLE entries_to_tags(
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
 );
 -- todo education table
+-- todo make entry-resumeid two-way table because the id will be different if you reuse an entry
