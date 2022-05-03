@@ -25,7 +25,7 @@ CREATE TABLE entries(
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
   content VARCHAR(256),
-  FOREIGN KEY(owner) REFERENCES users(owner) ON DELETE CASCADE
+  FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE tags(
@@ -44,7 +44,7 @@ CREATE TABLE entry_to_tag(
 CREATE TABLE resume_to_entry(
   resumeid INTEGER NOT NULL,
   entryid INTEGER NOT NULL,
-  PRIMARY KEY(entryid, tagid),
+  PRIMARY KEY(resumeid, entryid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
 );

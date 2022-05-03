@@ -31,16 +31,16 @@ class NewResume extends React.Component {
 
         const post = document.getElementById('resume-content'); // check
 
-        // render the resumes
+        // render the resumes TODO: get resumeid from rest api
         ReactDOM.render(
           <div>
-            {
-              entries.map((e) => (
-                <p key={e.entryid}>{e.content}</p>
-              ))
-            }
+            <form action="/api/v1/resume/?operation=create&target=/resume/" method="post" encType="multipart/form-data">
+              <input type="checkbox" name="type" value="Are you a student?" />
+              <input type="text" name="name" value="Resume name" />
+              <input type="hidden" name="operation" value="create" />
+            </form>
           </div>,
-          post.querySelector('.entries-list'),
+          post.querySelector('.create-form'),
         );
       })
       .catch((error) => console.log(error));
@@ -49,7 +49,7 @@ class NewResume extends React.Component {
   render() {
     return (
       <div id="resume-content" className="list">
-        <div className="entries-list" />
+        <div className="create-form" />
         <p>resume content 😊</p>
         <p>this pg will have options for filling out basic info, then fwd to resumeid pg</p>
       </div>

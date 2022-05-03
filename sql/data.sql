@@ -11,10 +11,20 @@ VALUES ('jag', 'H.V. Jagadish', 'jag@umich.edu', '73ab33bd357c3fd42292487b825880
 INSERT INTO users(username, fullname, email, filename, password)
 VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', '.jpg', 'password');
 -- add a resume to tdokas
-INSERT INTO resumes(owner, name, typename, snapshot)
-VALUES ('tdokas', 'resume 1', 1, '.jpg');
+INSERT INTO resumes(owner, name, typename)
+VALUES ('tdokas', 'resume 1', 1);
+INSERT INTO resumes(owner, name, typename)
+VALUES ('tdokas', 'resume 2', 0);
 -- add some entries for the resume
-INSERT INTO entries(resumeid, owner, frequency, header, content)
-VALUES (1, 'tdokas', 1, 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
-INSERT INTO entries(resumeid, owner, frequency, header, content)
-VALUES (1, 'tdokas', 2, 'project', 'Built and managed my own server for remote development');
+INSERT INTO entries(frequency, owner, header, content)
+VALUES (1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!');
+INSERT INTO entries(frequency, owner, header, content)
+VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
+INSERT INTO entries(frequency, owner, header, content)
+VALUES (2, 'tdokas', 'project', 'Added some content for another resume');
+INSERT INTO resume_to_entry(resumeid, entryid)
+VALUES (1, 1);
+INSERT INTO resume_to_entry(resumeid, entryid)
+VALUES (1, 2);
+INSERT INTO resume_to_entry(resumeid, entryid)
+VALUES (2, 3);

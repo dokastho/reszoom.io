@@ -69,17 +69,16 @@ def load_resumes():
     logname = flask.session.get('logname')
 
     op = flask.request.args.get("operation", default=None, type=str)
-    rid = flask.request.args.get("id", default=0, type=int)
 
-    if rid == 0 or op is None:
+    if op is None:
         flask.abort(404)
 
     if op == "create":
         # get name and type of resume
         rname = flask.request.form.get('name')
+        type = flask.request.form.get('type')
         if len(rname) == 0:
             flask.abort(400)
-        type = flask.request.form.get('type')
         
         cur = database.execute(
             "INSERT INTO resumes "
@@ -90,6 +89,9 @@ def load_resumes():
         cur.fetchone()
 
     elif op == "delete":
+        rid = flask.request.args.get("id", default=0, type=int)
+        if rid == 0:
+            flask.abort(404)
         # first delete/update the entries. load them using the intermediate table
         cur = database.execute(
             "SELECT * "
