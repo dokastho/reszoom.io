@@ -34,7 +34,7 @@ class NewResume extends React.Component {
         // render the resumes TODO: get resumeid from rest api
         ReactDOM.render(
           <div>
-            <form action="/api/v1/resume/?operation=create&target=/resume/" method="post" encType="multipart/form-data">
+            <form action="/resume/?operation=create&target=/resume/" method="post" encType="multipart/form-data">
               <input type="checkbox" name="type" value="Are you a student?" />
               <input type="text" name="name" value="Resume name" />
               <input type="hidden" name="operation" value="create" />
