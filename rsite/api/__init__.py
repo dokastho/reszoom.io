@@ -6,3 +6,4 @@
 # from insta485.api.likes import create_like, delete_like
 from rsite.api.v1 import get_routes
 from rsite.api.resume_rest import load_resumes
+from rsite.api.user_rest import get_userinfo

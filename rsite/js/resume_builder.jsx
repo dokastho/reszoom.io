@@ -10,6 +10,9 @@ class ResumeBuilder extends React.Component {
       entries: props.entries,
       eids: props.eids,
       resumeid: '',
+      username: '',
+      email: '',
+      fullname: '',
     };
     this.renderResume = this.renderResume.bind(this);
     this.renderEntries = this.renderEntries.bind(this);
@@ -78,7 +81,7 @@ class ResumeBuilder extends React.Component {
         const proj = document.getElementById('project-entries');
 
         // render about me
-        this.renderEntries(about, '.about-me', 'aboutme');
+        this.renderUserInfo(about);
         // render education
         this.renderEntries(edu, '.entries-list', 'education');
         // render experience
@@ -106,6 +109,35 @@ class ResumeBuilder extends React.Component {
       </div>,
       post.querySelector(query),
     );
+  }
+
+  renderUserInfo(post) {
+    fetch('/api/v1/userinfo', { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({
+          username: data.username,
+          email: data.email,
+          fullname: data.fullname,
+        });
+
+        const { fullname, username, email } = this.state;
+
+        console.log(username);
+
+        // render the user info
+        ReactDOM.render(
+          <div>
+            <h1>{fullname}</h1>
+            <h3>{email}</h3>
+          </div>,
+          post.querySelector('.about-me'),
+        );
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
