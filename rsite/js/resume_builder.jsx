@@ -39,7 +39,7 @@ class ResumeBuilder extends React.Component {
         console.log(entries);
         console.log(resumeid);
 
-        const post = document.getElementById('resume-content'); // check
+        const post = document.getElementById('resume-content');
 
         // render the editing options form
         ReactDOM.render(
@@ -64,15 +64,19 @@ class ResumeBuilder extends React.Component {
         this.setState({
           eids: data.eids,
         });
-        const { entries, eids, resumeid } = this.state;
+
+        const { entries, eids } = this.state;
+
         // render the resume
+        const post = document.getElementById('resume-content');
         ReactDOM.render(
           <div>
             {
               eids.map((e) => (
-                if (e.resumeid === resumeid)
-                  <p key={e.entryid}></p>
-              )
+                e.resumeid === resumeid
+                  ? <p key={e.entryid}>{entries[e.entryid].content}</p>
+                  : null
+              ))
             }
           </div>,
           post.querySelector('.entries-list'),
