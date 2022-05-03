@@ -2,12 +2,12 @@
 Site user rest api.
 
 URLs include:
-/api/v1/user/
+/api/v1/userinfo/
 """
 import flask
 import rsite
 
-@rsite.app.route("/api/v1/user")
+@rsite.app.route("/api/v1/userinfo")
 def get_userinfo():
     """Get user info for logged in user."""
     with rsite.app.app_context():
