@@ -59,6 +59,11 @@ class ResumeBuilder extends React.Component {
     return (
       <div id="resume-content" className="list">
         <div className="entries-list" />
+        <div className="edit-form">
+          <form action="/resume/commit/?operation=delete&target=/resume" method="post" encType="multipart/form-data">
+            <input type="submit" value="Delete Resume" />
+          </form>
+        </div>
         <p>resume content 😊</p>
         <p>this pg will load the content from resumeid and edit. redirects from new too</p>
       </div>
