@@ -11,7 +11,7 @@ import rsite
 from rsite.model import show_username
 
 
-@rsite.app.route('/resume/')
+@rsite.app.route('/resume/', methods=['GET'])
 def show_resume():
     """Render react content for main resume page"""
     with rsite.app.app_context():
@@ -85,10 +85,6 @@ def post_resumes():
         )
         cur.fetchone()
 
-        target = rsite.model.get_target()
-
-        return flask.redirect(target), 201
-
     elif op == "delete":
         rid = flask.request.form.get("id", default=0, type=int)
         if rid == 0:
@@ -144,10 +140,9 @@ def post_resumes():
         )
         cur.fetchone()
 
-        target = rsite.model.get_target()
-
-        return flask.redirect(target)
-
-
     elif op == "save":
         pass
+
+    target = rsite.model.get_target()
+
+    return flask.redirect(target)
