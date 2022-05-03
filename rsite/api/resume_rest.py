@@ -31,6 +31,7 @@ def load_resumes():
             resumes = cur.fetchall()
             data = {'resumes': resumes}
         elif op == "userinfo":
+            # load all entries for a specific user
             cur = database.execute(
                 "SELECT * "
                 "FROM entries "
@@ -42,20 +43,33 @@ def load_resumes():
                 flask.abort(500)
             data = {'entries': entries}
         elif op == "resume":
+            # load entries for a specific resume (and implicitly, user)
             rid = flask.request.args.get("id", default=0, type=int)
 
             if rid == 0:
-                flask.abort(500)
+                flask.abort(404)
 
             cur = database.execute(
                 "SELECT * "
-                "FROM entries "
-                "WHERE owner == ?"
-                "AND resumeid == ?",
-                (logname, rid, )
+                "FROM resume_to_entry "
+                "WHERE resumeid == ?",
+                (rid, )
             )
-            entries = cur.fetchall()
-            data = {'entries': entries}
+            eids = cur.fetchall()
+
+            data = {'entries': []}
+
+            for eid in eids:
+                cur = database.execute(
+                    "SELECT * "
+                    "FROM entries "
+                    "WHERE owner == ?"
+                    "AND entryid == ?",
+                    (logname, eid, )
+                )
+                entry = cur.fetchone()
+                data['entries'].append(entry)
+            
         else:
             flask.abort(403)
         return flask.jsonify(data), 201
@@ -154,5 +168,5 @@ def post_resumes():
 
 
 @rsite.app.route('/api/v1/resume/save/', methods=['DELETE'])
-def load_resumes():
+def save_resumes():
     """Remove resume from db if the credentials match."""
