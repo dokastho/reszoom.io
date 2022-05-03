@@ -15,7 +15,7 @@ CREATE TABLE resumes(
   owner VARCHAR(20) NOT NULL,
   name VARCHAR(64) NOT NULL,
   typename BOOLEAN NOT NULL,
-  snapshot VARCHAR(64) NOT NULL,
+  -- snapshot VARCHAR(64) NOT NULL, todo add snapshot later
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 

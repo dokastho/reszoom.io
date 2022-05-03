@@ -64,6 +64,9 @@ def load_resumes():
 @rsite.app.route('/api/v1/resume/', methods=['POST'])
 def load_resumes():
     """Resolve post requests for the resume."""
+    database = rsite.model.get_db()
+
+    logname = flask.session.get('logname')
 
     op = flask.request.args.get("operation", default=None, type=str)
     rid = flask.request.args.get("id", default=0, type=int)
@@ -72,16 +75,74 @@ def load_resumes():
         flask.abort(404)
 
     if op == "create":
-        pass
+        # get name and type of resume
+        rname = flask.request.form.get('name')
+        if len(rname) == 0:
+            flask.abort(400)
+        type = flask.request.form.get('type')
+        
+        cur = database.execute(
+            "INSERT INTO resumes "
+            "(owner, name, typename) "
+            "VALUES (?, ?, ?)",
+            (logname, rname, type, )
+        )
+        cur.fetchone()
+
     elif op == "delete":
-        database = rsite.model.get_db()
+        # first delete/update the entries. load them using the intermediate table
         cur = database.execute(
             "SELECT * "
-            "FROM entries "
+            "FROM resume_to_entry "
             "WHERE resumeid == ?",
             (rid, )
         )
-        entries = cur.fetchall()
+        eids = cur.fetchall()
+        for eid in eids:
+            # fetch the entry
+            cur = database.execute(
+                "SELECT * "
+                "FROM entries "
+                "WHERE entryid == ?",
+                (eid['entryid'], )
+            )
+            entry = cur.fetchone()
+
+            entry['frequency'] = entry['frequency'] - 1
+            if entry['frequency'] == 0:
+                # delete the entry
+                cur = database.execute(
+                    "DELETE FROM entries "
+                    "WHERE entryid == ?",
+                    (entry['entryid'],)
+                )
+
+            else:
+                # update the entry
+                cur = database.execute(
+                    "UPDATE entries "
+                    "SET frequency = ?"
+                    "WHERE entryid == ?",
+                    (entry['frequency'], entry['entryid'],)
+                )
+            
+            # execute the update/delete for this entry
+            cur.fetchone()
+
+        # then delete the resume
+        cur = database.execute(
+            "DELETE FROM resumes "
+            "WHERE resumeid == ?",
+            (rid,)
+        )
+        cur.fetchone()
+
+        # redirect to some target TODO: find where to go instead of /
+        target = rsite.model.get_target()
+
+        return flask.redirect(target)
+
+
     elif op == "save":
         pass
 
