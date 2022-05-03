@@ -29,29 +29,25 @@ class NewResume extends React.Component {
 
         console.log(entries);
 
-        const post = document.getElementById('resume-content'); // check
+        // const post = document.getElementById('resume-content'); // check
+      })
+      .catch((error) => console.log(error));
+  }
 
-        // render the resumes
-        // TODO: get resumeid from rest api
-        // TODO: check in real time if resume name available for user
-        ReactDOM.render(
+  render() {
+    // TODO: get resumeid from rest api
+    // TODO: check in real time if resume name available for user
+    return (
+      <div id="resume-content" className="list">
+        <div className="create-form">
           <div>
             <form action="/resume/commit/?operation=create&target=/resume" method="post" encType="multipart/form-data">
               <input type="checkbox" name="type" />
               <input type="text" name="name" required />
               <input type="hidden" name="operation" value="create" />
             </form>
-          </div>,
-          post.querySelector('.create-form'),
-        );
-      })
-      .catch((error) => console.log(error));
-  }
-
-  render() {
-    return (
-      <div id="resume-content" className="list">
-        <div className="create-form" />
+          </div>
+        </div>
         <p>resume content 😊</p>
         <p>this pg will have options for filling out basic info, then fwd to resumeid pg</p>
       </div>
