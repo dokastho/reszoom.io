@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import PropTypes from 'prop-types';
 
-class ResumeBuilder extends React.Component {
+class NewResume extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,15 +57,13 @@ class ResumeBuilder extends React.Component {
   }
 }
 
-ResumeBuilder.propTypes = {};
+NewResume.propTypes = {};
 
 render(
-  <ResumeBuilder />,
+  <NewResume />,
   document.getElementById('make-resume'),
 );
 
-ResumeBuilder.propTypes = {
+NewResume.propTypes = {
   entries: PropTypes.instanceOf(Array).isRequired,
 };
-
-export default ResumeBuilder;
