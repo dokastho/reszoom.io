@@ -21,7 +21,7 @@ VALUES (1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site wh
 INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
 INSERT INTO entries(frequency, owner, header, content)
-VALUES (2, 'tdokas', 'project', 'Added some content for another resume');
+VALUES (1, 'tdokas', 'project', 'Added some content for another resume');
 INSERT INTO resume_to_entry(resumeid, entryid)
 VALUES (1, 1);
 INSERT INTO resume_to_entry(resumeid, entryid)

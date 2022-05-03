@@ -51,6 +51,16 @@ class ResumeBuilder extends React.Component {
           </div>,
           post.querySelector('.entries-list'),
         );
+
+        // render the editing options form
+        ReactDOM.render(
+          // delete first
+          <form action="/resume/commit/?operation=delete&target=/resume" method="post" encType="multipart/form-data">
+            <input type="hidden" name="id" value={resumeid} />
+            <input type="submit" value="Delete Resume" />
+          </form>,
+          post.querySelector('.edit-form'),
+        );
       })
       .catch((error) => console.log(error));
   }
@@ -59,6 +69,7 @@ class ResumeBuilder extends React.Component {
     return (
       <div id="resume-content" className="list">
         <div className="entries-list" />
+        <div className="edit-form" />
         <p>resume content 😊</p>
         <p>this pg will load the content from resumeid and edit. redirects from new too</p>
       </div>

@@ -53,7 +53,7 @@ def show_saved(resumeid):
 
         return flask.render_template('view_edit.html', **context)
 
-@rsite.app.route('/resume/', methods=['POST'])
+@rsite.app.route('/resume/commit/', methods=['POST'])
 def post_resumes():
     """Resolve post requests for the resume."""
     database = rsite.model.get_db()
@@ -70,20 +70,27 @@ def post_resumes():
     if op == "create":
         # get name and type of resume
         rname = flask.request.form.get('name')
-        type = flask.request.form.get('type')
+        rtype = flask.request.form.get('type')
+        
         if len(rname) == 0:
             flask.abort(400)
+        
+        rtype = 1 if rtype == 'on' else 0
         
         cur = database.execute(
             "INSERT INTO resumes "
             "(owner, name, typename) "
             "VALUES (?, ?, ?)",
-            (logname, rname, type, )
+            (logname, rname, rtype, )
         )
         cur.fetchone()
 
+        target = rsite.model.get_target()
+
+        return flask.redirect(target), 201
+
     elif op == "delete":
-        rid = flask.request.args.get("id", default=0, type=int)
+        rid = flask.request.form.get("id", default=0, type=int)
         if rid == 0:
             flask.abort(404)
         # first delete/update the entries. load them using the intermediate table
@@ -139,7 +146,7 @@ def post_resumes():
 
         target = rsite.model.get_target()
 
-        return flask.redirect(target), 201
+        return flask.redirect(target)
 
 
     elif op == "save":
