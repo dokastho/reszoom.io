@@ -58,14 +58,17 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      this.setState((prevState) => ({
-        eids: prevState.eids.concat({
-          entryid: data.entryid,
-          resumeid,
-        }),
-
-        entries: prevState.entries.set(`${data.entryid}`, data.entry),
-      }));
+      this.setState((prevState) => {
+        newEntries[header] = '';
+        return {
+          eids: prevState.eids.concat({
+            entryid: data.entryid,
+            resumeid,
+          }),
+          entries: prevState.entries.set(`${data.entryid}`, data.entry),
+          newEntries,
+        };
+      });
     })
       .catch((error) => console.log(error));
   }
@@ -89,7 +92,7 @@ class Entries extends React.Component {
   }
 
   render() {
-    const { header, eids, entries } = this.state;
+    const { header, eids, entries, newEntries } = this.state;
     return (
       <div>
         <h1>{header}</h1>
@@ -101,9 +104,6 @@ class Entries extends React.Component {
                   {/* render content */}
                   <span>{entries.get(`${e.entryid}`).content}</span>
                   {/* render delete form */}
-                  {/* <form onSubmit={() => this.deleteEntry(e.entryid)}>
-                    <input type="submit" value="Delete" />
-                </form> */}
                   <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                 </div>
               )
@@ -112,7 +112,7 @@ class Entries extends React.Component {
         }
         {/* render create form */}
         <form onSubmit={(event) => this.createEntry(header, 0, event)}>
-          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} />
+          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} value={newEntries[header]} />
           <input type="submit" />
         </form>
       </div>
