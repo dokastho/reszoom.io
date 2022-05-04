@@ -78,11 +78,14 @@ class Entries extends React.Component {
       method: 'DELETE',
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
-      this.setState((prevState) => (
-        {
+      // eslint-disable-next-line prefer-arrow-callback
+      this.setState(function (prevState) {
+        delete prevState.entries[`${entryid}`];
+        return {
           entries: prevState.entries.delete(`${entryid}`),
-        }
-      ));
+          eids: prevState.eids.filter((eid) => eid.entryid !== entryid),
+        };
+      });
       // const { entries } = this.state;
       // console.log(entries);
     })
