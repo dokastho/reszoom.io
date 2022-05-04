@@ -106,10 +106,10 @@ class ResumeBuilder extends React.Component {
               : null
           ))
         }
-        <form action="/entry/?operation=create">
+        <form action={`/entry/?operation=create&target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
           <input type="text" name="entrycontent" required />
-          <input type="hidden" name="header" value={resumeid} />
-          <input type="hidden" name="resumeid" value={header} />
+          <input type="hidden" name="header" value={header} />
+          <input type="hidden" name="resumeid" value={resumeid} />
           <input type="submit" name="addentry" value="Add an entry" />
         </form>
       </div>,
