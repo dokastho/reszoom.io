@@ -91,6 +91,15 @@ def post_resumes():
         )
         cur.fetchone()
 
+        # get id to redirect to
+        cur = database.execute(
+            "SELECT MAX(resumeid) "
+            "AS rid "
+            "FROM resumes "
+        )
+        data = cur.fetchone()
+        target = "/resume/" + str(data['rid']) + "/"
+
     elif op == "delete":
         rid = flask.request.form.get("id", default=0, type=int)
         if rid == 0:
@@ -129,10 +138,10 @@ def post_resumes():
             (rid, logname, )
         )
         cur.fetchone()
+        target = rsite.model.get_target()
 
     elif op == "save":
         pass
 
-    target = rsite.model.get_target()
 
     return flask.redirect(target)

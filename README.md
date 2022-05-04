@@ -10,6 +10,7 @@ up next:
 - [ ] ordering and reordering of entries
 - [ ] edit button to load form entry
 - [ ] update entry rest api
+- [ ] cache entries so that if you delete the last entry but want to undo before saving
 
 down the road...
 - [ ] tags for entries

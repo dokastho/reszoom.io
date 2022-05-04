@@ -73,6 +73,15 @@ def load_resumes():
             )
             userinfo = cur.fetchone()
 
+            # get the resume info
+            cur = database.execute(
+                "SELECT * "
+                "FROM resumes "
+                "WHERE resumeid == ?",
+                (rid, )
+            )
+            resumeinfo = cur.fetchone()
+
             # construct the response
             res = {
                 'eids': eids,
@@ -80,6 +89,8 @@ def load_resumes():
                 'username': userinfo['username'],
                 'fullname': userinfo['fullname'],
                 'email': userinfo['email'],
+                'resumename': resumeinfo['name'],
+                'resumetype': resumeinfo['typename']
             }
         else:
             flask.abort(403)
