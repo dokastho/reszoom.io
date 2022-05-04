@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Cookies from 'js-cookie';
+import Entries from './entry_list';
 
 class ResumeBuilder extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class ResumeBuilder extends React.Component {
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
-    this.renderEntries = this.renderEntries.bind(this);
   }
 
   componentDidMount() {
@@ -82,7 +82,8 @@ class ResumeBuilder extends React.Component {
 
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
       }));
-    });
+    })
+      .catch((error) => console.log(error));
   }
 
   deleteEntry(entryid) {
@@ -96,43 +97,20 @@ class ResumeBuilder extends React.Component {
           entries: prevState.entries.delete(`${entryid}`),
         }
       ));
-    });
-  }
-
-  // render entries for the header, as well as edit button and field to add another
-  // todo: start suggestion stuff for recommending adding more/less items
-  renderEntries(header) {
-    const { eids, entries } = this.state;
-    return (
-      <div>
-        <h1>{header}</h1>
-        {
-          eids.map((e) => (
-            entries.get(`${e.entryid}`).header === header
-              ? (
-                <div key={e.entryid}>
-                  {/* render content */}
-                  <p>{entries.get(`${e.entryid}`).content}</p>
-                  {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)}>
-                    <input type="submit" value="Delete" />
-                  </form>
-                </div>
-              )
-              : null
-          ))
-        }
-        {/* render create form */}
-        <form onSubmit={(event) => this.createEntry(header, 0, event)}>
-          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} />
-          <input type="submit" />
-        </form>
-      </div>
-    );
+      // const { entries } = this.state;
+      // console.log(entries);
+    })
+      .catch((error) => console.log(error));
   }
 
   render() {
-    const { resumeid, fullname, email } = this.state;
+    const {
+      resumeid,
+      fullname,
+      email,
+      entries,
+      eids,
+    } = this.state;
     return (
       <div id="resume-content">
         <div id="user-header">
@@ -143,17 +121,17 @@ class ResumeBuilder extends React.Component {
         </div>
         <div id="education-entries">
           <div className="entries-list">
-            {this.renderEntries('education')}
+            <Entries entries={entries} eids={eids} header="education" />
           </div>
         </div>
         <div id="experience-entries">
           <div className="entries-list">
-            {this.renderEntries('experience')}
+            <Entries entries={entries} eids={eids} header="experience" />
           </div>
         </div>
         <div id="project-entries">
           <div className="entries-list">
-            {this.renderEntries('project')}
+            <Entries entries={entries} eids={eids} header="project" />
           </div>
         </div>
         <div className="edit-form">
