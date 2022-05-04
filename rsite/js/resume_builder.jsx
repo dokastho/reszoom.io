@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM, { render } from 'react-dom';
+import { render } from 'react-dom';
 import PropTypes from 'prop-types';
 
 class ResumeBuilder extends React.Component {
@@ -10,7 +10,7 @@ class ResumeBuilder extends React.Component {
       // cache entries so that if you delete the last entry but want to undo before saving
       entries: props.entries,
       eids: props.eids,
-      newEntries: Map(),
+      newEntries: new Map(),
       resumeid: '',
       username: '',
       email: '',
@@ -92,7 +92,7 @@ class ResumeBuilder extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          entries: prevState.entries.filter((key) => key !== entryid),
+          entries: prevState.entries.delete(entryid),
         }
       ));
     });
@@ -100,20 +100,20 @@ class ResumeBuilder extends React.Component {
 
   // render entries for the header, as well as edit button and field to add another
   // todo: start suggestion stuff for recommending adding more/less items
-  renderEntries(post, query, header) {
+  renderEntries(header) {
     const { eids, entries } = this.state;
-    ReactDOM.render(
+    return (
       <div>
         <h1>{header}</h1>
         {
           eids.map((e) => (
             entries[e.entryid].header === header
               ? (
-                <div>
+                <div key={e.entryid}>
                   {/* render content */}
-                  <p key={e.entryid}>{entries[e.entryid].content}</p>
+                  <p>{entries[e.entryid].content}</p>
                   {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)} method="post" encType="multipart/form-data">
+                  <form onSubmit={() => this.deleteEntry(e.entryid)} encType="multipart/form-data">
                     <input type="submit" name="delete" value="Delete" />
                   </form>
                 </div>
@@ -122,20 +122,16 @@ class ResumeBuilder extends React.Component {
           ))
         }
         {/* render create form */}
-        <form onSubmit={() => this.createEntry(header)} method="post" encType="multipart/form-data">
+        <form onSubmit={() => this.createEntry(header)} encType="multipart/form-data">
           <input type="text" name="entrycontent" onChange={(event) => this.handleEntryChange(header, event)} required />
           <input type="submit" name="addentry" value="Add an entry" />
         </form>
-      </div>,
-      post.querySelector(query),
+      </div>
     );
   }
 
   render() {
     const { resumeid, fullname, email } = this.state;
-    const edu = document.getElementById('education-entries');
-    const exp = document.getElementById('experience-entries');
-    const proj = document.getElementById('project-entries');
     return (
       <div id="resume-content">
         <div id="user-header">
@@ -146,20 +142,19 @@ class ResumeBuilder extends React.Component {
         </div>
         <div id="education-entries">
           <div className="entries-list">
-            {this.renderEntries(edu, '.entries-list', 'education')}
+            {this.renderEntries('education')}
           </div>
         </div>
         <div id="experience-entries">
           <div className="entries-list">
-            {this.renderEntries(exp, '.entries-list', 'experience')}
+            {this.renderEntries('experience')}
           </div>
         </div>
         <div id="project-entries">
           <div className="entries-list">
-            {this.renderEntries(proj, '.entries-list', 'project')}
+            {this.renderEntries('project')}
           </div>
         </div>
-        <div className="entries-list" />
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
