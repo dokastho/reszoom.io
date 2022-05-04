@@ -7,7 +7,7 @@ URLs include:
 """
 import flask
 import rsite
-from rsite.model import delete_entry
+from rsite.model import delete_helper
 
 
 @rsite.app.route('/api/v1/resume/load/', methods=['GET'])
@@ -54,7 +54,7 @@ def load_resumes():
                 }
 
             # get eids for the resume id
-            rid = flask.request.args.get("id", default=0, type=int)
+            rid = flask.request.args.get("resumeid", default=0, type=int)
 
             if rid == 0:
                 flask.abort(404)
@@ -176,7 +176,7 @@ def create_entry():
         "resumeid": resumeid
     }), 201
 
-@rsite.app.route("/api/v1/entry/<int: entryid>/", methods=['DELETE'])
+@rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])
 def delete_entry(entryid):
     """Delete an entry."""
     if entryid == 0:
@@ -199,6 +199,6 @@ def delete_entry(entryid):
     if logname != entry['owner']:
         flask.abort(403)
         
-    delete_entry(entry)
+    delete_helper(entry)
 
     return flask.Response(status=204)
