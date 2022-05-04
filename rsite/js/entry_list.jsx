@@ -31,8 +31,6 @@ class Entries extends React.Component {
       header,
       resumeid,
     });
-    console.log('mount');
-    console.log(this);
   }
 
   handleEntryChange(header, event) {
@@ -58,8 +56,6 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      // console.log(data);
-
       this.setState((prevState) => ({
         eids: prevState.eids.concat({
           entryid: data.entryid,
@@ -78,21 +74,19 @@ class Entries extends React.Component {
       method: 'DELETE',
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
-      this.setState((prevState) => (
-        {
-          entries: prevState.entries.delete(`${entryid}`),
-        }
-      ));
-      // const { entries } = this.state;
-      // console.log(entries);
+      this.setState((prevState) => {
+        prevState.entries.delete(`${entryid}`);
+        return {
+          entries: prevState.entries,
+          eids: prevState.eids.filter((eid) => eid.entryid !== entryid),
+        };
+      });
     })
       .catch((error) => console.log(error));
   }
 
   render() {
     const { header, eids, entries } = this.state;
-    // console.log('render');
-    // console.log(this);
     return (
       <div>
         <h1>{header}</h1>
