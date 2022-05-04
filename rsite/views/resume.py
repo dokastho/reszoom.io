@@ -62,7 +62,7 @@ def post_resumes():
     if not logname:
         flask.abort(403)
 
-    op = flask.request.args.get("operation", default=None, type=str)
+    op = flask.request.form.get("operation", default=None, type=str)
 
     if op is None:
         flask.abort(404)

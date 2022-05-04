@@ -49,8 +49,9 @@ class ResumeBuilder extends React.Component {
         // render the editing options form
         ReactDOM.render(
           // delete first
-          <form action="/resume/commit/?operation=delete&target=/resume" method="post" encType="multipart/form-data">
+          <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
+            <input type="hidden" name="operation" value="delete" />
             <input type="submit" value="Delete Resume" />
           </form>,
           post.querySelector('.edit-form'),
@@ -103,12 +104,21 @@ class ResumeBuilder extends React.Component {
         {
           eids.map((e) => (
             entries[e.entryid].header === header
-              ? <p key={e.entryid}>{entries[e.entryid].content}</p>
+              ? (
+                <div>
+                  <p key={e.entryid}>{entries[e.entryid].content}</p>
+                  <form action={`/entry/?target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
+                    <input type="hidden" name="operation" value="delete" />
+                    <input type="submit" name="delete" value="Delete" />
+                  </form>
+                </div>
+              )
               : null
           ))
         }
-        <form action={`/entry/?operation=create&target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
+        <form action={`/entry/?target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
           <input type="text" name="entrycontent" required />
+          <input type="hidden" name="operation" value="create" />
           <input type="hidden" name="header" value={header} />
           <input type="hidden" name="resumeid" value={resumeid} />
           <input type="submit" name="addentry" value="Add an entry" />
