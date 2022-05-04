@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { render } from 'react-dom';
 // import '../static/css/styles.css';
@@ -8,32 +9,8 @@ class NewResume extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
-      // entries: props.entries,
     };
-    // this.createNew = this.createNew.bind(this);
   }
-
-  // componentDidMount() {
-  // Call REST API to get the user's past entries
-  // fetch('/api/v1/resume/load/?fetch=userinfo', { credentials: 'same-origin' })
-  //   .then((response) => {
-  //     if (!response.ok) throw Error(response.statusText);
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     this.setState({
-  //       entries: data.entries,
-  //     });
-  //     const {
-  //       entries,
-  //     } = this.state;
-
-  //     console.log(entries);
-
-  //     // const post = document.getElementById('resume-content'); // check
-  //   })
-  //   .catch((error) => console.log(error));
-  // }
 
   render() {
     // TODO: get resumeid from rest api
@@ -42,9 +19,10 @@ class NewResume extends React.Component {
       <div id="resume-content" className="list">
         <div className="create-form">
           <div>
-            <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
-              <input type="checkbox" name="type" />
-              <input type="text" name="name" required />
+            <form action="/resume/commit/" method="post" encType="multipart/form-data">
+              <label htmlFor="typebox">Are you a student?</label>
+              <input type="checkbox" name="type" id="typebox" />
+              <input type="text" name="name" required placeholder="New Resume Name" />
               <input type="hidden" name="operation" value="create" />
             </form>
           </div>
