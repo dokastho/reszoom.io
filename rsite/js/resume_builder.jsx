@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Cookies from 'js-cookie';
+import Entries from './entry_list';
 
 class ResumeBuilder extends React.Component {
   constructor(props) {
@@ -10,16 +11,11 @@ class ResumeBuilder extends React.Component {
       // cache entries so that if you delete the last entry but want to undo before saving
       entries: new Map(),
       eids: [],
-      newEntries: new Map(),
       resumeid: '',
       username: '',
       email: '',
       fullname: '',
     };
-    this.createEntry = this.createEntry.bind(this);
-    this.deleteEntry = this.deleteEntry.bind(this);
-    this.handleEntryChange = this.handleEntryChange.bind(this);
-    this.renderEntries = this.renderEntries.bind(this);
   }
 
   componentDidMount() {
@@ -49,90 +45,14 @@ class ResumeBuilder extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  handleEntryChange(header, event) {
-    const str = `.${header}`;
-    const { newEntries } = this.state;
-    newEntries.set(str, event.target.value);
-    this.setState({ newEntries });
-  }
-
-  createEntry(header, entryid, event) {
-    event.preventDefault();
-
-    const { resumeid, newEntries } = this.state;
-    const str = `.${header}`;
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}`, {
-      credentials: 'same-origin',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text: newEntries.get(str) }),
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      return response.json();
-    }).then((data) => {
-      // console.log(data);
-
-      this.setState((prevState) => ({
-        eids: prevState.eids.concat({
-          entryid: data.entryid,
-          resumeid,
-        }),
-
-        entries: prevState.entries.set(`${data.entryid}`, data.entry),
-      }));
-    });
-  }
-
-  deleteEntry(entryid) {
-    fetch(`/api/v1/entry/${entryid}/`, {
-      credentials: 'same-origin',
-      method: 'DELETE',
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      this.setState((prevState) => (
-        {
-          entries: prevState.entries.delete(`${entryid}`),
-        }
-      ));
-    });
-  }
-
-  // render entries for the header, as well as edit button and field to add another
-  // todo: start suggestion stuff for recommending adding more/less items
-  renderEntries(header) {
-    const { eids, entries } = this.state;
-    return (
-      <div>
-        <h1>{header}</h1>
-        {
-          eids.map((e) => (
-            entries.get(`${e.entryid}`).header === header
-              ? (
-                <div key={e.entryid}>
-                  {/* render content */}
-                  <p>{entries.get(`${e.entryid}`).content}</p>
-                  {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)}>
-                    <input type="submit" value="Delete" />
-                  </form>
-                </div>
-              )
-              : null
-          ))
-        }
-        {/* render create form */}
-        <form onSubmit={(event) => this.createEntry(header, 0, event)}>
-          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} />
-          <input type="submit" />
-        </form>
-      </div>
-    );
-  }
-
   render() {
-    const { resumeid, fullname, email } = this.state;
+    const {
+      resumeid,
+      fullname,
+      email,
+      entries,
+      eids,
+    } = this.state;
     return (
       <div id="resume-content">
         <div id="user-header">
@@ -143,17 +63,17 @@ class ResumeBuilder extends React.Component {
         </div>
         <div id="education-entries">
           <div className="entries-list">
-            {this.renderEntries('education')}
+            <Entries entries={entries} eids={eids} header="education" resumeid={resumeid} />
           </div>
         </div>
         <div id="experience-entries">
           <div className="entries-list">
-            {this.renderEntries('experience')}
+            <Entries entries={entries} eids={eids} header="experience" resumeid={resumeid} />
           </div>
         </div>
         <div id="project-entries">
           <div className="entries-list">
-            {this.renderEntries('project')}
+            <Entries entries={entries} eids={eids} header="project" resumeid={resumeid} />
           </div>
         </div>
         <div className="edit-form">
@@ -164,7 +84,6 @@ class ResumeBuilder extends React.Component {
           </form>
         </div>
         <p>resume content 😊</p>
-        <p>this pg will load the content from resumeid and edit. redirects from new too</p>
       </div>
     );
   }
@@ -174,5 +93,3 @@ render(
   <ResumeBuilder />,
   document.getElementById('make-resume'),
 );
-
-export default ResumeBuilder;
