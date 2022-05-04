@@ -58,8 +58,6 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      // console.log(data);
-
       this.setState((prevState) => ({
         eids: prevState.eids.concat({
           entryid: data.entryid,
@@ -78,21 +76,20 @@ class Entries extends React.Component {
       method: 'DELETE',
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
-      this.setState((prevState) => (
-        {
-          entries: prevState.entries.delete(`${entryid}`),
-        }
-      ));
-      // const { entries } = this.state;
-      // console.log(entries);
+      this.setState((prevState) => {
+        prevState.entries.delete(`${entryid}`);
+        prevState.eids.filter((eid) => eid.entryid !== entryid);
+        return {
+          entries: prevState.entries,
+          eids: prevState.eids,
+        };
+      });
     })
       .catch((error) => console.log(error));
   }
 
   render() {
     const { header, eids, entries } = this.state;
-    // console.log('render');
-    // console.log(this);
     return (
       <div>
         <h1>{header}</h1>
@@ -102,7 +99,6 @@ class Entries extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
-                  {console.log(entries)}
                   <span>{entries.get(`${e.entryid}`).content}</span>
                   {/* render delete form */}
                   {/* <form onSubmit={() => this.deleteEntry(e.entryid)}>
