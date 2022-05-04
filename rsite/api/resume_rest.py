@@ -100,27 +100,20 @@ def create_entry():
     if not logname:
         flask.abort(403)
 
+    resumeid = flask.request.args.get("resumeid", type=int, default=0)
+    entryid = flask.request.args.get("entryid", type=int, default=0)
+    header = flask.request.args.get("header", type=str, default='')
+
     # entry must be in json format
     if not flask.request.is_json:
         flask.abort(400)    # incorrect body
 
     body = flask.request.get_json()
-    if "resumeid" not in body:
-        flask.abort(400)    # insufficient arguments
 
-    if "entryid" not in body:
-        flask.abort(400)    # insufficient arguments
-    
     if "text" not in body:
         flask.abort(400)    # insufficient arguments
-    
-    if "header" not in body:
-        flask.abort(400)    # insufficient arguments
 
-    resumeid = int(body['resumeid'])
-    entryid = int(body['entryid'])
-    content = body['text']
-    header = body['header']
+    content = body['text']    
 
     if len(content) == 0 or len(header) == 0 or resumeid == 0:
         flask.abort(400)

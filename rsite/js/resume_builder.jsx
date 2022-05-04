@@ -10,7 +10,7 @@ class ResumeBuilder extends React.Component {
       // cache entries so that if you delete the last entry but want to undo before saving
       entries: props.entries,
       eids: props.eids,
-      newEntries: null,
+      newEntries: Map(),
       resumeid: '',
       username: '',
       email: '',
@@ -35,17 +35,9 @@ class ResumeBuilder extends React.Component {
         return response.json();
       })
       .then((data) => {
-        // initialize newEntries map as empty
-        // add more as needed
-        const newEntries = new Map();
-        newEntries['.experience'] = '';
-        newEntries['.education'] = '';
-        newEntries['.project'] = '';
-
         this.setState({
           entries: data.entries,
           eids: data.eids,
-          newEntries,
           resumeid: str,
           username: data.username,
           email: data.email,
@@ -59,35 +51,51 @@ class ResumeBuilder extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  // {`/entry/?target=/resume/${resumeid}`}
-
-  createEntry(header) {
-
+  handleEntryChange(header, event) {
+    const str = `.${header}`;
+    this.setState({ newEntries: this.newEntries.set(str, event.target.value) });
   }
 
-  deleteEntry(entryid) {
-    fetch('/api/v1/entry/', {
+  createEntry(header, entryid, event) {
+    event.preventDefault();
+
+    const { resumeid, newEntries } = this.state;
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}`, {
       credentials: 'same-origin',
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ entryid,  }),
+      body: JSON.stringify({ text: newEntries[header] }),
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+      return response.json();
+    }).then((data) => {
+      // console.log(data);
+
+      this.setState((prevState) => ({
+        eids: prevState.eids.concat({
+          entryid: data.eids.entryid,
+          resumeid: data.eids.resumeid,
+        }),
+
+        entries: prevState.entries.set(entryid, data.entries[entryid]),
+      }));
+    });
+  }
+
+  deleteEntry(entryid) {
+    fetch(`/api/v1/entry/${entryid}/`, {
+      credentials: 'same-origin',
+      method: 'DELETE',
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          comments: prevState.comments.filter((comment) => comment.commentid !== commentid),
+          entries: prevState.entries.filter((key) => key !== entryid),
         }
       ));
     });
-  }
-
-  handleEntryChange(header, event) {
-    const str = `.${header}`;
-    const { newEntries } = this.state;
-    newEntries[str] = event.target.value;
-    this.setState({ newEntries });
   }
 
   // render entries for the header, as well as edit button and field to add another
