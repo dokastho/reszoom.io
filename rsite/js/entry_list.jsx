@@ -90,9 +90,9 @@ class Entries extends React.Component {
   }
 
   render() {
-    const { header, eids, entries } = this.state;
-    console.log('render');
-    console.log(this);
+    const { header, eids, entries } = this.props;
+    // console.log('render');
+    // console.log(this);
     return (
       <div>
         <h1>{header}</h1>
