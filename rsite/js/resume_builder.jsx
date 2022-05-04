@@ -82,7 +82,8 @@ class ResumeBuilder extends React.Component {
 
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
       }));
-    });
+    })
+      .catch((error) => console.log(error));
   }
 
   deleteEntry(entryid) {
@@ -96,7 +97,10 @@ class ResumeBuilder extends React.Component {
           entries: prevState.entries.delete(`${entryid}`),
         }
       ));
-    });
+      // const { entries } = this.state;
+      // console.log(entries);
+    })
+      .catch((error) => console.log(error));
   }
 
   // render entries for the header, as well as edit button and field to add another
@@ -112,6 +116,7 @@ class ResumeBuilder extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
+                  {console.log(entries)}
                   <p>{entries.get(`${e.entryid}`).content}</p>
                   {/* render delete form */}
                   <form onSubmit={() => this.deleteEntry(e.entryid)}>
