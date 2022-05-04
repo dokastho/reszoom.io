@@ -42,7 +42,7 @@ class NewResume extends React.Component {
       <div id="resume-content" className="list">
         <div className="create-form">
           <div>
-            <form action="/resume/commit/?operation=create&target=/resume" method="post" encType="multipart/form-data">
+            <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
               <input type="checkbox" name="type" />
               <input type="text" name="name" required />
               <input type="hidden" name="operation" value="create" />
