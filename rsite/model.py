@@ -174,7 +174,7 @@ def encrypt(salt, password):
     return password_db_string
 
 
-def delete_entry(entry):
+def delete_helper(entry):
     """Delete an entry or update if freq > 1."""
     database = get_db()
     entry['frequency'] = entry['frequency'] - 1
