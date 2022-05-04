@@ -92,7 +92,7 @@ class ResumeBuilder extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          entries: prevState.entries.remove(entryid),
+          entries: prevState.entries.delete(`${entryid}`),
         }
       ));
     });
