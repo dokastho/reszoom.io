@@ -9,7 +9,7 @@ class Entries extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      newEntries: new Map(),
+      text: '',
       header: props.header,
       resumeid: props.resumeid,
     };
@@ -35,25 +35,21 @@ class Entries extends React.Component {
     console.log(this);
   }
 
-  handleEntryChange(header, event) {
-    const str = `.${header}`;
-    const { newEntries } = this.state;
-    newEntries.set(str, event.target.value);
-    this.setState({ newEntries });
+  handleEntryChange(event) {
+    this.setState({ text: event.target.value });
   }
 
-  createEntry(header, entryid, event) {
+  createEntry(entryid, event) {
     event.preventDefault();
 
-    const { resumeid, newEntries } = this.state;
-    const str = `.${header}`;
+    const { resumeid, header, text } = this.state;
     fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: newEntries.get(str) }),
+      body: JSON.stringify({ text }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
@@ -63,8 +59,8 @@ class Entries extends React.Component {
           entryid: data.entryid,
           resumeid,
         }),
-
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
+        text: '',
       }));
     })
       .catch((error) => console.log(error));
@@ -89,7 +85,12 @@ class Entries extends React.Component {
   }
 
   render() {
-    const { header, eids, entries } = this.state;
+    const {
+      header,
+      eids,
+      entries,
+      text,
+    } = this.state;
     return (
       <div>
         <h1>{header}</h1>
@@ -101,9 +102,6 @@ class Entries extends React.Component {
                   {/* render content */}
                   <span>{entries.get(`${e.entryid}`).content}</span>
                   {/* render delete form */}
-                  {/* <form onSubmit={() => this.deleteEntry(e.entryid)}>
-                    <input type="submit" value="Delete" />
-                </form> */}
                   <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                 </div>
               )
@@ -111,8 +109,8 @@ class Entries extends React.Component {
           ))
         }
         {/* render create form */}
-        <form onSubmit={(event) => this.createEntry(header, 0, event)}>
-          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} />
+        <form onSubmit={(event) => this.createEntry(0, event)}>
+          <input type="text" onChange={(event) => this.handleEntryChange(event)} value={text} />
           <input type="submit" />
         </form>
       </div>
