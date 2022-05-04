@@ -80,7 +80,8 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          entries: prevState.entries.delete(`${entryid}`),
+          entries: prevState.entries ? prevState.entries.delete(`${entryid}`) : prevState.entries,
+          eids: prevState.eids.filter((eid) => eid.entryid !== entryid),
         }
       ));
       // const { entries } = this.state;
