@@ -54,6 +54,7 @@ def show_saved(resumeid):
         if resume['owner'] != logname:
             flask.abort(403)
 
+        context['resumeid'] = resumeid
         return flask.render_template('view_edit.html', **context)
 
 @rsite.app.route('/resume/commit/', methods=['POST'])
