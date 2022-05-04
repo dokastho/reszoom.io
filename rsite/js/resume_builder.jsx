@@ -112,6 +112,7 @@ class ResumeBuilder extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
+                  {console.log(entries)}
                   <p>{entries.get(`${e.entryid}`).content}</p>
                   {/* render delete form */}
                   <form onSubmit={() => this.deleteEntry(e.entryid)}>
