@@ -85,7 +85,8 @@ class ResumeBuilder extends React.Component {
     });
   }
 
-  deleteEntry(entryid) {
+  deleteEntry(entryid, event) {
+    event.preventDefault();
     fetch(`/api/v1/entry/${entryid}/`, {
       credentials: 'same-origin',
       method: 'DELETE',
@@ -114,7 +115,7 @@ class ResumeBuilder extends React.Component {
                   {/* render content */}
                   <p>{entries.get(`${e.entryid}`).content}</p>
                   {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)}>
+                  <form onSubmit={(event) => this.deleteEntry(e.entryid, event)}>
                     <input type="submit" value="Delete" />
                   </form>
                 </div>
