@@ -4,6 +4,7 @@ up next:
 - [ x ] deleting resumes
 - [ x ] starting forms
 - [ ] make resumeid key type Number
+- [ ] remove the ? added by delete
 - [ ] starting form "regions" which each have their own class
 
 down the road...
