@@ -18,15 +18,15 @@ def commit_entry():
     if not logname:
         flask.abort(403)
 
-    op = flask.request.args.get("operation", default=None, type=str)
+    op = flask.request.form.get("operation", default=None, type=str)
+    resumeid = flask.request.form.get('resumeid', type=int, default=0)
+    entryid = flask.request.form.get('entryid', type=int, default=0)
 
     if op is None:
         flask.abort(404)
 
     if op == "create":
         # get name and type of resume
-        resumeid = flask.request.form.get('resumeid', type=int, default=0)
-        entryid = flask.request.form.get('entryid', type=int, default=0)
         content = flask.request.form.get('entrycontent')
         header = flask.request.form.get('header')
 
