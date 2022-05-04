@@ -176,7 +176,7 @@ def create_entry():
         "resumeid": resumeid
     }), 201
 
-@rsite.app.route("/api/v1/entry/<int: entryid>/", methods=['DELETE'])
+@rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])
 def delete_entry(entryid):
     """Delete an entry."""
     if entryid == 0:
