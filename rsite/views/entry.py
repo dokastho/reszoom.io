@@ -9,7 +9,7 @@ import rsite
 from rsite.model import show_username
 
 
-@rsite.app.route("/entry/")
+@rsite.app.route("/entry/", methods=['POST'])
 def commit_entry():
     """Post an entry."""
     database = rsite.model.get_db()
@@ -31,12 +31,6 @@ def commit_entry():
         
         if len(content) == 0 or len(header) == 0:
             flask.abort(400)
-
-        cur = database.execute(
-            "SELECT AUTO_INCREMENT "
-            "FROM entries"
-        )
-        entryid = cur.fetchone()
         
         cur = database.execute(
             "INSERT INTO entries "
@@ -45,6 +39,14 @@ def commit_entry():
             (1, logname, header, content, )
         )
         cur.fetchone()
+
+        cur = database.execute(
+            "SELECT MAX(entryid) "
+            "AS id "
+            "FROM entries"
+        )
+        entryid = cur.fetchone()
+        entryid = entryid['id']
 
         cur = database.execute(
             "INSERT INTO resume_to_entry "
