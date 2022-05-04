@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
 import Entries from './entry_list';
 
@@ -38,7 +38,29 @@ class ResumeBuilder extends React.Component {
           fullname: data.fullname,
         });
 
-        const { username } = this.state;
+        const {
+          entries,
+          eids,
+          resumeid,
+          username,
+        } = this.state;
+
+        const edu = document.getElementById('education-entries');
+        const exp = document.getElementById('experience-entries');
+        const proj = document.getElementById('project-entries');
+
+        ReactDOM.render(
+          <Entries entries={entries} eids={eids} resumeid={resumeid} header="education" />,
+          edu,
+        );
+        ReactDOM.render(
+          <Entries entries={entries} eids={eids} resumeid={resumeid} header="experience" />,
+          exp,
+        );
+        ReactDOM.render(
+          <Entries entries={entries} eids={eids} resumeid={resumeid} header="project" />,
+          proj,
+        );
 
         console.log(username);
       })
@@ -50,8 +72,6 @@ class ResumeBuilder extends React.Component {
       resumeid,
       fullname,
       email,
-      entries,
-      eids,
     } = this.state;
     return (
       <div id="resume-content">
@@ -61,21 +81,9 @@ class ResumeBuilder extends React.Component {
             <h3>{email}</h3>
           </div>
         </div>
-        <div id="education-entries">
-          <div className="entries-list">
-            <Entries entries={entries} eids={eids} header="education" resumeid={resumeid} />
-          </div>
-        </div>
-        <div id="experience-entries">
-          <div className="entries-list">
-            <Entries entries={entries} eids={eids} header="experience" resumeid={resumeid} />
-          </div>
-        </div>
-        <div id="project-entries">
-          <div className="entries-list">
-            <Entries entries={entries} eids={eids} header="project" resumeid={resumeid} />
-          </div>
-        </div>
+        <div id="education-entries" />
+        <div id="experience-entries" />
+        <div id="project-entries" />
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
