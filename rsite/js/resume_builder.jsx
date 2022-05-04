@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM, { render } from 'react-dom';
-import PropTypes from 'prop-types';
 
 class ResumeBuilder extends React.Component {
   constructor(props) {
@@ -8,9 +7,9 @@ class ResumeBuilder extends React.Component {
     this.state = {
       // state attributes go here
       // cache entries so that if you delete the last entry but want to undo before saving
-      entries: props.entries,
-      eids: props.eids,
-      newEntries: Map(),
+      entries: new Map(),
+      eids: [],
+      newEntries: new Map(),
       resumeid: '',
       username: '',
       email: '',
@@ -159,7 +158,6 @@ class ResumeBuilder extends React.Component {
             {this.renderEntries(proj, '.entries-list', 'project')}
           </div>
         </div>
-        <div className="entries-list" />
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
@@ -178,10 +176,5 @@ render(
   <ResumeBuilder />,
   document.getElementById('make-resume'),
 );
-
-ResumeBuilder.propTypes = {
-  entries: PropTypes.instanceOf(Map).isRequired,
-  eids: PropTypes.instanceOf(Array).isRequired,
-};
 
 export default ResumeBuilder;
