@@ -40,8 +40,6 @@ def load_resumes():
                 (logname, )
             )
             entries = cur.fetchall()
-            if len(entries) == 0:
-                flask.abort(500)
 
             # construct entries map
             data = {}
