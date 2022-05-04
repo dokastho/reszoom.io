@@ -6,7 +6,7 @@ URLs include:
 """
 import flask
 import rsite
-from rsite.model import show_username
+from rsite.model import delete_entry, show_username
 
 
 @rsite.app.route("/entry/", methods=['POST'])
@@ -25,22 +25,22 @@ def commit_entry():
 
     if op == "create":
         # get name and type of resume
-        resumeid = flask.request.form.get('resumeid', type=int)
-        entryid = flask.request.form.get('entryid', type=int)
+        resumeid = flask.request.form.get('resumeid', type=int, default=0)
+        entryid = flask.request.form.get('entryid', type=int, default=0)
         content = flask.request.form.get('entrycontent')
         header = flask.request.form.get('header')
-        
+
         if len(content) == 0 or len(header) == 0 or resumeid == 0:
             flask.abort(400)
 
         # entryid not supplied, so entry is new
-        if entryid == None:
+        if entryid == 0:
             # insert new
             cur = database.execute(
-            "INSERT INTO entries "
-            "(frequency, owner, header, content) "
-            "VALUES (?, ?, ?, ?)",
-            (1, logname, header, content, )
+                "INSERT INTO entries "
+                "(frequency, owner, header, content) "
+                "VALUES (?, ?, ?, ?)",
+                (1, logname, header, content, )
             )
             cur.fetchone()
 
@@ -61,7 +61,7 @@ def commit_entry():
                 (resumeid, entryid, )
             )
             cur.fetchone()
-        
+
         else:
             # entry already in db so increment freq
             cur = database.execute(
@@ -83,12 +83,25 @@ def commit_entry():
             cur.fetchone()
 
     elif op == "delete":
-        pass
+        if entryid == 0:
+            flask.abort(404)
+
+        cur = database.execute(
+            "SELECT * "
+            "FROM entries "
+            "WHERE entryid == ?",
+            (entryid, )
+        )
+        entry = cur.fetchone()
+
+        if logname != entry['owner']:
+            flask.abort(403)
+            
+        delete_entry(entry)
 
     elif op == "save":
         pass
 
-    
     target = rsite.model.get_target()
 
     return flask.redirect(target)

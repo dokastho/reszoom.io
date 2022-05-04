@@ -7,6 +7,7 @@ class ResumeBuilder extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
+      // cache entries so that if you delete the last entry but want to undo before saving
       entries: props.entries,
       eids: props.eids,
       resumeid: '',

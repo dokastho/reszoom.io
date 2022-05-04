@@ -172,3 +172,25 @@ def encrypt(salt, password):
     password_hash = hash_obj.hexdigest()
     password_db_string = "$".join([algorithm, salt, password_hash])
     return password_db_string
+
+
+def delete_entry(entry):
+    """Delete an entry or update if freq > 1."""
+    database = get_db()
+    entry['frequency'] = entry['frequency'] - 1
+    if entry['frequency'] == 0:
+        # delete the entry
+        cur = database.execute(
+            "DELETE FROM entries "
+            "WHERE entryid == ?",
+            (entry['entryid'],)
+        )
+
+    else:
+        # update the entry
+        cur = database.execute(
+            "UPDATE entries "
+            "SET frequency = ?"
+            "WHERE entryid == ?",
+            (entry['frequency'], entry['entryid'],)
+        )
