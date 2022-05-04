@@ -73,16 +73,19 @@ class ResumeBuilder extends React.Component {
       return response.json();
     }).then((data) => {
       // console.log(data);
+      newEntries[str] = '';
 
       this.setState((prevState) => ({
         eids: prevState.eids.concat({
           entryid: data.entryid,
           resumeid,
+          newEntries,
         }),
 
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
       }));
-    });
+    })
+      .catch((error) => console.log(error));
   }
 
   deleteEntry(entryid) {
@@ -96,13 +99,17 @@ class ResumeBuilder extends React.Component {
           entries: prevState.entries.delete(`${entryid}`),
         }
       ));
-    });
+      // const { entries } = this.state;
+      // console.log(entries);
+    })
+      .catch((error) => console.log(error));
   }
 
   // render entries for the header, as well as edit button and field to add another
   // todo: start suggestion stuff for recommending adding more/less items
   renderEntries(header) {
     const { eids, entries } = this.state;
+    // console.log(entries);
     return (
       <div>
         <h1>{header}</h1>
@@ -112,6 +119,7 @@ class ResumeBuilder extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
+                  {console.log(entries)}
                   <p>{entries.get(`${e.entryid}`).content}</p>
                   {/* render delete form */}
                   <form onSubmit={() => this.deleteEntry(e.entryid)}>
