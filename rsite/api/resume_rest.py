@@ -40,8 +40,6 @@ def load_resumes():
                 (logname, )
             )
             entries = cur.fetchall()
-            if len(entries) == 0:
-                flask.abort(500)
 
             # construct entries map
             data = {}
@@ -170,10 +168,14 @@ def create_entry():
 
     return flask.jsonify({
         "entryid": entryid,
-        "frequency": freq,
-        "header": header,
-        "content": content,
-        "resumeid": resumeid
+        "resumeid": resumeid,
+        "entry":
+        {
+            "content": content,
+            "frequency": freq,
+            "header": header,
+            "owner": logname
+        }
     }), 201
 
 @rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])

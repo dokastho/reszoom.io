@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Cookies from 'js-cookie';
 
 class ResumeBuilder extends React.Component {
   constructor(props) {
@@ -22,13 +23,10 @@ class ResumeBuilder extends React.Component {
   }
 
   componentDidMount() {
-    // get resume id from URL
-    let str = window.location.href;
-    str = str.substring(0, str.length - 1);
-    str = str.substring(str.lastIndexOf('/') + 1);
+    const rid = Number(Cookies.get('resumeid'));
 
     // Call REST API to get the user's past entries
-    fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${str}`, { credentials: 'same-origin' })
+    fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${rid}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -38,7 +36,7 @@ class ResumeBuilder extends React.Component {
           // entries: data.entries,
           entries: new Map(Object.entries(data.entries)),
           eids: data.eids,
-          resumeid: str,
+          resumeid: rid,
           username: data.username,
           email: data.email,
           fullname: data.fullname,
@@ -53,20 +51,23 @@ class ResumeBuilder extends React.Component {
 
   handleEntryChange(header, event) {
     const str = `.${header}`;
-    this.setState({ newEntries: this.newEntries.set(str, event.target.value) });
+    const { newEntries } = this.state;
+    newEntries.set(str, event.target.value);
+    this.setState({ newEntries });
   }
 
   createEntry(header, entryid, event) {
     event.preventDefault();
 
     const { resumeid, newEntries } = this.state;
+    const str = `.${header}`;
     fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text: newEntries.get(header) }),
+      body: JSON.stringify({ text: newEntries.get(str) }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
@@ -75,11 +76,11 @@ class ResumeBuilder extends React.Component {
 
       this.setState((prevState) => ({
         eids: prevState.eids.concat({
-          entryid: data.eids.entryid,
-          resumeid: data.eids.resumeid,
+          entryid: data.entryid,
+          resumeid,
         }),
 
-        entries: prevState.entries.set(entryid, data.entries.get(`${entryid}`)),
+        entries: prevState.entries.set(`${data.entryid}`, data.entry),
       }));
     });
   }
@@ -92,7 +93,7 @@ class ResumeBuilder extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          entries: prevState.entries.remove(entryid),
+          entries: prevState.entries.delete(`${entryid}`),
         }
       ));
     });
@@ -113,8 +114,8 @@ class ResumeBuilder extends React.Component {
                   {/* render content */}
                   <p>{entries.get(`${e.entryid}`).content}</p>
                   {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)} encType="multipart/form-data">
-                    <input type="submit" name="delete" value="Delete" />
+                  <form onSubmit={() => this.deleteEntry(e.entryid)}>
+                    <input type="submit" value="Delete" />
                   </form>
                 </div>
               )
@@ -122,9 +123,9 @@ class ResumeBuilder extends React.Component {
           ))
         }
         {/* render create form */}
-        <form onSubmit={() => this.createEntry(header)} encType="multipart/form-data">
-          <input type="text" name="entrycontent" onChange={(event) => this.handleEntryChange(header, event)} required />
-          <input type="submit" name="addentry" value="Add an entry" />
+        <form onSubmit={(event) => this.createEntry(header, 0, event)}>
+          <input type="text" onChange={(event) => this.handleEntryChange(header, event)} />
+          <input type="submit" />
         </form>
       </div>
     );
