@@ -3,6 +3,21 @@ import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
 import Entries from './entry_list';
 
+function getEntriesByHeader(entries, eids, header) {
+  // iterate over eids and add entry, eid to return data if they match the header
+  const returnEntries = new Map();
+  const returnEids = [];
+  eids.forEach((e) => {
+    const key = `${e.entryid}`;
+    const entry = entries.get(key);
+    if (entry.header === header) {
+      returnEntries.set(key, entry);
+      returnEids.concat(e);
+    }
+  });
+  return { returnEntries, returnEids };
+}
+
 class ResumeBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -45,23 +60,21 @@ class ResumeBuilder extends React.Component {
           username,
         } = this.state;
 
-        const edu = document.getElementById('education-entries');
-        const exp = document.getElementById('experience-entries');
-        const proj = document.getElementById('project-entries');
+        const fields = ['education', 'experience', 'project'];
 
-        ReactDOM.render(
-          <Entries entries={entries} eids={eids} resumeid={resumeid} header="education" />,
-          edu,
-        );
-        ReactDOM.render(
-          <Entries entries={entries} eids={eids} resumeid={resumeid} header="experience" />,
-          exp,
-        );
-        ReactDOM.render(
-          <Entries entries={entries} eids={eids} resumeid={resumeid} header="project" />,
-          proj,
-        );
-
+        fields.forEach((f) => {
+          const post = document.getElementById(`${f}-entries`);
+          const { sectionEntries, sectionEids } = getEntriesByHeader(entries, eids, f);
+          ReactDOM.render(
+            <Entries
+              entries={sectionEntries}
+              eids={sectionEids}
+              resumeid={resumeid}
+              header={f}
+            />,
+            post,
+          );
+        });
         console.log(username);
       })
       .catch((error) => console.log(error));
