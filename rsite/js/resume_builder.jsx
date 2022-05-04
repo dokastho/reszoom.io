@@ -10,14 +10,16 @@ class ResumeBuilder extends React.Component {
       // cache entries so that if you delete the last entry but want to undo before saving
       entries: props.entries,
       eids: props.eids,
+      newEntries: null,
       resumeid: '',
       username: '',
       email: '',
       fullname: '',
     };
-    this.renderResume = this.renderResume.bind(this);
+    this.createEntry = this.createEntry.bind(this);
+    this.deleteEntry = this.deleteEntry.bind(this);
+    this.handleEntryChange = this.handleEntryChange.bind(this);
     this.renderEntries = this.renderEntries.bind(this);
-    this.fetchUserInfo = this.fetchUserInfo.bind(this);
   }
 
   componentDidMount() {
@@ -33,22 +35,65 @@ class ResumeBuilder extends React.Component {
         return response.json();
       })
       .then((data) => {
+        // initialize newEntries map as empty
+        // add more as needed
+        const newEntries = new Map();
+        newEntries['.experience'] = '';
+        newEntries['.education'] = '';
+        newEntries['.project'] = '';
+
         this.setState({
           entries: data.entries,
           eids: data.eids,
+          newEntries,
           resumeid: str,
           username: data.username,
           email: data.email,
           fullname: data.fullname,
         });
+
+        const { username } = this.state;
+
+        console.log(username);
       })
       .catch((error) => console.log(error));
+  }
+
+  // {`/entry/?target=/resume/${resumeid}`}
+
+  createEntry(header) {
+
+  }
+
+  deleteEntry(entryid) {
+    fetch('/api/v1/entry/', {
+      credentials: 'same-origin',
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ entryid,  }),
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+      this.setState((prevState) => (
+        {
+          comments: prevState.comments.filter((comment) => comment.commentid !== commentid),
+        }
+      ));
+    });
+  }
+
+  handleEntryChange(header, event) {
+    const str = `.${header}`;
+    const { newEntries } = this.state;
+    newEntries[str] = event.target.value;
+    this.setState({ newEntries });
   }
 
   // render entries for the header, as well as edit button and field to add another
   // todo: start suggestion stuff for recommending adding more/less items
   renderEntries(post, query, header) {
-    const { eids, entries, resumeid } = this.state;
+    const { eids, entries } = this.state;
     ReactDOM.render(
       <div>
         <h1>{header}</h1>
@@ -57,11 +102,10 @@ class ResumeBuilder extends React.Component {
             entries[e.entryid].header === header
               ? (
                 <div>
+                  {/* render content */}
                   <p key={e.entryid}>{entries[e.entryid].content}</p>
-                  <form action={`/entry/?target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
-                    <input type="hidden" name="operation" value="delete" />
-                    <input type="hidden" name="resumeid" value={resumeid} />
-                    <input type="hidden" name="entryid" value={e.entryid} />
+                  {/* render delete form */}
+                  <form onSubmit={() => this.deleteEntry(e.entryid)} method="post" encType="multipart/form-data">
                     <input type="submit" name="delete" value="Delete" />
                   </form>
                 </div>
@@ -69,11 +113,9 @@ class ResumeBuilder extends React.Component {
               : null
           ))
         }
-        <form action={`/entry/?target=/resume/${resumeid}`} method="post" encType="multipart/form-data">
-          <input type="text" name="entrycontent" required />
-          <input type="hidden" name="operation" value="create" />
-          <input type="hidden" name="header" value={header} />
-          <input type="hidden" name="resumeid" value={resumeid} />
+        {/* render create form */}
+        <form onSubmit={() => this.createEntry(header)} method="post" encType="multipart/form-data">
+          <input type="text" name="entrycontent" onChange={(event) => this.handleEntryChange(header, event)} required />
           <input type="submit" name="addentry" value="Add an entry" />
         </form>
       </div>,

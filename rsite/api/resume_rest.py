@@ -7,6 +7,7 @@ URLs include:
 """
 import flask
 import rsite
+from rsite.model import delete_entry
 
 
 @rsite.app.route('/api/v1/resume/load/', methods=['GET'])
@@ -85,3 +86,126 @@ def load_resumes():
         else:
             flask.abort(403)
         return flask.jsonify(res), 201
+
+###############################################################################
+##### ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES #####
+###############################################################################
+
+@rsite.app.route("/api/v1/entry/", methods=['POST'])
+def create_entry():
+    """Post an entry."""
+    database = rsite.model.get_db()
+
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+
+    # entry must be in json format
+    if not flask.request.is_json:
+        flask.abort(400)    # incorrect body
+
+    body = flask.request.get_json()
+    if "resumeid" not in body:
+        flask.abort(400)    # insufficient arguments
+
+    if "entryid" not in body:
+        flask.abort(400)    # insufficient arguments
+    
+    if "text" not in body:
+        flask.abort(400)    # insufficient arguments
+    
+    if "header" not in body:
+        flask.abort(400)    # insufficient arguments
+
+    resumeid = int(body['resumeid'])
+    entryid = int(body['entryid'])
+    content = body['text']
+    header = body['header']
+
+    if len(content) == 0 or len(header) == 0 or resumeid == 0:
+        flask.abort(400)
+
+    freq = 1
+    # entryid not supplied, so entry is new
+    if entryid == 0:
+        # insert new
+        cur = database.execute(
+            "INSERT INTO entries "
+            "(frequency, owner, header, content) "
+            "VALUES (?, ?, ?, ?)",
+            (freq, logname, header, content, )
+        )
+        cur.fetchone()
+
+        # get id
+        cur = database.execute(
+            "SELECT MAX(entryid) "
+            "AS id "
+            "FROM entries"
+        )
+        data = cur.fetchone()
+        entryid = data['id']
+
+        # insert id into resume_to_entry
+        cur = database.execute(
+            "INSERT INTO resume_to_entry "
+            "(resumeid, entryid) "
+            "VALUES (?, ?)",
+            (resumeid, entryid, )
+        )
+        cur.fetchone()
+
+    else:
+        # entry already in db so increment freq
+        cur = database.execute(
+            "SELECT frequency "
+            "FROM entries "
+            "WHERE entryid == ?",
+            (entryid, )
+        )
+        data = cur.fetchone()
+        freq = data['frequency']
+        freq += 1
+
+        cur = database.execute(
+            "UPDATE entries "
+            "SET frequency = ? "
+            "WHERE entryid == ?",
+            (freq, entryid, )
+        )
+        cur.fetchone()
+
+    return flask.jsonify({
+        "entryid": entryid,
+        "frequency": freq,
+        "header": header,
+        "content": content,
+        "resumeid": resumeid
+    }), 201
+
+@rsite.app.route("/api/v1/entry/<int: entryid>/", methods=['DELETE'])
+def delete_entry(entryid):
+    """Delete an entry."""
+    if entryid == 0:
+            flask.abort(404)
+    
+    database = rsite.model.get_db()
+
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE entryid == ?",
+        (entryid, )
+    )
+    entry = cur.fetchone()
+
+    if logname != entry['owner']:
+        flask.abort(403)
+        
+    delete_entry(entry)
+
+    return flask.Response(status=204)
