@@ -22,13 +22,10 @@ class ResumeBuilder extends React.Component {
   }
 
   componentDidMount() {
-    // get resume id from URL
-    let str = window.location.href;
-    str = str.substring(0, str.length - 1);
-    str = str.substring(str.lastIndexOf('/') + 1);
+    const rid = Number(window.id);
 
     // Call REST API to get the user's past entries
-    fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${str}`, { credentials: 'same-origin' })
+    fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${rid}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -38,7 +35,7 @@ class ResumeBuilder extends React.Component {
           // entries: data.entries,
           entries: new Map(Object.entries(data.entries)),
           eids: data.eids,
-          resumeid: str,
+          resumeid: rid,
           username: data.username,
           email: data.email,
           fullname: data.fullname,
@@ -92,7 +89,7 @@ class ResumeBuilder extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => (
         {
-          entries: prevState.entries.remove(entryid),
+          entries: prevState.entries.delete(`${entryid}`),
         }
       ));
     });
