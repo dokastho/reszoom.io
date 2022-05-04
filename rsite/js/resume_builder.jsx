@@ -27,101 +27,20 @@ class ResumeBuilder extends React.Component {
     str = str.substring(str.lastIndexOf('/') + 1);
 
     // Call REST API to get the user's past entries
-    fetch('/api/v1/resume/load/?fetch=userinfo', { credentials: 'same-origin' })
+    fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${str}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
         this.setState({
-          entries: data,
+          entries: data.entries,
+          eids: data.eids,
           resumeid: str,
-        });
-        // const {
-        //   entries,
-        //   resumeid,
-        // } = this.state;
-
-        // console.log(entries);
-        // console.log(resumeid);
-
-        // const post = document.getElementById('resume-content');
-
-        // render the editing options form
-        // ReactDOM.render(
-        //   // delete first
-        //   <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
-        //     <input type="hidden" name="id" value={resumeid} />
-        //     <input type="hidden" name="operation" value="delete" />
-        //     <input type="submit" value="Delete Resume" />
-        //   </form>,
-        //   post.querySelector('.edit-form'),
-        // );
-        // render the resume components
-        this.renderResume();
-      })
-      .catch((error) => console.log(error));
-  }
-
-  fetchUserInfo() {
-    fetch('/api/v1/userinfo', { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({
           username: data.username,
           email: data.email,
           fullname: data.fullname,
         });
-
-        // const { fullname, username, email } = this.state;
-        const { username } = this.state;
-
-        console.log(username);
-
-        // render the user info
-        // ReactDOM.render(
-        //   <div>
-        //     <h1>{fullname}</h1>
-        //     <h3>{email}</h3>
-        //   </div>,
-        //   post.querySelector('.about-me'),
-        // );
-      })
-      .catch((error) => console.log(error));
-  }
-
-  renderResume() {
-    // render the resume itself
-    const { resumeid } = this.state;
-    fetch(`/api/v1/resume/load/?fetch=resume&id=${resumeid}`, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({
-          eids: data.eids,
-        });
-        this.fetchUserInfo();
-
-        // RENDER THE RESUME
-        // // load the dom id's
-        // const about = document.getElementById('user-header');
-        // const edu = document.getElementById('education-entries');
-        // const exp = document.getElementById('experience-entries');
-        // const proj = document.getElementById('project-entries');
-
-        // // render about me
-        // this.renderUserInfo(about);
-        // // render education
-        // this.renderEntries(edu, '.entries-list', 'education');
-        // // render experience
-        // this.renderEntries(exp, '.entries-list', 'experience');
-        // // render project info
-        // this.renderEntries(proj, '.entries-list', 'project');
       })
       .catch((error) => console.log(error));
   }

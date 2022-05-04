@@ -29,7 +29,7 @@ def load_resumes():
                 (logname, )
             )
             resumes = cur.fetchall()
-            data = {'resumes': resumes}
+            res = {'resumes': resumes}
         elif op == "userinfo":
             # load all entries for a specific user
             cur = database.execute(
@@ -51,15 +51,12 @@ def load_resumes():
                     'header': entry['header'],
                     'content': entry['content']
                 }
-            
 
-        elif op == "resume":
-            # load entries for a specific resume (and implicitly, user)
+            # get eids for the resume id
             rid = flask.request.args.get("id", default=0, type=int)
 
             if rid == 0:
                 flask.abort(404)
-
             cur = database.execute(
                 "SELECT * "
                 "FROM resume_to_entry "
@@ -68,8 +65,23 @@ def load_resumes():
             )
             eids = cur.fetchall()
 
-            data = {'eids': eids}
+            # get the userinfo
+            cur = database.execute(
+                "SELECT * "
+                "FROM users "
+                "WHERE username == ?",
+                (logname, )
+            )
+            userinfo = cur.fetchone()
 
+            # construct the response
+            res = {
+                'eids': eids,
+                'entries': data,
+                'username': userinfo['username'],
+                'fullname': userinfo['fullname'],
+                'email': userinfo['email'],
+            }
         else:
             flask.abort(403)
-        return flask.jsonify(data), 201
+        return flask.jsonify(res), 201
