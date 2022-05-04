@@ -8,7 +8,7 @@ URLs include:
 """
 import flask
 import rsite
-from rsite.model import show_username, delete_entry
+from rsite.model import show_username, delete_helper
 
 
 @rsite.app.route('/resume/', methods=['GET'])
@@ -47,6 +47,9 @@ def show_saved(resumeid):
             (resumeid, )
         )
         resume = cur.fetchone()
+
+        if resume is None:
+            flask.abort(404)
 
         if resume['owner'] != logname:
             flask.abort(403)
@@ -110,7 +113,7 @@ def post_resumes():
             if logname != entry['owner']:
                 flask.abort(403)
             
-            delete_entry(entry)
+            delete_helper(entry)
             
             # execute the update/delete for this entry
             cur.fetchone()
