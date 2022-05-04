@@ -82,7 +82,8 @@ class ResumeBuilder extends React.Component {
 
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
       }));
-    });
+    })
+      .catch((error) => console.log(error));
   }
 
   deleteEntry(entryid) {
@@ -96,13 +97,17 @@ class ResumeBuilder extends React.Component {
           entries: prevState.entries.delete(`${entryid}`),
         }
       ));
-    });
+      // const { entries } = this.state;
+      // console.log(entries);
+    })
+      .catch((error) => console.log(error));
   }
 
   // render entries for the header, as well as edit button and field to add another
   // todo: start suggestion stuff for recommending adding more/less items
   renderEntries(header) {
     const { eids, entries } = this.state;
+    // console.log(entries);
     return (
       <div>
         <h1>{header}</h1>
@@ -112,11 +117,13 @@ class ResumeBuilder extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
-                  <p>{entries.get(`${e.entryid}`).content}</p>
+                  {console.log(entries)}
+                  <span>{entries.get(`${e.entryid}`).content}</span>
                   {/* render delete form */}
-                  <form onSubmit={() => this.deleteEntry(e.entryid)}>
+                  {/* <form onSubmit={() => this.deleteEntry(e.entryid)}>
                     <input type="submit" value="Delete" />
-                  </form>
+                  </form> */}
+                  <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                 </div>
               )
               : null
