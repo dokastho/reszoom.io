@@ -97,6 +97,7 @@ class ResumeBuilder extends React.Component {
         <div id="education-entries" />
         <div id="experience-entries" />
         <div id="project-entries" />
+        {/* render the resume options */}
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
