@@ -23,10 +23,15 @@ class ResumeBuilder extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
-      // cache entries so that if you delete the last entry but want to undo before saving
       entries: new Map(),
       eids: [],
+
+      // resume-specific attributes
       resumeid: '',
+      resumename: '',
+      resumetype: false,
+
+      // user-specific attributes
       username: '',
       email: '',
       fullname: '',
@@ -48,6 +53,8 @@ class ResumeBuilder extends React.Component {
           entries: new Map(Object.entries(data.entries)),
           eids: data.eids,
           resumeid: rid,
+          resumename: data.resumename,
+          resumetype: data.resumetype,
           username: data.username,
           email: data.email,
           fullname: data.fullname,
@@ -83,11 +90,15 @@ class ResumeBuilder extends React.Component {
   render() {
     const {
       resumeid,
+      resumename,
+      resumetype,
       fullname,
       email,
     } = this.state;
     return (
       <div id="resume-content">
+        <h1>{resumename}</h1>
+        <h3>{resumetype ? 'Student Resume' : 'Employee Resume'}</h3>
         <div id="user-header">
           <div className="about-me">
             <h1>{fullname}</h1>
