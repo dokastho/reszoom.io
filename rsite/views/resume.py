@@ -54,7 +54,10 @@ def show_saved(resumeid):
         if resume['owner'] != logname:
             flask.abort(403)
 
-        return flask.render_template('view_edit.html', **context)
+        resp = flask.make_response(flask.render_template('view_edit.html', **context))
+        resp.set_cookie('resumeid', f'{resumeid}')
+
+        return resp
 
 @rsite.app.route('/resume/commit/', methods=['POST'])
 def post_resumes():
