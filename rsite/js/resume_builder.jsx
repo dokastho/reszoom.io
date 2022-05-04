@@ -103,7 +103,15 @@ class ResumeBuilder extends React.Component {
         {
           eids.map((e) => (
             entries[e.entryid].header === header
-              ? <p key={e.entryid}>{entries[e.entryid].content}</p>
+              ? (
+                <div>
+                  <p key={e.entryid}>{entries[e.entryid].content}</p>
+                  <form action="" method="post" encType="multipart/form-data">
+                    <input type="hidden" name="operation" value="delete" />
+                    <input type="submit" name="delete" value="Delete" />
+                  </form>
+                </div>
+              )
               : null
           ))
         }
