@@ -10,7 +10,7 @@ class ResumeBuilder extends React.Component {
       // cache entries so that if you delete the last entry but want to undo before saving
       entries: props.entries,
       eids: props.eids,
-      newEntries: Map(),
+      newEntries: new Map(),
       resumeid: '',
       username: '',
       email: '',
