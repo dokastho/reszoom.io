@@ -5,17 +5,17 @@ import Entries from './entry_list';
 
 function getEntriesByHeader(entries, eids, header) {
   // iterate over eids and add entry, eid to return data if they match the header
-  const returnEntries = new Map();
-  const returnEids = [];
+  const sectionEntries = new Map();
+  let sectionEids = [];
   eids.forEach((e) => {
     const key = `${e.entryid}`;
     const entry = entries.get(key);
     if (entry.header === header) {
-      returnEntries.set(key, entry);
-      returnEids.concat(e);
+      sectionEntries.set(key, entry);
+      sectionEids = sectionEids.concat(e);
     }
   });
-  return { returnEntries, returnEids };
+  return { sectionEntries, sectionEids };
 }
 
 class ResumeBuilder extends React.Component {
