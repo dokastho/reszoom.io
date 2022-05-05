@@ -215,3 +215,42 @@ def delete_entry(entryid):
     delete_helper(entry)
 
     return flask.Response(status=204)
+
+
+@rsite.app.route("/api/v1/entry/<int:posid>/", methods=['POST'])
+def move_entry(posid):
+    """Update the resume_to_entry db entry with the new positions."""
+    
+    new_pos = flask.request.args.get("newPos")
+
+    if posid == 0 or new_pos == 0:
+        flask.abort(404)
+    
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+    
+    database = rsite.model.get_db()
+    # authenticate the user as owner
+    cur = database.execute(
+        "SELECT * "
+        "FROM resume_to_id "
+        "WHERE pos == ? AND owner == ?"
+        (posid, logname, )
+    )
+    auth = cur.fetchone()
+    
+    if auth is None:
+        flask.abort(403)
+    
+    # update the entries
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (posid, )
+    )
+    cur.fetchone()
+
+    return flask.Response(status=204)
+    

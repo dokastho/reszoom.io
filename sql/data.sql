@@ -24,11 +24,11 @@ INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
 INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Added some content for another resume');
-INSERT INTO resume_to_entry(resumeid, entryid)
-VALUES (1, 1);
-INSERT INTO resume_to_entry(resumeid, entryid)
-VALUES (1, 2);
-INSERT INTO resume_to_entry(resumeid, entryid)
-VALUES (1, 3);
-INSERT INTO resume_to_entry(resumeid, entryid)
-VALUES (2, 4);
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 1, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 2, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 3, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 4, 'tdokas');

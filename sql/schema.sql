@@ -45,9 +45,11 @@ CREATE TABLE resume_to_entry(
   resumeid INTEGER NOT NULL,
   pos INTEGER PRIMARY KEY AUTOINCREMENT,
   entryid INTEGER NOT NULL,
+  owner VARCHAR(20) NOT NULL,
   -- PRIMARY KEY(resumeid, entryid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
-  FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE
+  FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
+  FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
 -- education and experience
