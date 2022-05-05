@@ -64,17 +64,13 @@ class Entries extends React.Component {
       return response.json();
     }).then((data) => {
       this.setState((prevState) => ({
-        eids: prevState.eids.concat({
-          entryid: data.entryid,
-          pos: data.pos,
-          owner: username,
-          resumeid,
-        }),
+        eids: prevState.eids.concat(data.eid),
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
         text: '',
       }));
     })
       .catch((error) => console.log(error));
+    console.log(username);
   }
 
   deleteEntry(entryid) {
