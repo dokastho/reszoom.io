@@ -177,9 +177,19 @@ def create_entry():
         )
         cur.fetchone()
 
+    # get eid from resume_to_entry (including the pos autoincrement)
+    cur = database.execute(
+        "SELECT * "
+        "FROM resume_to_entry "
+        "WHERE resumeid == ? "
+        "AND entryid == ? "
+        "AND owner == ? "
+        (resumeid, entryid, logname, )
+    )
+    eid = cur.fetchone()
+
     return flask.jsonify({
-        "entryid": entryid,
-        "resumeid": resumeid,
+        "eid": eid,
         "entry":
         {
             "content": content,
