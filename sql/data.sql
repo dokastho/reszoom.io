@@ -24,8 +24,8 @@ INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Built and managed my own server for remote development');
 INSERT INTO entries(frequency, owner, header, content)
 VALUES (1, 'tdokas', 'project', 'Added some content for another resume');
-INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (1, 1, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, pos, owner)
+VALUES (1, 1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
