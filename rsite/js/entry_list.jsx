@@ -15,6 +15,8 @@ class Entries extends React.Component {
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
+    this.moveUp = this.moveUp.bind(this);
+    this.moveDn = this.moveDn.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
   }
 
@@ -85,6 +87,42 @@ class Entries extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  // move an entry up a place
+  moveUp(idx) {
+    const { eids } = this.state;
+    const tempPos = eids[idx].pos;
+    const tempEid = eids[idx];
+
+    // swap the pos member of each eid
+    eids[idx].pos = eids[idx - 1].pos;
+    eids[idx - 1].pos = tempPos;
+
+    // swap the eids themselves
+    eids[idx] = eids[idx - 1];
+    eids[idx - 1] = tempEid;
+
+    // set the state
+    this.setState({ eids });
+  }
+
+  // move an entry down a place
+  moveDn(idx) {
+    const { eids } = this.state;
+    const tempPos = eids[idx].pos;
+    const tempEid = eids[idx];
+
+    // swap the pos member of each eid
+    eids[idx].pos = eids[idx + 1].pos;
+    eids[idx + 1].pos = tempPos;
+
+    // swap the eids themselves
+    eids[idx] = eids[idx + 1];
+    eids[idx + 1] = tempEid;
+
+    // set the state
+    this.setState({ eids });
+  }
+
   render() {
     const {
       header,
@@ -92,12 +130,12 @@ class Entries extends React.Component {
       entries,
       text,
     } = this.state;
-
+    const max = Object.keys(eids).length;
     return (
       <div>
         <h1>{header}</h1>
         {
-          eids.map((e) => (
+          eids.map((e, idx) => (
             entries.get(`${e.entryid}`).header === header
               ? (
                 <div key={e.entryid}>
@@ -105,6 +143,14 @@ class Entries extends React.Component {
                   <span>{entries.get(`${e.entryid}`).content}</span>
                   {/* render delete form */}
                   <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+
+                  {/* render up button for all entries not on first line */}
+                  {idx === 0 ? null
+                    : <button type="button" onClick={this.moveUp.bind(this, eids, idx)}>Up</button>}
+
+                  {/* render down button for all entries not on last line */}
+                  {idx === max ? null
+                    : <button type="button" onClick={this.moveDn.bind(this, eids, idx)}>Down</button>}
                 </div>
               )
               : null
