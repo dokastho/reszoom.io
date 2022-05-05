@@ -43,6 +43,7 @@ CREATE TABLE entry_to_tag(
 
 CREATE TABLE resume_to_entry(
   resumeid INTEGER NOT NULL,
+  pos INTEGER NOT NULL,
   entryid INTEGER NOT NULL,
   PRIMARY KEY(resumeid, entryid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,

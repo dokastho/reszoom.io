@@ -57,6 +57,7 @@ class Entries extends React.Component {
       this.setState((prevState) => ({
         eids: prevState.eids.concat({
           entryid: data.entryid,
+          pos: data.pos,
           resumeid,
         }),
         entries: prevState.entries.set(`${data.entryid}`, data.entry),
