@@ -151,9 +151,9 @@ def create_entry():
         # insert id into resume_to_entry
         cur = database.execute(
             "INSERT INTO resume_to_entry "
-            "(resumeid, entryid) "
-            "VALUES (?, ?)",
-            (resumeid, entryid, )
+            "(resumeid, entryid, owner) "
+            "VALUES (?, ?, ?)",
+            (resumeid, entryid, logname, )
         )
         cur.fetchone()
 
@@ -217,7 +217,7 @@ def delete_entry(entryid):
     return flask.Response(status=204)
 
 
-@rsite.app.route("/api/v1/entry/<int:posid>/", methods=['POST'])
+@rsite.app.route("/api/v1/entry/meta/<int:posid>/", methods=['POST'])
 def move_entry(posid):
     """Update the resume_to_entry db entry with the new positions."""
     
