@@ -41,6 +41,7 @@ CREATE TABLE entry_to_tag(
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
 );
 
+-- reserve pos 1 for swaps
 CREATE TABLE resume_to_entry(
   resumeid INTEGER NOT NULL,
   pos INTEGER PRIMARY KEY AUTOINCREMENT,

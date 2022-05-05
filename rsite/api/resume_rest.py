@@ -151,9 +151,9 @@ def create_entry():
         # insert id into resume_to_entry
         cur = database.execute(
             "INSERT INTO resume_to_entry "
-            "(resumeid, entryid) "
-            "VALUES (?, ?)",
-            (resumeid, entryid, )
+            "(resumeid, entryid, owner) "
+            "VALUES (?, ?, ?)",
+            (resumeid, entryid, logname, )
         )
         cur.fetchone()
 
@@ -217,38 +217,65 @@ def delete_entry(entryid):
     return flask.Response(status=204)
 
 
-@rsite.app.route("/api/v1/entry/<int:posid>/", methods=['POST'])
-def move_entry(posid):
+@rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
+def swap_entry():
     """Update the resume_to_entry db entry with the new positions."""
     
-    new_pos = flask.request.args.get("newPos")
+    pos1 = flask.request.args.get("pos1", type=int, default=0)
+    pos2 = flask.request.args.get("pos2", type=int, default=0)
 
-    if posid == 0 or new_pos == 0:
+    if pos1 == 0 or pos2 == 0:
         flask.abort(404)
     
     logname = rsite.model.get_logname()
     if not logname:
         flask.abort(403)
     
+    temp = 1
+    
     database = rsite.model.get_db()
     # authenticate the user as owner
     cur = database.execute(
         "SELECT * "
-        "FROM resume_to_id "
-        "WHERE pos == ? AND owner == ?"
-        (posid, logname, )
+        "FROM resume_to_entry "
+        "WHERE pos == ? AND owner == ?",
+        (pos1, logname, )
     )
-    auth = cur.fetchone()
+    auth1 = cur.fetchone()
+    cur = database.execute(
+        "SELECT * "
+        "FROM resume_to_entry "
+        "WHERE pos == ? AND owner == ?",
+        (pos2, logname, )
+    )
+    auth2 = cur.fetchone()
     
-    if auth is None:
+    if auth1 is None or auth2 is None:
         flask.abort(403)
     
     # update the entries
+    # set pos1 to temp
     cur = database.execute(
         "UPDATE resume_to_entry "
         "SET pos = ? "
         "WHERE pos == ? ",
-        (posid, )
+        (temp, pos1, )
+    )
+    cur.fetchone()
+    # set pos2 to pos1
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (pos1, pos2, )
+    )
+    cur.fetchone()
+    # set pos1 to pos2
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (pos2, pos1, )
     )
     cur.fetchone()
 
