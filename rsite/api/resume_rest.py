@@ -217,7 +217,7 @@ def delete_entry(entryid):
     return flask.Response(status=204)
 
 
-@rsite.app.route("/api/v1/entry/<int:posid>/", methods=['POST'])
+@rsite.app.route("/api/v1/entry/meta/<int:posid>/", methods=['POST'])
 def move_entry(posid):
     """Update the resume_to_entry db entry with the new positions."""
     

@@ -15,8 +15,7 @@ class Entries extends React.Component {
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
-    this.moveUp = this.moveUp.bind(this);
-    this.moveDn = this.moveDn.bind(this);
+    this.moveEntry = this.moveEntry.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
   }
 
@@ -87,40 +86,40 @@ class Entries extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  // move an entry up a place
-  moveUp(idx) {
+  // move an entry up or down a place
+  moveEntry(idx, other) {
     const { eids } = this.state;
-    const tempPos = eids[idx].pos;
+    const oldPos = eids[idx].pos;
+    const newPos = eids[other].pos;
     const tempEid = eids[idx];
 
     // swap the pos member of each eid
-    eids[idx].pos = eids[idx - 1].pos;
-    eids[idx - 1].pos = tempPos;
+    eids[idx].pos = newPos;
+    eids[other].pos = oldPos;
 
     // swap the eids themselves
-    eids[idx] = eids[idx - 1];
-    eids[idx - 1] = tempEid;
+    eids[idx] = eids[other];
+    eids[other] = tempEid;
 
-    // set the state
-    this.setState({ eids });
-  }
+    // update the db
+    fetch(`/api/v1/entry/meta/${oldPos}/?newPos=${newPos}/`, {
+      credentials: 'same-origin',
+      method: 'POST',
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
 
-  // move an entry down a place
-  moveDn(idx) {
-    const { eids } = this.state;
-    const tempPos = eids[idx].pos;
-    const tempEid = eids[idx];
-
-    // swap the pos member of each eid
-    eids[idx].pos = eids[idx + 1].pos;
-    eids[idx + 1].pos = tempPos;
-
-    // swap the eids themselves
-    eids[idx] = eids[idx + 1];
-    eids[idx + 1] = tempEid;
-
-    // set the state
-    this.setState({ eids });
+      // make second fetch for other eid
+      fetch(`/api/v1/entry/meta/${newPos}/${oldPos}/`, {
+        credentials: 'same-origin',
+        method: 'POST',
+      }).then((responseTwo) => {
+        if (!responseTwo.ok) throw Error(responseTwo.statusText);
+        // set the state
+        this.setState({ eids });
+      })
+        .catch((errorTwo) => console.log(errorTwo));
+    })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -146,11 +145,11 @@ class Entries extends React.Component {
 
                   {/* render up button for all entries not on first line */}
                   {idx === 0 ? null
-                    : <button type="button" onClick={this.moveUp.bind(this, idx)}>Up</button>}
+                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
                   {/* render down button for all entries not on last line */}
                   {idx === max ? null
-                    : <button type="button" onClick={this.moveDn.bind(this, idx)}>Down</button>}
+                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                 </div>
               )
               : null
