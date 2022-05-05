@@ -78,11 +78,11 @@ class ResumeBuilder extends React.Component {
               eids={sectionEids}
               resumeid={resumeid}
               header={f}
+              username={username}
             />,
             post,
           );
         });
-        console.log(username);
       })
       .catch((error) => console.log(error));
   }
