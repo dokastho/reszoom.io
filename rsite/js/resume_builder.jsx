@@ -5,13 +5,12 @@ import Entries from './entry_list';
 
 function getEntriesByHeader(entries, eids, header) {
   // iterate over eids and add entry, eid to return data if they match the header
-  const sectionEntries = new Map();
+  const sectionEntries = {};
   let sectionEids = [];
   eids.forEach((e) => {
-    const key = `${e.entryid}`;
-    const entry = entries.get(key);
+    const entry = entries[e.entryid];
     if (entry.header === header) {
-      sectionEntries.set(key, entry);
+      sectionEntries[e.entryid] = entry;
       sectionEids = sectionEids.concat(e);
     }
   });
@@ -48,9 +47,14 @@ class ResumeBuilder extends React.Component {
         return response.json();
       })
       .then((data) => {
+        // const obj = Object.entries(data.entries);
+        // const m = new Map();
+        // obj.map((o) => (
+        //   m[o[0]] = o[1]
+        // ));
         this.setState({
-          // entries: data.entries,
-          entries: new Map(Object.entries(data.entries)),
+          entries: data.entries,
+          // entries: new Map(),
           eids: data.eids,
           resumeid: rid,
           resumename: data.resumename,

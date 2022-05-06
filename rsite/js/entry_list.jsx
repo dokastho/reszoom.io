@@ -14,7 +14,7 @@ class Entries extends React.Component {
       resumeid: props.resumeid,
       username: props.username,
       // array of actively editing entries
-      newEntryText: new Map(),
+      newEntryText: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -34,6 +34,12 @@ class Entries extends React.Component {
       resumeid,
       username,
     } = this.props;
+    // const entriesWithNumericKeys = new Map();
+
+    // [entries.keys()].map((k) => (
+    //   entriesWithNumericKeys.set(Number(k), entries.get(k))
+    // ));
+    // console.log(entriesWithNumericKeys);
     this.setState({
       entries,
       eids,
@@ -53,7 +59,7 @@ class Entries extends React.Component {
   // update handler for an existing entry
   handleEntryChange(event, entryid) {
     const { newEntryText } = this.state;
-    newEntryText.set(`${entryid}`, event.target.value);
+    newEntryText[entryid] = event.target.value;
     this.setState({ newEntryText });
   }
 
@@ -65,6 +71,7 @@ class Entries extends React.Component {
       resumeid,
       header,
       text,
+      entries,
       username,
     } = this.state;
     fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=create`, {
@@ -78,11 +85,14 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      this.setState((prevState) => ({
-        eids: prevState.eids.concat(data.eid),
-        entries: prevState.entries.set(`${data.eid.entryid}`, data.entry),
-        text: '',
-      }));
+      this.setState((prevState) => {
+        entries[data.eid.entryid] = data.entry;
+        return {
+          eids: prevState.eids.concat(data.eid),
+          entries,
+          text: '',
+        };
+      });
     })
       .catch((error) => console.log(error));
     console.log(username);
@@ -96,10 +106,11 @@ class Entries extends React.Component {
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => {
-        prevState.entries.delete(`${entryid}`);
+        const newEntries = prevState.entries;
+        delete newEntries[entryid];
         const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
         return {
-          entries: prevState.entries,
+          entries: newEntries,
           eids: neweids,
         };
       });
@@ -110,14 +121,14 @@ class Entries extends React.Component {
   // set the newentry to initiate the edit form
   editEntry(entryid) {
     const { newEntryText, entries } = this.state;
-    newEntryText.set(`${entryid}`, entries.get(`${entryid}`).content);
+    newEntryText[entryid] = entries[entryid].content;
     this.setState({ newEntryText });
   }
 
   // cancel an edit by clearing the edited content
   cancelEdit(entryid) {
     const { newEntryText } = this.state;
-    newEntryText.delete(`${entryid}`);
+    delete newEntryText[entryid];
     this.setState({ newEntryText });
   }
 
@@ -133,7 +144,7 @@ class Entries extends React.Component {
       newEntryText,
     } = this.state;
 
-    const text = newEntryText.get(`${entryid}`);
+    const text = newEntryText[entryid];
 
     fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update`, {
       credentials: 'same-origin',
@@ -146,9 +157,9 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      newEntryText.delete(`${entryid}`);
+      delete newEntryText[entryid];
       eids[idx] = data.eid;
-      entries.set(`${entryid}`, data.entry);
+      entries[entryid] = data.entry;
       this.setState({
         eids,
         entries,
@@ -200,15 +211,15 @@ class Entries extends React.Component {
         <h1>{header}</h1>
         {
           eids.map((e, idx) => (
-            entries.get(`${e.entryid}`).header === header
+            entries[e.entryid].header === header
               ? (
                 <div key={e.entryid}>
-                  {newEntryText.has(`${e.entryid}`)
+                  {newEntryText[e.entryid]
                     // render the edit button
                     ? (
                       <span>
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
-                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />
                           {/* render up button for all entries not on first line */}
                           {idx === 0 ? null
                             : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
@@ -223,7 +234,7 @@ class Entries extends React.Component {
                     // render the entry content and delete button
                     : (
                       <span>
-                        {entries.get(`${e.entryid}`).content}
+                        {entries[e.entryid].content}
                         <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                         <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                         {/* render up button for all entries not on first line */}
@@ -251,7 +262,7 @@ class Entries extends React.Component {
 }
 
 Entries.propTypes = {
-  entries: PropTypes.instanceOf(Map).isRequired,
+  entries: PropTypes.instanceOf(Object).isRequired,
   eids: PropTypes.instanceOf(Array).isRequired,
   header: PropTypes.string.isRequired,
   resumeid: PropTypes.number.isRequired,

@@ -3,7 +3,7 @@ up next:
 - [x] creating resumes
 - [x] deleting resumes
 - [x] starting forms
-- [ ] **make resumeid key type Number**
+- [x] make resumeid key type Number
 - [x] remove the ? added by delete
 - [x] starting form "regions" which each have their own class
 - [x] data structure addition for entry edit form button
