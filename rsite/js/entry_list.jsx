@@ -16,6 +16,7 @@ class Entries extends React.Component {
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
+    this.updateEntry = this.updateEntry.bind(this);
     this.moveEntry = this.moveEntry.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
   }
@@ -89,6 +90,10 @@ class Entries extends React.Component {
       });
     })
       .catch((error) => console.log(error));
+  }
+
+  updateEntry() {
+    
   }
 
   // move an entry up or down a place
