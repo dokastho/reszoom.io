@@ -1,6 +1,7 @@
 import React from 'react';
 // import { render } from 'react-dom';
 import PropTypes from 'prop-types';
+import Entry from './entry';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -15,7 +16,6 @@ class Entries extends React.Component {
       username: props.username,
     };
     this.createEntry = this.createEntry.bind(this);
-    this.deleteEntry = this.deleteEntry.bind(this);
     this.moveEntry = this.moveEntry.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
   }
@@ -73,24 +73,6 @@ class Entries extends React.Component {
     console.log(username);
   }
 
-  deleteEntry(entryid) {
-    fetch(`/api/v1/entry/${entryid}/`, {
-      credentials: 'same-origin',
-      method: 'DELETE',
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      this.setState((prevState) => {
-        prevState.entries.delete(`${entryid}`);
-        const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
-        return {
-          entries: prevState.entries,
-          eids: neweids,
-        };
-      });
-    })
-      .catch((error) => console.log(error));
-  }
-
   // move an entry up or down a place
   moveEntry(idx, other) {
     const { eids } = this.state;
@@ -136,9 +118,7 @@ class Entries extends React.Component {
               ? (
                 <div key={e.entryid}>
                   {/* render content */}
-                  <span>{entries.get(`${e.entryid}`).content}</span>
-                  {/* render delete form */}
-                  <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                  <Entry entryid={e.entryid} text={entries.get(`${e.entryid}`).content} />
 
                   {/* render up button for all entries not on first line */}
                   {idx === 0 ? null
