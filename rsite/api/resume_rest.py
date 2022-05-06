@@ -100,10 +100,10 @@ def load_resumes():
 ##### ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES #####
 ###############################################################################
 
+
 @rsite.app.route("/api/v1/entry/", methods=['POST'])
-def create_entry():
+def post_entry():
     """Post an entry."""
-    database = rsite.model.get_db()
 
     logname = rsite.model.get_logname()
     if not logname:
@@ -112,6 +112,7 @@ def create_entry():
     resumeid = flask.request.args.get("resumeid", type=int, default=0)
     entryid = flask.request.args.get("entryid", type=int, default=0)
     header = flask.request.args.get("header", type=str, default='')
+    op = flask.request.args.get("operation", type=str, default='')
 
     # entry must be in json format
     if not flask.request.is_json:
@@ -122,10 +123,116 @@ def create_entry():
     if "text" not in body:
         flask.abort(400)    # insufficient arguments
 
-    content = body['text']    
+    content = body['text']
 
-    if len(content) == 0 or len(header) == 0 or resumeid == 0:
+    if len(content) == 0 or len(header) == 0 or len(op) or resumeid == 0:
         flask.abort(400)
+    if op == "create":
+        data = do_create(logname, resumeid, entryid, header, content)
+    elif op == "update":
+        data = do_update(logname, resumeid, entryid, header, content)
+
+    return flask.jsonify(data), 201
+
+
+@ rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])
+def delete_entry(entryid):
+    """Delete an entry."""
+    if entryid == 0:
+        flask.abort(404)
+
+    database = rsite.model.get_db()
+
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE entryid == ?",
+        (entryid, )
+    )
+    entry = cur.fetchone()
+
+    if logname != entry['owner']:
+        flask.abort(403)
+
+    delete_helper(entry)
+
+    return flask.Response(status=204)
+
+
+@ rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
+def swap_entry():
+    """Update the resume_to_entry db entry with the new positions."""
+
+    pos1 = flask.request.args.get("pos1", type=int, default=0)
+    pos2 = flask.request.args.get("pos2", type=int, default=0)
+
+    if pos1 == 0 or pos2 == 0:
+        flask.abort(404)
+
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+
+    temp = 1
+
+    database = rsite.model.get_db()
+    # authenticate the user as owner
+    cur = database.execute(
+        "SELECT * "
+        "FROM resume_to_entry "
+        "WHERE pos == ? AND owner == ?",
+        (pos1, logname, )
+    )
+    auth1 = cur.fetchone()
+    cur = database.execute(
+        "SELECT * "
+        "FROM resume_to_entry "
+        "WHERE pos == ? AND owner == ?",
+        (pos2, logname, )
+    )
+    auth2 = cur.fetchone()
+
+    if auth1 is None or auth2 is None:
+        flask.abort(403)
+
+    # update the entries
+    # set pos1 to temp
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (temp, pos1, )
+    )
+    val = cur.fetchone()
+    # set pos2 to pos1
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (pos1, pos2, )
+    )
+    val = cur.fetchone()
+    # set pos1 to pos2
+    cur = database.execute(
+        "UPDATE resume_to_entry "
+        "SET pos = ? "
+        "WHERE pos == ? ",
+        (pos2, temp, )
+    )
+    val = cur.fetchone()
+
+    return flask.Response(status=204)
+
+# helpers
+
+
+def do_create(logname, resumeid, entryid, header, content):
+    """Helper function for creating an entry."""
+    database = rsite.model.get_db()
 
     freq = 1
     # entryid not supplied, so entry is new
@@ -187,8 +294,7 @@ def create_entry():
         (resumeid, entryid, logname, )
     )
     eid = cur.fetchone()
-
-    return flask.jsonify({
+    return {
         "eid": eid,
         "entry":
         {
@@ -197,97 +303,12 @@ def create_entry():
             "header": header,
             "owner": logname
         }
-    }), 201
+    }
 
-@rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])
-def delete_entry(entryid):
-    """Delete an entry."""
-    if entryid == 0:
-            flask.abort(404)
-    
+
+def do_update(logname, resumeid, entryid, header, content):
+    """Helper function for updating an entry"""
     database = rsite.model.get_db()
 
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    cur = database.execute()
 
-    cur = database.execute(
-        "SELECT * "
-        "FROM entries "
-        "WHERE entryid == ?",
-        (entryid, )
-    )
-    entry = cur.fetchone()
-
-    if logname != entry['owner']:
-        flask.abort(403)
-        
-    delete_helper(entry)
-
-    return flask.Response(status=204)
-
-
-@rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
-def swap_entry():
-    """Update the resume_to_entry db entry with the new positions."""
-    
-    pos1 = flask.request.args.get("pos1", type=int, default=0)
-    pos2 = flask.request.args.get("pos2", type=int, default=0)
-
-    if pos1 == 0 or pos2 == 0:
-        flask.abort(404)
-    
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
-    
-    temp = 1
-    
-    database = rsite.model.get_db()
-    # authenticate the user as owner
-    cur = database.execute(
-        "SELECT * "
-        "FROM resume_to_entry "
-        "WHERE pos == ? AND owner == ?",
-        (pos1, logname, )
-    )
-    auth1 = cur.fetchone()
-    cur = database.execute(
-        "SELECT * "
-        "FROM resume_to_entry "
-        "WHERE pos == ? AND owner == ?",
-        (pos2, logname, )
-    )
-    auth2 = cur.fetchone()
-    
-    if auth1 is None or auth2 is None:
-        flask.abort(403)
-    
-    # update the entries
-    # set pos1 to temp
-    cur = database.execute(
-        "UPDATE resume_to_entry "
-        "SET pos = ? "
-        "WHERE pos == ? ",
-        (temp, pos1, )
-    )
-    val = cur.fetchone()
-    # set pos2 to pos1
-    cur = database.execute(
-        "UPDATE resume_to_entry "
-        "SET pos = ? "
-        "WHERE pos == ? ",
-        (pos1, pos2, )
-    )
-    val = cur.fetchone()
-    # set pos1 to pos2
-    cur = database.execute(
-        "UPDATE resume_to_entry "
-        "SET pos = ? "
-        "WHERE pos == ? ",
-        (pos2, temp, )
-    )
-    val = cur.fetchone()
-
-    return flask.Response(status=204)
-    

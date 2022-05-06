@@ -13,11 +13,17 @@ class Entries extends React.Component {
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
+      // array of actively editing entries
+      newEntryText: new Map(),
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
+    this.updateEntry = this.updateEntry.bind(this);
+    this.editEntry = this.editEntry.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
     this.moveEntry = this.moveEntry.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
+    this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
   }
 
   componentDidMount() {
@@ -39,10 +45,19 @@ class Entries extends React.Component {
     console.log(this);
   }
 
-  handleEntryChange(event) {
+  // update handler for a new entry
+  handleNewEntryChange(event) {
     this.setState({ text: event.target.value });
   }
 
+  // update handler for an existing entry
+  handleEntryChange(event, entryid) {
+    const { newEntryText } = this.state;
+    newEntryText.set(`${entryid}`, event.target.value);
+    this.setState({ newEntryText });
+  }
+
+  // create an entry
   createEntry(entryid, event) {
     event.preventDefault();
 
@@ -73,6 +88,7 @@ class Entries extends React.Component {
     console.log(username);
   }
 
+  // delete an entry
   deleteEntry(entryid) {
     fetch(`/api/v1/entry/${entryid}/`, {
       credentials: 'same-origin',
@@ -89,6 +105,25 @@ class Entries extends React.Component {
       });
     })
       .catch((error) => console.log(error));
+  }
+
+  // set the newentry to initiate the edit form
+  editEntry(entryid) {
+    const { newEntryText, entries } = this.state;
+    newEntryText.set(`${entryid}`, entries.get(`${entryid}`).content);
+    this.setState({ newEntryText });
+  }
+
+  // cancel an edit by clearing the edited content
+  cancelEdit(entryid) {
+    const { newEntryText } = this.state;
+    newEntryText.delete(`${entryid}`);
+    this.setState({ newEntryText });
+  }
+
+  // submit an edit to an entry
+  updateEntry(entryid) {
+
   }
 
   // move an entry up or down a place
@@ -125,6 +160,7 @@ class Entries extends React.Component {
       eids,
       entries,
       text,
+      newEntryText,
     } = this.state;
     const max = Object.keys(eids).length - 1;
     return (
@@ -135,10 +171,23 @@ class Entries extends React.Component {
             entries.get(`${e.entryid}`).header === header
               ? (
                 <div key={e.entryid}>
-                  {/* render content */}
-                  <span>{entries.get(`${e.entryid}`).content}</span>
-                  {/* render delete form */}
-                  <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+
+                  {newEntryText.has(`${e.entryid}`)
+                    // render the edit button
+                    ? (
+                      <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
+                        <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
+                        <input type="button" value="Cancel" onClick={this.cancelEdit.bind(this, e.entryid)} />
+                      </form>
+                    )
+                    // render the entry content and delete button
+                    : (
+                      <span>
+                        {entries.get(`${e.entryid}`).content}
+                        <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                        <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                      </span>
+                    )}
 
                   {/* render up button for all entries not on first line */}
                   {idx === 0 ? null
@@ -154,7 +203,7 @@ class Entries extends React.Component {
         }
         {/* render create form */}
         <form onSubmit={(event) => this.createEntry(0, event)}>
-          <input type="text" onChange={(event) => this.handleEntryChange(event)} value={text} />
+          <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
           <input type="submit" />
         </form>
       </div>
