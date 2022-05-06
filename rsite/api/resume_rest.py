@@ -126,7 +126,7 @@ def post_entry():
 
     content = body['text']
 
-    if len(content) == 0 or len(header) == 0 or len(op) or resumeid == 0:
+    if len(content) == 0 or len(header) == 0 or len(op) == 0 or resumeid == 0:
         flask.abort(400)
     if op == "create":
         data = do_create(logname, resumeid, entryid, header, content)
@@ -321,14 +321,14 @@ def do_update(logname, resumeid, entryid, header, content):
     )
     oldentry = cur.fetchone()
 
-    freq = oldentry['freq']
+    freq = oldentry['frequency']
 
     # entry must be valid
     if oldentry is None:
         flask.abort(400)
 
     # if freq is 1, just change content
-    if oldentry['freq'] == 1:
+    if freq == 1:
         cur = database.execute(
             "UPDATE entries "
             "SET content = ? "
@@ -366,7 +366,7 @@ def do_update(logname, resumeid, entryid, header, content):
         freq -= 1
         cur = database.execute(
             "UPDATE entries "
-            "SET freq = ? "
+            "SET frequency = ? "
             "WHERE entryid == ?",
             (freq, entryid, )
         )
