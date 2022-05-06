@@ -46,6 +46,7 @@ def load_resumes():
             for entry in entries:
                 data[entry['entryid']] = {
                     'frequency': entry['frequency'],
+                    'priority': entry['priority'],
                     'owner': entry['owner'],
                     'header': entry['header'],
                     'content': entry['content']
@@ -230,7 +231,7 @@ def swap_entry():
 # helpers
 
 
-def do_create(logname, resumeid, entryid, header, content):
+def do_create(logname, resumeid, entryid, header, content, priority=1):
     """Helper function for creating an entry."""
     database = rsite.model.get_db()
 
@@ -240,9 +241,9 @@ def do_create(logname, resumeid, entryid, header, content):
         # insert new
         cur = database.execute(
             "INSERT INTO entries "
-            "(frequency, owner, header, content) "
-            "VALUES (?, ?, ?, ?)",
-            (freq, logname, header, content, )
+            "(frequency, priority, owner, header, content) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (freq, priority, logname, header, content, )
         )
         cur.fetchone()
 
@@ -278,9 +279,9 @@ def do_create(logname, resumeid, entryid, header, content):
 
         cur = database.execute(
             "UPDATE entries "
-            "SET frequency = ? "
+            "SET frequency = ?, priority = ? "
             "WHERE entryid == ?",
-            (freq, entryid, )
+            (freq, freq, entryid, )
         )
         cur.fetchone()
 
@@ -300,6 +301,7 @@ def do_create(logname, resumeid, entryid, header, content):
         {
             "content": content,
             "frequency": freq,
+            "priority": freq,
             "header": header,
             "owner": logname
         }
@@ -310,5 +312,72 @@ def do_update(logname, resumeid, entryid, header, content):
     """Helper function for updating an entry"""
     database = rsite.model.get_db()
 
-    cur = database.execute()
+    # get the entry
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE entryid == ?",
+        (entryid, )
+    )
+    oldentry = cur.fetchone()
 
+    freq = oldentry['freq']
+
+    # entry must be valid
+    if oldentry is None:
+        flask.abort(400)
+
+    # if freq is 1, just change content
+    if oldentry['freq'] == 1:
+        cur = database.execute(
+            "UPDATE entries "
+            "SET content = ? "
+            "WHERE entryid == ?",
+            (content, entryid, )
+        )
+        cur.fetchone()
+
+        # get eid from resume_to_entry (including the pos autoincrement)
+        cur = database.execute(
+            "SELECT * "
+            "FROM resume_to_entry "
+            "WHERE resumeid == ? "
+            "AND entryid == ? "
+            "AND owner == ? ",
+            (resumeid, entryid, logname, )
+        )
+        eid = cur.fetchone()
+        data = {
+            "eid": eid,
+            "entry":
+            {
+                "content": content,
+                "frequency": freq,
+                "priority": freq,
+                "header": header,
+                "owner": logname
+            }
+        }
+
+    # else copy the attributes of the old entry
+    else:
+        # decrement freq
+        priority = freq
+        freq -= 1
+        cur = database.execute(
+            "UPDATE entries "
+            "SET freq = ? "
+            "WHERE entryid == ?",
+            (freq, entryid, )
+        )
+        cur.fetchone()
+        # create new entry
+        # id here is 0 so that it creates a new entry.
+        # down the line I'd like to make it impossible to create two of the
+        # same entries, so with that in mind I will want to change that.
+        # priority here is duplicated with the old entry so that a newly edited
+        # entry will not be poorly favored by the program
+        #
+        data = do_create(logname, resumeid, 0, header, content, priority)
+
+    return data
