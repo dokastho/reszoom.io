@@ -48,9 +48,15 @@ class ResumeBuilder extends React.Component {
         return response.json();
       })
       .then((data) => {
+        const obj = Object.entries(data.entries);
+        const m = new Map();
+        obj.map((key,val) => (
+          console.log(key)
+          console.log(val)
+        ));
         this.setState({
           // entries: data.entries,
-          entries: new Map(Object.entries(data.entries)),
+          entries: new Map(),
           eids: data.eids,
           resumeid: rid,
           resumename: data.resumename,
