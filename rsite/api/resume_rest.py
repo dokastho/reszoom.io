@@ -46,6 +46,7 @@ def load_resumes():
             for entry in entries:
                 data[entry['entryid']] = {
                     'frequency': entry['frequency'],
+                    'priority': entry['priority'],
                     'owner': entry['owner'],
                     'header': entry['header'],
                     'content': entry['content']
@@ -240,9 +241,9 @@ def do_create(logname, resumeid, entryid, header, content):
         # insert new
         cur = database.execute(
             "INSERT INTO entries "
-            "(frequency, owner, header, content) "
-            "VALUES (?, ?, ?, ?)",
-            (freq, logname, header, content, )
+            "(frequency, priority, owner, header, content) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (freq, freq, logname, header, content, )
         )
         cur.fetchone()
 
@@ -278,9 +279,9 @@ def do_create(logname, resumeid, entryid, header, content):
 
         cur = database.execute(
             "UPDATE entries "
-            "SET frequency = ? "
+            "SET frequency = ?, priority = ? "
             "WHERE entryid == ?",
-            (freq, entryid, )
+            (freq, freq, entryid, )
         )
         cur.fetchone()
 
@@ -300,6 +301,7 @@ def do_create(logname, resumeid, entryid, header, content):
         {
             "content": content,
             "frequency": freq,
+            "priority": freq,
             "header": header,
             "owner": logname
         }

@@ -171,14 +171,22 @@ class Entries extends React.Component {
             entries.get(`${e.entryid}`).header === header
               ? (
                 <div key={e.entryid}>
-
                   {newEntryText.has(`${e.entryid}`)
                     // render the edit button
                     ? (
-                      <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
-                        <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
-                        <input type="button" value="Cancel" onClick={this.cancelEdit.bind(this, e.entryid)} />
-                      </form>
+                      <span>
+                        <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
+                          {/* render up button for all entries not on first line */}
+                          {idx === 0 ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                          {/* render down button for all entries not on last line */}
+                          {idx === max ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                        </form>
+                      </span>
                     )
                     // render the entry content and delete button
                     : (
@@ -186,16 +194,17 @@ class Entries extends React.Component {
                         {entries.get(`${e.entryid}`).content}
                         <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                         <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                        {/* render up button for all entries not on first line */}
+                        {idx === 0 ? null
+                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                        {/* render down button for all entries not on last line */}
+                        {idx === max ? null
+                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                       </span>
                     )}
 
-                  {/* render up button for all entries not on first line */}
-                  {idx === 0 ? null
-                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
-                  {/* render down button for all entries not on last line */}
-                  {idx === max ? null
-                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                 </div>
               )
               : null
