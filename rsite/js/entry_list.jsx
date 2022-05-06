@@ -122,14 +122,15 @@ class Entries extends React.Component {
   }
 
   // submit an edit to an entry
-  updateEntry(event, entryid) {
+  updateEntry(event, entryid, idx) {
     event.preventDefault();
 
     const {
+      eids,
+      entries,
       resumeid,
       header,
       newEntryText,
-      username,
     } = this.state;
 
     const text = newEntryText.get(`${entryid}`);
@@ -145,17 +146,16 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      this.setState((prevState) => {
-        newEntryText.delete(`${entryid}`);
-        return {
-          eids: prevState.eids.concat(data.eid),
-          entries: prevState.entries.set(`${data.eid.entryid}`, data.entry),
-          newEntryText,
-        };
+      newEntryText.delete(`${entryid}`);
+      eids[idx] = data.eid;
+      entries.set(`${entryid}`, data.entry);
+      this.setState({
+        eids,
+        entries,
+        newEntryText,
       });
     })
       .catch((error) => console.log(error));
-    console.log(username);
   }
 
   // move an entry up or down a place
@@ -207,7 +207,7 @@ class Entries extends React.Component {
                     // render the edit button
                     ? (
                       <span>
-                        <form action={(event) => this.updateEntry.bind(this, event, e.entryid)} encType="multipart/form-data">
+                        <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
                           {/* render up button for all entries not on first line */}
                           {idx === 0 ? null
