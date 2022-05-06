@@ -175,10 +175,12 @@ class Entries extends React.Component {
                   {newEntryText.has(`${e.entryid}`)
                     // render the edit button
                     ? (
-                      <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
-                        <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
-                        <input type="button" value="Cancel" onClick={this.cancelEdit.bind(this, e.entryid)} />
-                      </form>
+                      <span>
+                        <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
+                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                        </form>
+                      </span>
                     )
                     // render the entry content and delete button
                     : (
