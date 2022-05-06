@@ -67,7 +67,7 @@ class Entries extends React.Component {
       text,
       username,
     } = this.state;
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}`, {
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=create`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
@@ -122,8 +122,40 @@ class Entries extends React.Component {
   }
 
   // submit an edit to an entry
-  updateEntry(entryid) {
+  updateEntry(event, entryid) {
+    event.preventDefault();
 
+    const {
+      resumeid,
+      header,
+      newEntryText,
+      username,
+    } = this.state;
+
+    const text = newEntryText.get(`${entryid}`);
+
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update`, {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text }),
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+      return response.json();
+    }).then((data) => {
+      this.setState((prevState) => {
+        newEntryText.delete(`${entryid}`);
+        return {
+          eids: prevState.eids.concat(data.eid),
+          entries: prevState.entries.set(`${data.eid.entryid}`, data.entry),
+          newEntryText,
+        };
+      });
+    })
+      .catch((error) => console.log(error));
+    console.log(username);
   }
 
   // move an entry up or down a place
@@ -171,14 +203,22 @@ class Entries extends React.Component {
             entries.get(`${e.entryid}`).header === header
               ? (
                 <div key={e.entryid}>
-
                   {newEntryText.has(`${e.entryid}`)
                     // render the edit button
                     ? (
-                      <form action={this.updateEntry.bind(this, e.entryid)} encType="multipart/form-data">
-                        <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
-                        <input type="button" value="Cancel" onClick={this.cancelEdit.bind(this, e.entryid)} />
-                      </form>
+                      <span>
+                        <form action={(event) => this.updateEntry.bind(this, event, e.entryid)} encType="multipart/form-data">
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
+                          {/* render up button for all entries not on first line */}
+                          {idx === 0 ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                          {/* render down button for all entries not on last line */}
+                          {idx === max ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                        </form>
+                      </span>
                     )
                     // render the entry content and delete button
                     : (
@@ -186,16 +226,15 @@ class Entries extends React.Component {
                         {entries.get(`${e.entryid}`).content}
                         <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                         <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                        {/* render up button for all entries not on first line */}
+                        {idx === 0 ? null
+                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                        {/* render down button for all entries not on last line */}
+                        {idx === max ? null
+                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                       </span>
                     )}
-
-                  {/* render up button for all entries not on first line */}
-                  {idx === 0 ? null
-                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                  {/* render down button for all entries not on last line */}
-                  {idx === max ? null
-                    : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                 </div>
               )
               : null

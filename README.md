@@ -17,6 +17,7 @@ up next:
 down the road...
 - [ ] tags for entries
 - [ ] brainstorm better way of editing without changing past resumes
+- [ ] prevent duplicate entries
 
 even farther down the road...
 - [ ] front end design
