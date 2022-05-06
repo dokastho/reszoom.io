@@ -34,6 +34,13 @@ class Entries extends React.Component {
       resumeid,
       username,
     } = this.props;
+    const entriesWithNumericKeys = new Map();
+    const keys = entries.keys();
+
+    keys.forEach((k) => {
+      entriesWithNumericKeys.set(Number(k), entries.get(k));
+    });
+    console.log(entriesWithNumericKeys);
     this.setState({
       entries,
       eids,
