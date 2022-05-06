@@ -207,7 +207,7 @@ class Entries extends React.Component {
                     // render the edit button
                     ? (
                       <span>
-                        <form action={(event) => this.updateEntry.bind(this, event, e.entryid)} encType="multipart/form-data">
+                        <form action={(event) => this.updateEntry(event, e.entryid)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText.get(`${e.entryid}`)} />
                           {/* render up button for all entries not on first line */}
                           {idx === 0 ? null
