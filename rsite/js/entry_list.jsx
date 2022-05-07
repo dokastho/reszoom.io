@@ -142,8 +142,9 @@ class Entries extends React.Component {
     } = this.state;
 
     const text = newEntryText[entryid];
+    const { pos } = eids[idx].pos;
 
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update`, {
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update&pos=${pos}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
