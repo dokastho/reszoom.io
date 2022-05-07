@@ -13,8 +13,10 @@ up next:
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
 - [ ] log in "try again" function
 - [ ] make passwords strict
-- [ ] education/experience content
+- [x] education/experience content
 - [ ] make sure inputs arent too long
+- [ ] add "hide" option for education/experience
+- [ ] make those things viewable in the user profile
 
 down the road...
 - [ ] tags for entries
