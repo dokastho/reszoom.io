@@ -17,6 +17,24 @@ function getEntriesByHeaderType(entries, eids, header, type) {
   return { sectionEntries, sectionEids };
 }
 
+function splitByHeaders(sectionEntries, sectionEids) {
+  const splitEntries = {};
+  const splitEids = {};
+
+  // iterate over eids
+  sectionEids.forEach((e) => {
+    const entry = sectionEntries[e.entryid];
+    // key: subheader val:entry
+    if (!(entry.subheader in Object.keys(splitEntries))) {
+      splitEntries[entry.subheader] = [];
+      splitEids[entry.subheader] = [];
+    }
+    splitEntries.subheader.concat(entry);
+    splitEids.subheader.concat(e);
+  });
+  return { splitEntries, splitEids };
+}
+
 class ResumeBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -67,31 +85,9 @@ class ResumeBuilder extends React.Component {
 
         // render entries
 
-        const fields = ['education', 'experience', 'project'];
+        // 1. render the education and experience info
+        const fields = ['education', 'experience'];
 
-        fields.forEach((f) => {
-          const post = document.getElementById(f);
-          const isEntries = 1;
-          const {
-            sectionEntries,
-            sectionEids,
-          } = getEntriesByHeaderType(entries, eids, f, isEntries);
-          ReactDOM.render(
-            <Entries
-              entries={sectionEntries}
-              eids={sectionEids}
-              resumeid={resumeid}
-              header={f}
-              username={username}
-              isEntries={isEntries}
-            />,
-            post.querySelector('.entries'),
-          );
-        });
-
-        // TODO: add some way in getEntriesByHeaderType to differentiate between different
-        // experiences, and render entries for each
-        fields.pop('project');
         fields.forEach((f) => {
           const post = document.getElementById(f);
           const isEntries = 0;
@@ -101,16 +97,66 @@ class ResumeBuilder extends React.Component {
           } = getEntriesByHeaderType(entries, eids, f, isEntries);
           // render the info for experience and education
           ReactDOM.render(
-            <Entries
-              entries={sectionEntries}
-              eids={sectionEids}
-              resumeid={resumeid}
-              header={f}
-              username={username}
-              isEntries={isEntries}
-            />,
+            <div>
+              <Entries
+                entries={sectionEntries}
+                eids={sectionEids}
+                resumeid={resumeid}
+                header={f}
+                username={username}
+                isEntries={isEntries}
+              />
+              <div className={f} />
+            </div>,
             post.querySelector('.info'),
           );
+        });
+
+        fields.concat('project');
+
+        // 2. render the entries for each header
+        //      split the entries of education & experience by their parent subheaders
+
+        fields.forEach((f) => {
+          const post = document.getElementById(f);
+          const isEntries = 1;
+          const {
+            sectionEntries,
+            sectionEids,
+          } = getEntriesByHeaderType(entries, eids, f, isEntries);
+          if (f === 'project') {
+            ReactDOM.render(
+              <Entries
+                entries={sectionEntries}
+                eids={sectionEids}
+                resumeid={resumeid}
+                header={f}
+                username={username}
+                isEntries={isEntries}
+              />,
+              post.querySelector('.entries'),
+            );
+          } else {
+            const { splitEntries, splitEids } = splitByHeaders(sectionEntries, sectionEids);
+
+            // map entries for each subheader
+
+            // eslint-disable-next-line array-callback-return
+            Object.keys(splitEntries).map((key) => {
+              const val = splitEntries[key];
+              ReactDOM.render(
+                <Entries
+                  entries={val}
+                  eids={splitEids[key]}
+                  resumeid={resumeid}
+                  header={f}
+                  username={username}
+                  isEntries={isEntries}
+                />,
+                post.querySelector(`.${key}`),
+              );
+            });
+          }
         });
       })
       .catch((error) => console.log(error));
@@ -142,12 +188,10 @@ class ResumeBuilder extends React.Component {
                 <div id="education">
                   <h1>Education</h1>
                   <div className="info" />
-                  <div className="entries" />
                 </div>
                 <div id="experience">
                   <h1>Experience</h1>
                   <div className="info" />
-                  <div className="entries" />
                 </div>
               </div>
             )
@@ -156,12 +200,10 @@ class ResumeBuilder extends React.Component {
                 <div id="experience">
                   <h1>Experience</h1>
                   <div className="info" />
-                  <div className="entries" />
                 </div>
                 <div id="education">
                   <h1>Education</h1>
                   <div className="info" />
-                  <div className="entries" />
                 </div>
               </div>
             )
