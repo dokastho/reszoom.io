@@ -49,7 +49,6 @@ def load_resumes():
                     'header': entry['header'],
                     'content': entry['content'],
                     'type': entry['type'],
-                    'location': entry['location'],
                     'begin': entry['begin'],
                     'end': entry['end'],
                     'gpa': entry['gpa']
