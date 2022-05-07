@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
 import Entries from './entry_list';
+import Experience from './experience';
 
 function getEntriesByHeader(entries, eids, header) {
   // iterate over eids and add entry, eid to return data if they match the header
@@ -66,10 +67,12 @@ class ResumeBuilder extends React.Component {
           username,
         } = this.state;
 
+        // render entries
+
         const fields = ['education', 'experience', 'project'];
 
         fields.forEach((f) => {
-          const post = document.getElementById(`${f}-entries`);
+          const post = document.getElementById(f);
           const { sectionEntries, sectionEids } = getEntriesByHeader(entries, eids, f);
           ReactDOM.render(
             <Entries
@@ -79,9 +82,22 @@ class ResumeBuilder extends React.Component {
               header={f}
               username={username}
             />,
-            post,
+            post.querySelector('.entries'),
           );
         });
+
+        const edu = document.getElementById('education');
+        const exp = document.getElementById('experience');
+
+        // render the info for experience and education
+        ReactDOM.render(
+          <Experience isEducation={0} />,
+          exp.querySelector('.info'),
+        );
+        ReactDOM.render(
+          <Experience isEducation={1} />,
+          edu.querySelector('.info'),
+        );
       })
       .catch((error) => console.log(error));
   }
@@ -104,10 +120,43 @@ class ResumeBuilder extends React.Component {
             <h3>{email}</h3>
           </div>
         </div>
-        <div id="education-entries" />
-        <div id="experience-entries" />
-        <div id="project-entries" />
-        {/* render the resume options */}
+        {
+          // render education-experience based on type
+          resumetype
+            ? (
+              <div>
+                <div id="education">
+                  <h1>Education</h1>
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+                <div id="experience">
+                  <h1>Experience</h1>
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+              </div>
+            )
+            : (
+              <div>
+                <div id="experience">
+                  <h1>Experience</h1>
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+                <div id="education">
+                  <h1>Education</h1>
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+              </div>
+            )
+        }
+        <div id="project">
+          <h1>Project</h1>
+          <div className="info" />
+          <div className="entries" />
+        </div>
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />

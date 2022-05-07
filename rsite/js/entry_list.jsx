@@ -206,7 +206,6 @@ class Entries extends React.Component {
     const max = Object.keys(eids).length - 1;
     return (
       <div>
-        <h1>{header}</h1>
         {
           eids.map((e, idx) => (
             entries[e.entryid].header === header

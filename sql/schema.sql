@@ -60,10 +60,10 @@ CREATE TABLE resume_to_entry(
 CREATE TABLE experience(
   owner VARCHAR(20) NOT NULL,
   location VARCHAR(64) NOT NULL,
-  content VARCHAR(256) NOT NULL,
+  -- content VARCHAR(256) NOT NULL,
   typename BOOLEAN NOT NULL,
-  begin INTEGER NOT NULL,
-  end INTEGER NOT NULL,
+  begin VARCHAR(20) NOT NULL,
+  end VARCHAR(20) NOT NULL,
   gpa INTEGER,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
