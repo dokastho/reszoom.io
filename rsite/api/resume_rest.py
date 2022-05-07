@@ -263,6 +263,17 @@ def get_experience():
         "exp": data
     }), 201
 
+
+@rsite.app.route("/api/v1/experience/", methods=["POST"])
+def get_experience():
+    """Add education/experience from db."""
+
+
+@rsite.app.route("/api/v1/experience/<int:expid>", methods=["DELETE"])
+def get_experience():
+    """Delete education/experience from db."""
+
+
 ###############################################################################
 ##### HELPERS # HELPERS # HELPERS # HELPERS # HELPERS # HELPERS # HELPERS #####
 ###############################################################################
