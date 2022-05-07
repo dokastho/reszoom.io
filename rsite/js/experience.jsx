@@ -138,17 +138,17 @@ class Experience extends React.Component {
       <div>
         {
           // render existing content
-          exp.map((e) => (
+          Object.keys(exp).map(([expid, o]) => (
             <span>
-              <h4>{e.location}</h4>
-              {isEducation ? <h4>{e.gpa}</h4> : null}
+              <h4>{o.location}</h4>
+              {isEducation ? <h4>{o.gpa}</h4> : null}
               <p>
-                {e.begin}
+                {o.begin}
                 -
-                {e.end}
+                {o.end}
               </p>
               {/* delete button */}
-              <button type="button" onClick={this.deleteExperience(e.expid)}>Delete</button>
+              <button type="button" onClick={this.deleteExperience(expid)}>Delete</button>
             </span>
           ))
         }
