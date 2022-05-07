@@ -9,7 +9,7 @@ VALUES ('michjc', 'Michael Cafarella', 'michjc@umich.edu', '5ecde7677b83304132cb
 INSERT INTO users(username, fullname, email, filename, password)
 VALUES ('jag', 'H.V. Jagadish', 'jag@umich.edu', '73ab33bd357c3fd42292487b825880958c595655.jpg', 'password');
 INSERT INTO users(username, fullname, email, filename, password)
-VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', '.jpg', 'password');
+VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', 'tdokaspic.png', 'password');
 -- add a resume to tdokas
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 1', 1);

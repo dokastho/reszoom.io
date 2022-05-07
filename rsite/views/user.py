@@ -19,16 +19,17 @@ def show_user(uname):
 
         database = rsite.model.get_db()
         cur = database.execute(
-            "SELECT fullname "
+            "SELECT * "
             "FROM users "
             "WHERE username == ?",
             (uname, )
         )
-        fullname = cur.fetchall()
+        data = cur.fetchone()
 
         context = {
             "logname": logname,
             "username": uname,
-            "fullname": fullname[0]['fullname']
+            "fullname": data['fullname'],
+            "profilepic": data['filename']
         }
     return flask.render_template("user.html", **context)

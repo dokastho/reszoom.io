@@ -14,6 +14,7 @@ up next:
 - [ ] log in "try again" function
 - [ ] make passwords strict
 - [ ] education/experience content
+- [ ] make sure inputs arent too long
 
 down the road...
 - [ ] tags for entries
