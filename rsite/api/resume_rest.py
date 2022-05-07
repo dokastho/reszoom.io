@@ -277,6 +277,8 @@ def do_create(logname, resumeid, entryid, header, content, priority=1, pos = 0):
                 (newEntryid, pos, )
             )
             cur.fetchone()
+
+        entryid = newEntryid
         
 
     else:
