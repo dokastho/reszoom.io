@@ -231,7 +231,7 @@ def swap_entry():
 # helpers
 
 
-def do_create(logname, resumeid, entryid, header, content, priority=1):
+def do_create(logname, resumeid, entryid, header, content, priority=1, pos = 0):
     """Helper function for creating an entry."""
     database = rsite.model.get_db()
 
@@ -248,22 +248,36 @@ def do_create(logname, resumeid, entryid, header, content, priority=1):
         cur.fetchone()
 
         # get id
+        # TODO: in a busy DB, getting the max like this will likely not work
         cur = database.execute(
             "SELECT MAX(entryid) "
             "AS id "
             "FROM entries"
         )
         data = cur.fetchone()
-        entryid = data['id']
+        newEntryid = data['id']
 
-        # insert id into resume_to_entry
-        cur = database.execute(
-            "INSERT INTO resume_to_entry "
-            "(resumeid, entryid, owner) "
-            "VALUES (?, ?, ?)",
-            (resumeid, entryid, logname, )
-        )
-        cur.fetchone()
+        # if pos is specified, then we want to update resume_to_entry
+        if pos == 0:
+            # insert id into resume_to_entry
+            cur = database.execute(
+                "INSERT INTO resume_to_entry "
+                "(resumeid, entryid, owner) "
+                "VALUES (?, ?, ?)",
+                (resumeid, newEntryid, logname, )
+            )
+            cur.fetchone()
+        
+        else:
+            # update pos
+            cur = database.execute(
+                "UPDATE resume_to_entry "
+                "SET entryid=? "
+                "WHERE pos == ?",
+                (newEntryid, pos, )
+            )
+            cur.fetchone()
+        
 
     else:
         # entry already in db so increment freq
@@ -371,6 +385,10 @@ def do_update(logname, resumeid, entryid, header, content):
             (freq, entryid, )
         )
         cur.fetchone()
+        # update entry in resume_to_entry
+        pos = flask.request.args.get("pos", type=int, default=0)
+        if pos == 0:
+            flask.abort(502)
         # create new entry
         # id here is 0 so that it creates a new entry.
         # down the line I'd like to make it impossible to create two of the
@@ -378,6 +396,6 @@ def do_update(logname, resumeid, entryid, header, content):
         # priority here is duplicated with the old entry so that a newly edited
         # entry will not be poorly favored by the program
         #
-        data = do_create(logname, resumeid, 0, header, content, priority)
+        data = do_create(logname, resumeid, 0, header, content, priority, pos)
 
     return data
