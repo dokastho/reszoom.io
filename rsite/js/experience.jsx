@@ -129,7 +129,7 @@ class Experience extends React.Component {
         {
           // render existing content
           Object.keys(exp).map((expid) => (
-            <span key={exp}>
+            <span key={expid}>
               <h4>{exp[expid].location}</h4>
               {isEducation ? <h4>{exp[expid].gpa}</h4> : null}
               <p>
@@ -138,30 +138,32 @@ class Experience extends React.Component {
                 {exp[expid].end}
               </p>
               {/* delete button */}
-              <button type="button" onSubmit={this.deleteExperience.bind(this, expid)}>Delete</button>
+              <button type="button" onClick={this.deleteExperience.bind(this, expid)}>Delete</button>
             </span>
           ))
         }
-        {
-          // button to render "add" form
-          add
-            ? (
-              <form onSubmit={(e) => this.addExperience(e)}>
-                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
-                <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
-                <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
-                {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
-                <input type="submit" />
-                <button type="button" onClick={this.setAddFalse}>Cancel</button>
-              </form>
-            )
-            : (
-              <button type="button" onClick={this.setAddTrue}>
-                Add
-                {isEducation ? ' Education' : ' Work experience'}
-              </button>
-            )
-        }
+        <div>
+          {
+            // button to render "add" form
+            add
+              ? (
+                <form onSubmit={(e) => this.addExperience(e)}>
+                  <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
+                  <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
+                  <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
+                  {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
+                  <input type="submit" />
+                  <button type="button" onClick={this.setAddFalse}>Cancel</button>
+                </form>
+              )
+              : (
+                <button type="button" onClick={this.setAddTrue}>
+                  Add
+                  {isEducation ? ' education' : ' work experience'}
+                </button>
+              )
+          }
+        </div>
       </div>
     );
   }
