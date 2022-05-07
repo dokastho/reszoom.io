@@ -16,6 +16,10 @@ class Experience extends React.Component {
       add: false,
       newExp: {},
     };
+    this.setAddTrue = this.setAddTrue.bind(this);
+    this.addExperience = this.addExperience.bind(this);
+    this.deleteExperience = this.deleteExperience.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +39,25 @@ class Experience extends React.Component {
         };
       });
     }).catch((error) => console.log(error));
+  }
+
+  // update the "new" experience entry
+  handleChange(event, attr) {
+    const { newExp } = this.state;
+    newExp[attr] = event;
+    this.setState({ newExp });
+  }
+
+  setAddTrue() {
+    this.setState({ add: true });
+  }
+
+  addExperience() {
+
+  }
+
+  deleteExperience() {
+
   }
 
   render() {
@@ -66,14 +89,14 @@ class Experience extends React.Component {
           add
             ? (
               <form onSubmit={this.addExperience}>
-                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={null} />
-                <input type="month" onChange={null} />
-                <input type="month" onChange={null} />
-                {isEducation ? <input type="text" placeholder="GPA" onChange={null} /> : null}
+                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e)} />
+                <input type="month" onChange={(e) => this.handleChange(e)} />
+                <input type="month" onChange={(e) => this.handleChange(e)} />
+                {isEducation ? <input type="text" placeholder="GPA" onChange={(e) => this.handleChange(e)} /> : null}
               </form>
             )
             : (
-              <button type="button" onClick={null}>
+              <button type="button" onClick={this.setAddTrue}>
                 Add
                 {isEducation ? ' Education' : ' Work experience'}
               </button>
