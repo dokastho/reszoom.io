@@ -17,6 +17,7 @@ up next:
 - [ ] make sure inputs arent too long
 - [ ] add "hide" option for education/experience
 - [ ] make those things viewable in the user profile
+- [ ] ***fold experience into normal entries***
 
 down the road...
 - [ ] tags for entries

@@ -136,7 +136,7 @@ class Experience extends React.Component {
                 {exp[expid].end}
               </p>
               {/* delete button */}
-              <button type="button" onClick={this.deleteExperience.bind(this, expid)}>Delete</button>
+              <button type="button" onClick={this.deleteExperience.bind(this, expid)}>Delete Permanently</button>
             </span>
           ))
         }
