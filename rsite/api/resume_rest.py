@@ -47,6 +47,7 @@ def load_resumes():
                     'priority': entry['priority'],
                     'owner': entry['owner'],
                     'header': entry['header'],
+                    'subheader': entry['subheader'],
                     'content': entry['content'],
                     'type': entry['type'],
                     'begin': entry['begin'],
