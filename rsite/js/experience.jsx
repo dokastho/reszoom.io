@@ -64,13 +64,13 @@ class Experience extends React.Component {
   // fetch rest api to POST new exp
   addExperience() {
     // load entry data from state
-    const { add, isEducation } = this.state;
+    const { newExp, isEducation } = this.state;
     const {
       location,
       begin,
       end,
       gpa,
-    } = add;
+    } = newExp;
 
     // fetch api
     fetch('/api/v1/experience/', {
@@ -138,17 +138,17 @@ class Experience extends React.Component {
       <div>
         {
           // render existing content
-          exp.map((e) => (
+          Object.keys(exp).map(([expid, o]) => (
             <span>
-              <h4>{e.location}</h4>
-              {isEducation ? <h4>{e.gpa}</h4> : null}
+              <h4>{o.location}</h4>
+              {isEducation ? <h4>{o.gpa}</h4> : null}
               <p>
-                {e.begin}
+                {o.begin}
                 -
-                {e.end}
+                {o.end}
               </p>
               {/* delete button */}
-              <button type="button" onClick={this.deleteExperience(e.expid)}>Delete</button>
+              <button type="button" onClick={this.deleteExperience(expid)}>Delete</button>
             </span>
           ))
         }
@@ -161,7 +161,8 @@ class Experience extends React.Component {
                 <input type="month" onChange={(e) => this.handleChange(e)} />
                 <input type="month" onChange={(e) => this.handleChange(e)} />
                 {isEducation ? <input type="text" placeholder="GPA" onChange={(e) => this.handleChange(e)} /> : null}
-                <ubtton type="button" onClick={this.setAddFalse}>Cancel</ubtton>
+                <input type="submit" />
+                <button type="button" onClick={this.setAddFalse}>Cancel</button>
               </form>
             )
             : (
