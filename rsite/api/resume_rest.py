@@ -47,27 +47,12 @@ def load_resumes():
                     'priority': entry['priority'],
                     'owner': entry['owner'],
                     'header': entry['header'],
-                    'content': entry['content']
-                }
-
-            # fetch experience
-            cur = database.execute(
-                "SELECT * "
-                "FROM experience "
-                "WHERE owner == ? ",
-                (logname, )
-            )
-            data = cur.fetchall()
-
-            exp = {}
-            # assemble json
-            for elt in data:
-                exp[elt['expid']] = {
-                    'typename': elt['typename'],
-                    'location': elt['location'],
-                    'begin': elt['begin'],
-                    'end': elt['end'],
-                    'gpa': elt['gpa']
+                    'content': entry['content'],
+                    'type': entry['type'],
+                    'location': entry['location'],
+                    'begin': entry['begin'],
+                    'end': entry['end'],
+                    'gpa': entry['gpa']
                 }
 
             # get eids for the resume id
@@ -103,7 +88,6 @@ def load_resumes():
             res = {
                 'eids': eids,
                 'entries': entries,
-                'experience': exp,
                 'username': userinfo['username'],
                 'fullname': userinfo['fullname'],
                 'email': userinfo['email'],

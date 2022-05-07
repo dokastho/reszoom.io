@@ -15,6 +15,9 @@ class Entries extends React.Component {
       username: props.username,
       // array of actively editing entries
       newEntryText: {},
+      // state attributes for type info
+      add: false,
+      newExp: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);

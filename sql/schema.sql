@@ -25,6 +25,10 @@ CREATE TABLE entries(
   frequency INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
+  type INTEGER(1) NOT NULL,
+  begin VARCHAR(20),
+  end VARCHAR(20),
+  gpa FLOAT,
   content VARCHAR(256),
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
@@ -50,16 +54,5 @@ CREATE TABLE resume_to_entry(
   owner VARCHAR(20) NOT NULL,
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
-  FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
-);
-
-CREATE TABLE experience(
-  expid INTEGER PRIMARY KEY AUTOINCREMENT,
-  owner VARCHAR(20) NOT NULL,
-  location VARCHAR(64) NOT NULL,
-  typename BOOLEAN NOT NULL,
-  begin VARCHAR(20) NOT NULL,
-  end VARCHAR(20) NOT NULL,
-  gpa FLOAT,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );

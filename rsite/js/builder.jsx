@@ -4,32 +4,18 @@ import Cookies from 'js-cookie';
 import Entries from './entry_list';
 import Experience from './experience';
 
-function getEntriesByHeader(entries, eids, header) {
+function getEntriesByHeaderType(entries, eids, header, type) {
   // iterate over eids and add entry, eid to return data if they match the header
   const sectionEntries = {};
   let sectionEids = [];
   eids.forEach((e) => {
     const entry = entries[e.entryid];
-    if (entry.header === header) {
+    if (entry.header === header && entry.type === type) {
       sectionEntries[e.entryid] = entry;
       sectionEids = sectionEids.concat(e);
     }
   });
   return { sectionEntries, sectionEids };
-}
-
-function getExperienceByHeader(experience, type) {
-  // same as above but for experience entries
-  // console.log(experience, type);
-  const keys = Object.keys(experience);
-  const sectionExp = {};
-  keys.forEach((k) => {
-    const exp = experience[k];
-    if (exp.typename === type) {
-      sectionExp[k] = exp;
-    }
-  });
-  return sectionExp;
 }
 
 class ResumeBuilder extends React.Component {
@@ -88,7 +74,11 @@ class ResumeBuilder extends React.Component {
 
         fields.forEach((f) => {
           const post = document.getElementById(f);
-          const { sectionEntries, sectionEids } = getEntriesByHeader(entries, eids, f);
+          const isEntries = 1;
+          const {
+            sectionEntries,
+            sectionEids,
+          } = getEntriesByHeaderType(entries, eids, f, isEntries);
           ReactDOM.render(
             <Entries
               entries={sectionEntries}
@@ -104,11 +94,20 @@ class ResumeBuilder extends React.Component {
         fields.pop('project');
         fields.forEach((f) => {
           const post = document.getElementById(f);
-          const type = Number(f === 'education');
-          const sectionInfo = getExperienceByHeader(experience, type);
+          const isEntries = 0;
+          const {
+            sectionEntries,
+            sectionEids,
+          } = getEntriesByHeaderType(entries, eids, f, isEntries);
           // render the info for experience and education
           ReactDOM.render(
-            <Experience isEducation={type} exp={sectionInfo} />,
+            <Entries
+              entries={sectionEntries}
+              eids={sectionEids}
+              resumeid={resumeid}
+              header={f}
+              username={username}
+            />,
             post.querySelector('.info'),
           );
         });
