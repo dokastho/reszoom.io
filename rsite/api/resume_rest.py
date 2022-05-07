@@ -228,10 +228,45 @@ def swap_entry():
 
     return flask.Response(status=204)
 
-# helpers
+###############################################################################
+## EDUCATION # EXPERIENCE # EDUCATION ## EXPERIENCE # EDUCATION # EXPERIENCE ##
+###############################################################################
 
 
-def do_create(logname, resumeid, entryid, header, content, priority=1, pos = 0):
+@rsite.app.route("/api/v1/experience/", methods=["GET"])
+def get_experience():
+    """Fetch education/experience from db."""
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
+
+    # get education info
+    isEducation = flask.request.args.get("edu", type=int)
+    if isEducation is None:
+        flask.abort(400)
+
+    database = rsite.model.get_db()
+
+    # fetch experience
+    cur = database.execute(
+        "SELECT * "
+        "FROM experience "
+        "WHERE owner == ? "
+        "AND typename == ?",
+        (logname, isEducation, )
+    )
+    data = cur.fetchall()
+    if len(data) == 0:
+        flask.abort(404)
+
+    return flask.jsonify(data), 201
+
+###############################################################################
+##### HELPERS # HELPERS # HELPERS # HELPERS # HELPERS # HELPERS # HELPERS #####
+###############################################################################
+
+
+def do_create(logname, resumeid, entryid, header, content, priority=1, pos=0):
     """Helper function for creating an entry."""
     database = rsite.model.get_db()
 
@@ -267,7 +302,7 @@ def do_create(logname, resumeid, entryid, header, content, priority=1, pos = 0):
                 (resumeid, newEntryid, logname, )
             )
             cur.fetchone()
-        
+
         else:
             # update pos
             cur = database.execute(
@@ -279,7 +314,6 @@ def do_create(logname, resumeid, entryid, header, content, priority=1, pos = 0):
             cur.fetchone()
 
         entryid = newEntryid
-        
 
     else:
         # entry already in db so increment freq
