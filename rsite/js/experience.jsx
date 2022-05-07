@@ -73,7 +73,7 @@ class Experience extends React.Component {
               </form>
             )
             : (
-              <button type="button" onClick={null}>
+              <button type="button" onClick={this.setState({ add: true })}>
                 Add
                 {isEducation ? ' Education' : ' Work experience'}
               </button>
