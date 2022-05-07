@@ -57,13 +57,13 @@ def add_experience():
     typename = body['type']     if 'type'       in body.keys() else flask.abort(400)
     begin = body['begin']       if 'begin'      in body.keys() else flask.abort(400)
     end = body['end']           if 'end'        in body.keys() else flask.abort(400)
-    gpa = body['gpa']           if 'gpa'        in body.keys() else flask.abort(400)
+    gpa = float(body['gpa'])    if 'gpa'        in body.keys() else flask.abort(400)
 
     # add a new entry
     cur = database.execute(
         "INSERT INTO experience "
         "(owner, location, typename, begin, end, gpa) "
-        "VALUES ?, ?, ?, ?, ?, ?",
+        "VALUES (?, ?, ?, ?, ?, ?)",
         (logname, location, typename, begin, end, gpa, )
     )
     cur.fetchone()
