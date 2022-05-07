@@ -46,7 +46,7 @@ class Experience extends React.Component {
   // update the "new" experience entry
   handleChange(event, attr) {
     const { newExp } = this.state;
-    newExp[attr] = event;
+    newExp[attr] = event.target.value;
     this.setState({ newExp });
   }
 
@@ -64,13 +64,13 @@ class Experience extends React.Component {
   // fetch rest api to POST new exp
   addExperience() {
     // load entry data from state
-    const { add, isEducation } = this.state;
+    const { newExp, isEducation } = this.state;
     const {
       location,
       begin,
       end,
       gpa,
-    } = add;
+    } = newExp;
 
     // fetch api
     fetch('/api/v1/experience/', {
@@ -115,7 +115,7 @@ class Experience extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
 
-    // no response necessary, just remove from state
+      // no response necessary, just remove from state
     }).then(() => {
       this.setState(() => {
         const { exp } = this.state;
@@ -134,34 +134,37 @@ class Experience extends React.Component {
       exp,
       add,
     } = this.state;
+    const arr = Object.keys(exp);
     return (
       <div>
         {
           // render existing content
-          exp.map((e) => (
-            <span>
-              <h4>{e.location}</h4>
-              {isEducation ? <h4>{e.gpa}</h4> : null}
-              <p>
-                {e.begin}
-                -
-                {e.end}
-              </p>
-              {/* delete button */}
-              <button type="button" onClick={this.deleteExperience(e.expid)}>Delete</button>
-            </span>
-          ))
+          arr.length === 0 ? null
+            : arr.map(([expid, o]) => (
+              <span>
+                <h4>{o.location}</h4>
+                {isEducation ? <h4>{o.gpa}</h4> : null}
+                <p>
+                  {o.begin}
+                  -
+                  {o.end}
+                </p>
+                {/* delete button */}
+                <button type="button" onClick={this.deleteExperience(expid)}>Delete</button>
+              </span>
+            ))
         }
         {
           // button to render "add" form
           add
             ? (
               <form onSubmit={this.addExperience}>
-                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e)} />
-                <input type="month" onChange={(e) => this.handleChange(e)} />
-                <input type="month" onChange={(e) => this.handleChange(e)} />
-                {isEducation ? <input type="text" placeholder="GPA" onChange={(e) => this.handleChange(e)} /> : null}
-                <ubtton type="button" onClick={this.setAddFalse}>Cancel</ubtton>
+                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
+                <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
+                <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
+                {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
+                <input type="submit" />
+                <button type="button" onClick={this.setAddFalse}>Cancel</button>
               </form>
             )
             : (
