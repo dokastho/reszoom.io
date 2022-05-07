@@ -18,6 +18,20 @@ function getEntriesByHeader(entries, eids, header) {
   return { sectionEntries, sectionEids };
 }
 
+function getExperienceByHeader(experience, type) {
+  // same as above but for experience entries
+  // console.log(experience, type);
+  const keys = Object.keys(experience);
+  const sectionExp = {};
+  keys.forEach((k) => {
+    const exp = experience[k];
+    if (exp.typename === type) {
+      sectionExp[k] = exp;
+    }
+  });
+  return sectionExp;
+}
+
 class ResumeBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -50,7 +64,7 @@ class ResumeBuilder extends React.Component {
       .then((data) => {
         this.setState({
           entries: data.entries,
-          // entries: new Map(),
+          experience: data.experience,
           eids: data.eids,
           resumeid: rid,
           resumename: data.resumename,
@@ -65,6 +79,7 @@ class ResumeBuilder extends React.Component {
           eids,
           resumeid,
           username,
+          experience,
         } = this.state;
 
         // render entries
@@ -86,18 +101,17 @@ class ResumeBuilder extends React.Component {
           );
         });
 
-        const edu = document.getElementById('education');
-        const exp = document.getElementById('experience');
-
-        // render the info for experience and education
-        ReactDOM.render(
-          <Experience isEducation={0} />,
-          exp.querySelector('.info'),
-        );
-        ReactDOM.render(
-          <Experience isEducation={1} />,
-          edu.querySelector('.info'),
-        );
+        fields.pop('project');
+        fields.forEach((f) => {
+          const post = document.getElementById(f);
+          const type = Number(f === 'education');
+          const { sectionInfo } = getExperienceByHeader(experience, type);
+          // render the info for experience and education
+          ReactDOM.render(
+            <Experience isEducation={type} exp={sectionInfo} />,
+            post.querySelector('.info'),
+          );
+        });
       })
       .catch((error) => console.log(error));
   }
