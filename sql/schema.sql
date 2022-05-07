@@ -48,22 +48,18 @@ CREATE TABLE resume_to_entry(
   pos INTEGER PRIMARY KEY AUTOINCREMENT,
   entryid INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
-  -- PRIMARY KEY(resumeid, entryid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
--- education and experience
--- todo should experience have entries? I think so... header for those would be experience
---    and I can load them based on resumeid
 CREATE TABLE experience(
+  expid INTEGER PRIMARY KEY AUTOINCREMENT,
   owner VARCHAR(20) NOT NULL,
   location VARCHAR(64) NOT NULL,
-  -- content VARCHAR(256) NOT NULL,
   typename BOOLEAN NOT NULL,
-  begin VARCHAR(20) NOT NULL,
-  end VARCHAR(20) NOT NULL,
+  begin DATETIME NOT NULL,
+  end DATETIME NOT NULL,
   gpa INTEGER,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );

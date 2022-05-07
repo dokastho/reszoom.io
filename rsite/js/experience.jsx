@@ -9,13 +9,19 @@ class Experience extends React.Component {
       // state attributes go here
       isEducation: props.isEducation,
       exp: [],
-      // location: '',
-      // begin: 0,
-      // end: 0,
-      // gpa: 0.0,
+      // expid
+      // location
+      // begin
+      // end
+      // gpa
       add: false,
       newExp: {},
     };
+    this.setAddTrue = this.setAddTrue.bind(this);
+    this.setAddFalse = this.setAddFalse.bind(this);
+    this.addExperience = this.addExperience.bind(this);
+    this.deleteExperience = this.deleteExperience.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +41,34 @@ class Experience extends React.Component {
         };
       });
     }).catch((error) => console.log(error));
+  }
+
+  // update the "new" experience entry
+  handleChange(event, attr) {
+    const { newExp } = this.state;
+    newExp[attr] = event;
+    this.setState({ newExp });
+  }
+
+  setAddTrue() {
+    this.setState({ add: true });
+  }
+
+  setAddFalse() {
+    this.setState({
+      newExp: {},
+      add: false,
+    });
+  }
+
+  // fetch rest api to POST new exp
+  addExperience() {
+
+  }
+
+  // fetch rest api to DELETE exp
+  deleteExperience() {
+
   }
 
   render() {
@@ -57,23 +91,24 @@ class Experience extends React.Component {
                 {e.end}
               </p>
               {/* delete button */}
-              <button type="button" onClick={null}>Delete</button>
+              <button type="button" onClick={this.deleteExperience(e.expid)}>Delete</button>
             </span>
           ))
         }
-        {/* button to render "add" form */}
         {
+          // button to render "add" form
           add
             ? (
               <form onSubmit={this.addExperience}>
-                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={null} />
-                <input type="month" onChange={null} />
-                <input type="month" onChange={null} />
-                {isEducation ? <input type="text" placeholder="GPA" onChange={null} /> : null}
+                <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e)} />
+                <input type="month" onChange={(e) => this.handleChange(e)} />
+                <input type="month" onChange={(e) => this.handleChange(e)} />
+                {isEducation ? <input type="text" placeholder="GPA" onChange={(e) => this.handleChange(e)} /> : null}
+                <ubtton type="button" onClick={this.setAddFalse}>Cancel</ubtton>
               </form>
             )
             : (
-              <button type="button" onClick={null}>
+              <button type="button" onClick={this.setAddTrue}>
                 Add
                 {isEducation ? ' Education' : ' Work experience'}
               </button>
