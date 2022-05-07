@@ -64,9 +64,8 @@ class Experience extends React.Component {
   // fetch rest api to POST new exp
   addExperience() {
     // load entry data from state
-    const { add } = this.state;
+    const { add, isEducation } = this.state;
     const {
-      expid,
       location,
       begin,
       end,
@@ -82,7 +81,7 @@ class Experience extends React.Component {
       },
       // post the data for new entry
       body: JSON.stringify({
-        expid,
+        type: isEducation,
         location,
         begin,
         end,
