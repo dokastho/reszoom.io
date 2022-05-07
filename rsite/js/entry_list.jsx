@@ -48,6 +48,8 @@ class Entries extends React.Component {
       header,
       resumeid,
       username,
+      isEntries,
+      add: false,
     });
     console.log('mount');
     console.log(this);
@@ -228,7 +230,9 @@ class Entries extends React.Component {
       text,
       newEntryText,
       isEntries,
+      add,
     } = this.state;
+    const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
     return (
       <div>
@@ -238,41 +242,45 @@ class Entries extends React.Component {
             entries[e.entryid].header === header
               ? (
                 <div key={e.entryid}>
-                  {e.entryid in newEntryText && isEntries
+                  {e.entryid in newEntryText
                     // render the edit button but only for entry type
                     ? (
                       <span>
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
-                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />
-                          {/* render up button for all entries not on first line */}
-                          {idx === 0 ? null
-                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                          {/* render down button for all entries not on last line */}
-                          {idx === max ? null
-                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          {
+                            // render edit form
+                            isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
+                          }
                         </form>
                       </span>
                     )
                     // render the entry content and delete button
                     : (
                       <div>
-                        {isEntries
-                          ? (
-                            <span>
-                              {entries[e.entryid].content}
-                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                            </span>
-                          )
-                          : (
-                            <span>
+                        <span>
+                          {
+                            isEntries ? (
+                              <div>
+                                {entries[e.entryid].content}
+                                <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                              </div>
+                            ) : (
+                              <span key={e.entryid}>
+                                <h4>{entries[e.entryid].location}</h4>
+                                {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
+                                <p>
+                                  {entries[e.entryid].begin}
+                                  -
+                                  {entries[e.entryid].end}
+                                </p>
+                                {/* delete button */}
+                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete Permanently</button>
+                              </span>
+                            )
+                          }
 
-                            </span>
-                          )
-
-                        }
+                        </span>
                         {/* render up button for all entries not on first line */}
                         {idx === 0 ? null
                           : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
@@ -288,10 +296,36 @@ class Entries extends React.Component {
           ))
         }
         {/* render create form */}
-        <form onSubmit={(event) => this.createEntry(0, event)}>
-          <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
-          <input type="submit" />
-        </form>
+        {
+          // eslint-disable-next-line no-nested-ternary
+          isEntries
+            ? (
+              <form onSubmit={(event) => this.createEntry(0, event)}>
+                <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
+                <input type="submit" />
+              </form>
+            )
+            : (
+              add
+                ? (
+                  <form onSubmit={(e) => this.createEntry(0, e)}>
+                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
+                    <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
+                    <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
+                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
+                    <input type="submit" />
+                    <button type="button" onClick={this.setAddFalse}>Cancel</button>
+                  </form>
+                )
+                : (
+                  <button type="button" onClick={this.setAddTrue}>
+                    Add
+                    {isEducation ? ' education' : ' work experience'}
+                  </button>
+                )
+            )
+        }
+
       </div>
     );
   }
