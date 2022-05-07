@@ -18,6 +18,7 @@ up next:
 - [ ] add "hide" option for education/experience
 - [ ] make those things viewable in the user profile
 - [ ] ***fold experience into normal entries***
+- [ ] use resume_to_entry table to point to entries
 
 down the road...
 - [ ] tags for entries
