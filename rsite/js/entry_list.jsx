@@ -13,11 +13,11 @@ class Entries extends React.Component {
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
+      isEntries: props.isEntries,
       // array of actively editing entries
       newEntryText: {},
       // state attributes for type info
       add: false,
-      newExp: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -25,6 +25,9 @@ class Entries extends React.Component {
     this.editEntry = this.editEntry.bind(this);
     this.cancelEdit = this.cancelEdit.bind(this);
     this.moveEntry = this.moveEntry.bind(this);
+    this.setAddTrue = this.setAddTrue.bind(this);
+    this.setAddFalse = this.setAddFalse.bind(this);
+    this.handleInfoChange = this.handleInfoChange.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
   }
@@ -36,6 +39,7 @@ class Entries extends React.Component {
       header,
       resumeid,
       username,
+      isEntries,
     } = this.props;
 
     this.setState({
@@ -59,6 +63,23 @@ class Entries extends React.Component {
     const { newEntryText } = this.state;
     newEntryText[entryid] = event.target.value;
     this.setState({ newEntryText });
+  }
+
+  handleInfoChange(event, attr) {
+    const { newEntryText } = this.state;
+    newEntryText[attr] = event.target.value;
+    this.setState({ newEntryText });
+  }
+
+  setAddTrue() {
+    this.setState({ add: true });
+  }
+
+  setAddFalse() {
+    this.setState({
+      newEntryText: {},
+      add: false,
+    });
   }
 
   // create an entry
@@ -89,6 +110,7 @@ class Entries extends React.Component {
           eids: prevState.eids.concat(data.eid),
           entries,
           text: '',
+          add: false,
         };
       });
     })
@@ -205,17 +227,19 @@ class Entries extends React.Component {
       entries,
       text,
       newEntryText,
+      isEntries,
     } = this.state;
     const max = Object.keys(eids).length - 1;
     return (
       <div>
         {
           eids.map((e, idx) => (
+            // TODO: I think this is unnecessary
             entries[e.entryid].header === header
               ? (
                 <div key={e.entryid}>
-                  {e.entryid in newEntryText
-                    // render the edit button
+                  {e.entryid in newEntryText && isEntries
+                    // render the edit button but only for entry type
                     ? (
                       <span>
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
@@ -233,10 +257,22 @@ class Entries extends React.Component {
                     )
                     // render the entry content and delete button
                     : (
-                      <span>
-                        {entries[e.entryid].content}
-                        <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                        <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                      <div>
+                        {isEntries
+                          ? (
+                            <span>
+                              {entries[e.entryid].content}
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </span>
+                          )
+                          : (
+                            <span>
+
+                            </span>
+                          )
+
+                        }
                         {/* render up button for all entries not on first line */}
                         {idx === 0 ? null
                           : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
@@ -244,7 +280,7 @@ class Entries extends React.Component {
                         {/* render down button for all entries not on last line */}
                         {idx === max ? null
                           : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-                      </span>
+                      </div>
                     )}
                 </div>
               )
@@ -267,6 +303,7 @@ Entries.propTypes = {
   header: PropTypes.string.isRequired,
   resumeid: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
+  isEntries: PropTypes.number.isRequired,
 };
 
 export default Entries;

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
 import Entries from './entry_list';
-import Experience from './experience';
 
 function getEntriesByHeaderType(entries, eids, header, type) {
   // iterate over eids and add entry, eid to return data if they match the header
@@ -50,7 +49,6 @@ class ResumeBuilder extends React.Component {
       .then((data) => {
         this.setState({
           entries: data.entries,
-          experience: data.experience,
           eids: data.eids,
           resumeid: rid,
           resumename: data.resumename,
@@ -65,7 +63,6 @@ class ResumeBuilder extends React.Component {
           eids,
           resumeid,
           username,
-          experience,
         } = this.state;
 
         // render entries
@@ -86,6 +83,7 @@ class ResumeBuilder extends React.Component {
               resumeid={resumeid}
               header={f}
               username={username}
+              isEntries={isEntries}
             />,
             post.querySelector('.entries'),
           );
@@ -107,6 +105,7 @@ class ResumeBuilder extends React.Component {
               resumeid={resumeid}
               header={f}
               username={username}
+              isEntries={isEntries}
             />,
             post.querySelector('.info'),
           );

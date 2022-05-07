@@ -34,9 +34,21 @@ INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 3, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 4, 'tdokas');
-INSERT INTO experience(owner, location, typename, begin, end, gpa)
+INSERT INTO entries(owner, location, typename, begin, end, gpa)
 VALUES ('tdokas', 'University of Michigan', 1, 'AUG 2020', 'MAY 2023', 3.4);
-INSERT INTO experience(owner, location, typename, begin, end, gpa)
+INSERT INTO entries(owner, location, typename, begin, end, gpa)
 VALUES ('tdokas', 'Michigan State University', 1, 'AUG 2019', 'MAY 2020', 3.9);
-INSERT INTO experience(owner, location, typename, begin, end)
+INSERT INTO entries(owner, location, typename, begin, end)
 VALUES ('tdokas', 'MBNI', 0, 'AUG 2020', 'MAY 2023');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 5, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 6, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 7, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 5, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 6, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 7, 'tdokas');
