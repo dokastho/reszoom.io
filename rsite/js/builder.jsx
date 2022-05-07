@@ -50,7 +50,7 @@ class ResumeBuilder extends React.Component {
       .then((data) => {
         this.setState({
           entries: data.entries,
-          // entries: new Map(),
+          experience: data.exp,
           eids: data.eids,
           resumeid: rid,
           resumename: data.resumename,
@@ -65,6 +65,7 @@ class ResumeBuilder extends React.Component {
           eids,
           resumeid,
           username,
+          experience,
         } = this.state;
 
         // render entries
@@ -91,11 +92,11 @@ class ResumeBuilder extends React.Component {
 
         // render the info for experience and education
         ReactDOM.render(
-          <Experience isEducation={0} />,
+          <Experience header="education" exp={experience} />,
           exp.querySelector('.info'),
         );
         ReactDOM.render(
-          <Experience isEducation={1} />,
+          <Experience header="experience" exp={experience} />,
           edu.querySelector('.info'),
         );
       })

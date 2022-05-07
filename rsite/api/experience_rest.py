@@ -22,25 +22,32 @@ def get_experience():
     logname, database = rest_api_auth_user()
 
     # get education info
-    isEducation = flask.request.args.get("edu", type=int)
-    if isEducation is None:
+    header = flask.request.args.get("header", type=int)
+    if header is None:
         flask.abort(400)
 
+    data = {"p": "q"}
     # fetch experience
     cur = database.execute(
         "SELECT * "
         "FROM experience "
         "WHERE owner == ? "
         "AND typename == ?",
-        (logname, isEducation, )
+        (logname, header, )
     )
-    data = cur.fetchall()
-    if len(data) == 0:
-        flask.abort(404)
+    arr = cur.fetchall()
 
-    return flask.jsonify({
-        "exp": data
-    }), 201
+    # assemble json
+    for elt in arr:
+        data[elt['expid']] = {
+            'location': elt['location'],
+            'begin': elt['begin'],
+            'end': elt['end'],
+            'gpa': elt['gpa']
+        }
+
+
+    return flask.jsonify(data), 201
 
 
 @rsite.app.route("/api/v1/experience/", methods=["POST"])
@@ -54,16 +61,16 @@ def add_experience():
     # verify args
     # doesn't read well but it's better than taking tons of lines
     location = body['location'] if 'location'   in body.keys() else flask.abort(400)
-    typename = body['type']     if 'type'       in body.keys() else flask.abort(400)
+    typename = body['header']     if 'type'       in body.keys() else flask.abort(400)
     begin = body['begin']       if 'begin'      in body.keys() else flask.abort(400)
     end = body['end']           if 'end'        in body.keys() else flask.abort(400)
-    gpa = body['gpa']           if 'gpa'        in body.keys() else flask.abort(400)
+    gpa = float(body['gpa'])    if 'gpa'        in body.keys() else flask.abort(400)
 
     # add a new entry
     cur = database.execute(
         "INSERT INTO experience "
         "(owner, location, typename, begin, end, gpa) "
-        "VALUES ?, ?, ?, ?, ?, ?",
+        "VALUES (?, ?, ?, ?, ?, ?)",
         (logname, location, typename, begin, end, gpa, )
     )
     cur.fetchone()
@@ -79,7 +86,7 @@ def add_experience():
         "SELECT * "
         "FROM experience "
         "WHERE expid == ?",
-        (expid)
+        (expid, )
     )
     data = cur.fetchone()
 
