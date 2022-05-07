@@ -89,6 +89,8 @@ class ResumeBuilder extends React.Component {
           );
         });
 
+        // TODO: add some way in getEntriesByHeaderType to differentiate between different
+        // experiences, and render entries for each
         fields.pop('project');
         fields.forEach((f) => {
           const post = document.getElementById(f);
