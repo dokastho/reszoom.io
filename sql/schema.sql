@@ -58,8 +58,8 @@ CREATE TABLE experience(
   owner VARCHAR(20) NOT NULL,
   location VARCHAR(64) NOT NULL,
   typename BOOLEAN NOT NULL,
-  begin DATETIME NOT NULL,
-  end DATETIME NOT NULL,
+  begin VARCHAR(20) NOT NULL,
+  end VARCHAR(20) NOT NULL,
   gpa INTEGER,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
