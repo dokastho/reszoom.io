@@ -9,6 +9,7 @@ URLs include:
 
 import flask
 import rsite
+from rsite.model import rest_api_auth_user
 
 ###############################################################################
 ## EDUCATION # EXPERIENCE # EDUCATION ## EXPERIENCE # EDUCATION # EXPERIENCE ##
@@ -18,16 +19,12 @@ import rsite
 @rsite.app.route("/api/v1/experience/", methods=["GET"])
 def get_experience():
     """Fetch education/experience from db."""
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, database = rest_api_auth_user()
 
     # get education info
     isEducation = flask.request.args.get("edu", type=int)
     if isEducation is None:
         flask.abort(400)
-
-    database = rsite.model.get_db()
 
     # fetch experience
     cur = database.execute(
@@ -49,14 +46,12 @@ def get_experience():
 @rsite.app.route("/api/v1/experience/", methods=["POST"])
 def add_experience():
     """Add education/experience from db."""
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, database = rest_api_auth_user()
 
 
 @rsite.app.route("/api/v1/experience/<int:expid>", methods=["DELETE"])
 def delete_experience():
     """Delete education/experience from db."""
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, database = rest_api_auth_user()
+
+    # verify user authorization

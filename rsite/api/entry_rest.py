@@ -9,7 +9,7 @@ URLs include:
 
 import flask
 import rsite
-from rsite.model import delete_helper
+from rsite.model import delete_helper, rest_api_auth_user
 
 ###############################################################################
 ##### ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES #####
@@ -20,9 +20,7 @@ from rsite.model import delete_helper
 def post_entry():
     """Post an entry."""
 
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, _ = rest_api_auth_user()
 
     resumeid = flask.request.args.get("resumeid", type=int, default=0)
     entryid = flask.request.args.get("entryid", type=int, default=0)
@@ -56,11 +54,7 @@ def delete_entry(entryid):
     if entryid == 0:
         flask.abort(404)
 
-    database = rsite.model.get_db()
-
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, database = rest_api_auth_user()
 
     cur = database.execute(
         "SELECT * "
@@ -88,13 +82,10 @@ def swap_entry():
     if pos1 == 0 or pos2 == 0:
         flask.abort(404)
 
-    logname = rsite.model.get_logname()
-    if not logname:
-        flask.abort(403)
+    logname, database = rest_api_auth_user()
 
     temp = 1
 
-    database = rsite.model.get_db()
     # authenticate the user as owner
     cur = database.execute(
         "SELECT * "

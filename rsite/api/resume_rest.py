@@ -7,19 +7,17 @@ URLs include:
 """
 import flask
 import rsite
+from rsite.model import rest_api_auth_user
 
 
 @rsite.app.route('/api/v1/resume/load/', methods=['GET'])
 def load_resumes():
     """Return resumes from database matching logname."""
     with rsite.app.app_context():
-        logname = rsite.model.get_logname()
-        if not logname:
-            flask.abort(403)
+        logname, database = rest_api_auth_user()
 
         op = flask.request.args.get("fetch", default="resume", type=str)
 
-        database = rsite.model.get_db()
 
         if op == "list":
             cur = database.execute(

@@ -208,3 +208,12 @@ def delete_helper(entryid, freq):
             (entryid, rid, )
         )
         cur.fetchone()
+
+def rest_api_auth_user():
+    """Standard user auth in rest api, returns logname and database connection."""
+    logname = get_logname()
+    if not logname:
+        flask.abort(403)
+
+    database = get_db()
+    return logname, database
