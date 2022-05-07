@@ -49,10 +49,14 @@ def get_experience():
 @rsite.app.route("/api/v1/experience/", methods=["POST"])
 def add_experience():
     """Add education/experience from db."""
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)
 
 
 @rsite.app.route("/api/v1/experience/<int:expid>", methods=["DELETE"])
 def delete_experience():
     """Delete education/experience from db."""
-
-
+    logname = rsite.model.get_logname()
+    if not logname:
+        flask.abort(403)

@@ -8,7 +8,7 @@ class Experience extends React.Component {
     this.state = {
       // state attributes go here
       isEducation: props.isEducation,
-      exp: [],
+      exp: {},
       // expid
       // location
       // begin
@@ -63,12 +63,70 @@ class Experience extends React.Component {
 
   // fetch rest api to POST new exp
   addExperience() {
+    // load entry data from state
+    const { add } = this.state;
+    const {
+      expid,
+      location,
+      begin,
+      end,
+      gpa,
+    } = add;
 
+    // fetch api
+    fetch('/api/v1/experience/', {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // post the data for new entry
+      body: JSON.stringify({
+        expid,
+        location,
+        begin,
+        end,
+        gpa,
+      }),
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+      return response.json();
+
+      // add data to state
+    }).then((data) => {
+      this.setState(() => {
+        const { exp } = this.state;
+        exp[data.expid] = data.data;
+        return {
+          newExp: {},
+          add: false,
+          exp,
+        };
+      });
+    })
+      .catch((error) => console.log(error));
   }
 
   // fetch rest api to DELETE exp
-  deleteExperience() {
+  deleteExperience(expid) {
+    fetch(`/api/v1/experience/${expid}/`, {
+      credentials: 'same-origin',
+      method: 'DELETE',
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+      return response.json();
 
+    // no response necessary, just remove from state
+    }).then(() => {
+      this.setState(() => {
+        const { exp } = this.state;
+        delete exp[expid];
+        return {
+          exp,
+        };
+      });
+    })
+      .catch((error) => console.log(error));
   }
 
   render() {
