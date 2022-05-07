@@ -25,12 +25,14 @@ CREATE TABLE entries(
   frequency INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
+  subheader INTEGER,
   type INTEGER(1) NOT NULL,
   begin VARCHAR(20),
   end VARCHAR(20),
   gpa FLOAT,
   content VARCHAR(256),
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
+  FOREIGN KEY(subheader) REFERENCES entries(entryid) ON DELETE CASCADE
 );
 
 CREATE TABLE tags(

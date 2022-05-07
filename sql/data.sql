@@ -16,14 +16,14 @@ VALUES ('tdokas', 'resume 1', 1);
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 2', 0);
 -- add some entries for the resume
-INSERT INTO entries(frequency, priority, owner, header, content, type)
-VALUES (1, 1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!', 1);
-INSERT INTO entries(frequency, priority, owner, header, content, type)
-VALUES (1, 1, 'tdokas', 'experience', 'Worked at a lab and received a raise for my abilities', 1);
-INSERT INTO entries(frequency, priority, owner, header, content, type)
-VALUES (2, 2, 'tdokas', 'project', 'Built and managed my own server for remote development', 1);
-INSERT INTO entries(frequency, priority, owner, header, content, type)
-VALUES (1, 1, 'tdokas', 'project', 'Added some content for another resume', 1);
+
+-- experience
+INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
+VALUES (1, 1, 'tdokas', 'education','University of Michigan', 0, 'AUG 2020', 'MAY 2023', 3.4);
+INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
+VALUES (1, 1, 'tdokas', 'education','Michigan State University', 0, 'AUG 2019', 'MAY 2020', 3.9);
+INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end)
+VALUES (1, 1, 'tdokas', 'experience','MBNI', 0, 'AUG 2020', 'MAY 2023');
 INSERT INTO resume_to_entry(resumeid, entryid, pos, owner)
 VALUES (1, 1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
@@ -31,23 +31,27 @@ VALUES (1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 3, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (2, 3, 'tdokas');
+VALUES (2, 1, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (2, 4, 'tdokas');
-INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
-VALUES (1, 1, 'tdokas', 'education','University of Michigan', 0, 'AUG 2020', 'MAY 2023', 3.4);
-INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
-VALUES (1, 1, 'tdokas', 'education','Michigan State University', 0, 'AUG 2019', 'MAY 2020', 3.9);
-INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end)
-VALUES (1, 1, 'tdokas', 'experience','MBNI', 0, 'AUG 2020', 'MAY 2023');
+VALUES (2, 2, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 3, 'tdokas');
+
+-- entries
+INSERT INTO entries(frequency, priority, owner, header, content, type)
+VALUES (1, 1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!', 1);
+INSERT INTO entries(frequency, priority, owner, header, subheader, content, type)
+VALUES (1, 1, 'tdokas', 'experience', 3, 'Worked at a lab and received a raise for my abilities', 1);
+INSERT INTO entries(frequency, priority, owner, header, content, type)
+VALUES (2, 2, 'tdokas', 'project', 'Built and managed my own server for remote development', 1);
+INSERT INTO entries(frequency, priority, owner, header, content, type)
+VALUES (1, 1, 'tdokas', 'project', 'Added some content for another resume', 1);
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (1, 4, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 5, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 6, 'tdokas');
-INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (1, 7, 'tdokas');
-INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (2, 5, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 6, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)

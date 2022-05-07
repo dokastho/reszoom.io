@@ -275,7 +275,7 @@ class Entries extends React.Component {
                                   {entries[e.entryid].end}
                                 </p>
                                 {/* delete button */}
-                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete Permanently</button>
+                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                               </span>
                             )
                           }
