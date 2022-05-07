@@ -159,7 +159,7 @@ def delete_entry(entryid):
     if logname != entry['owner']:
         flask.abort(403)
 
-    delete_helper(entry)
+    delete_helper(entry['entryid'], entry['frequency'])
 
     return flask.Response(status=204)
 

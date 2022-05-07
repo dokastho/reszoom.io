@@ -21,7 +21,7 @@ VALUES (1, 1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site
 INSERT INTO entries(frequency, priority, owner, header, content)
 VALUES (1, 1, 'tdokas', 'experience', 'Worked at a lab and received a raise for my abilities');
 INSERT INTO entries(frequency, priority, owner, header, content)
-VALUES (1, 1, 'tdokas', 'project', 'Built and managed my own server for remote development');
+VALUES (2, 2, 'tdokas', 'project', 'Built and managed my own server for remote development');
 INSERT INTO entries(frequency, priority, owner, header, content)
 VALUES (1, 1, 'tdokas', 'project', 'Added some content for another resume');
 INSERT INTO resume_to_entry(resumeid, entryid, pos, owner)
@@ -30,5 +30,7 @@ INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 3, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 3, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 4, 'tdokas');

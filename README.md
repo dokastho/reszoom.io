@@ -13,6 +13,7 @@ up next:
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
 - [ ] log in "try again" function
 - [ ] make passwords strict
+- [ ] education/experience content
 
 down the road...
 - [ ] tags for entries

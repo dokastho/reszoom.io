@@ -174,23 +174,37 @@ def encrypt(salt, password):
     return password_db_string
 
 
-def delete_helper(entry):
+def delete_helper(entryid, freq):
     """Delete an entry or update if freq > 1."""
     database = get_db()
-    entry['frequency'] = entry['frequency'] - 1
-    if entry['frequency'] == 0:
+    freq -= 1
+    if freq == 0:
         # delete the entry
         cur = database.execute(
             "DELETE FROM entries "
             "WHERE entryid == ?",
-            (entry['entryid'],)
+            (entryid,)
         )
+        cur.fetchone()
 
     else:
+        rid = flask.request.args.get("resumeid")
+        if rid == 0:
+            flask.abort(501)
         # update the entry
         cur = database.execute(
             "UPDATE entries "
-            "SET frequency = ?"
+            "SET frequency = ?, priority = ? "
             "WHERE entryid == ?",
-            (entry['frequency'], entry['entryid'],)
+            (freq, freq, entryid,)
         )
+        cur.fetchone()
+        
+        # delete the entry in table resume_to_entry
+        cur = database.execute(
+            "DELETE FROM resume_to_entry "
+            "WHERE entryid == ? "
+            "AND resumeid == ?",
+            (entryid, rid, )
+        )
+        cur.fetchone()

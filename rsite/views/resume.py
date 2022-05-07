@@ -125,7 +125,7 @@ def post_resumes():
             if logname != entry['owner']:
                 flask.abort(403)
             
-            delete_helper(entry)
+            delete_helper(entry['entryid'], entry['frequency'])
             
             # execute the update/delete for this entry
             cur.fetchone()
