@@ -65,7 +65,7 @@ def add_experience():
     }), 201
 
 
-@rsite.app.route("/api/v1/experience/<int:expid>", methods=["DELETE"])
+@rsite.app.route("/api/v1/experience/<int:expid>/", methods=["DELETE"])
 def delete_experience(expid):
     """Delete education/experience from db."""
     logname, database = rest_api_auth_user()
