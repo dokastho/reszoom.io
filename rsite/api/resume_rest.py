@@ -18,7 +18,6 @@ def load_resumes():
 
         op = flask.request.args.get("fetch", default="resume", type=str)
 
-
         if op == "list":
             cur = database.execute(
                 "SELECT * "
@@ -29,6 +28,8 @@ def load_resumes():
             resumes = cur.fetchall()
             res = {'resumes': resumes}
         elif op == "userinfo":
+            rid = flask.request.args.get("resumeid", default=0, type=int)
+
             # load all entries for a specific user
             cur = database.execute(
                 "SELECT * "
@@ -36,12 +37,12 @@ def load_resumes():
                 "WHERE owner == ?",
                 (logname, )
             )
-            entries = cur.fetchall()
+            data = cur.fetchall()
 
             # construct entries map
-            data = {}
-            for entry in entries:
-                data[entry['entryid']] = {
+            entries = {}
+            for entry in data:
+                entries[entry['entryid']] = {
                     'frequency': entry['frequency'],
                     'priority': entry['priority'],
                     'owner': entry['owner'],
@@ -49,9 +50,26 @@ def load_resumes():
                     'content': entry['content']
                 }
 
-            # get eids for the resume id
-            rid = flask.request.args.get("resumeid", default=0, type=int)
+            # fetch experience
+            cur = database.execute(
+                "SELECT * "
+                "FROM experience "
+                "WHERE owner == ? ",
+                (logname, )
+            )
+            data = cur.fetchall()
 
+            exp = {}
+            # assemble json
+            for elt in data:
+                exp[elt['expid']] = {
+                    'location': elt['location'],
+                    'begin': elt['begin'],
+                    'end': elt['end'],
+                    'gpa': elt['gpa']
+                }
+
+            # get eids for the resume id
             if rid == 0:
                 flask.abort(404)
             cur = database.execute(
@@ -83,7 +101,8 @@ def load_resumes():
             # construct the response
             res = {
                 'eids': eids,
-                'entries': data,
+                'entries': entries,
+                'experience': exp,
                 'username': userinfo['username'],
                 'fullname': userinfo['fullname'],
                 'email': userinfo['email'],
