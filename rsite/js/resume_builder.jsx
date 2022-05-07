@@ -104,10 +104,33 @@ class ResumeBuilder extends React.Component {
             <h3>{email}</h3>
           </div>
         </div>
-        <div id="education-entries" />
-        <div id="experience-entries" />
+        {
+          // render education-experience based on type
+          resumetype
+            ? (
+              <div>
+                <div id="education">
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+                <div id="experience">
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+                )
+                : (
+                <div id="experience">
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+                <div id="education">
+                  <div className="info" />
+                  <div className="entries" />
+                </div>
+              </div>
+            )
+                }
         <div id="project-entries" />
-        {/* render the resume options */}
         <div className="edit-form">
           <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
             <input type="hidden" name="id" value={resumeid} />
