@@ -90,16 +90,21 @@ class Entries extends React.Component {
   }
 
   // update handler for an existing entry
-  handleEntryChange(event, entryid) {
+  // key = entryid for entries and various json keys for info
+  handleEntryChange(event, key) {
     const { newEntryText } = this.state;
-    newEntryText[entryid] = event.target.value;
+    newEntryText[key] = event.target.value;
     this.setState({ newEntryText });
   }
 
   handleInfoChange(event, attr) {
     const { newEntryText } = this.state;
-    newEntryText[attr] = event.target.value;
-    this.setState({ newEntryText });
+    if (attr === 'location') {
+      this.setState({ text: event.target.value });
+    } else {
+      newEntryText[attr] = event.target.value;
+      this.setState({ newEntryText });
+    }
   }
 
   setAddTrue() {
@@ -133,13 +138,23 @@ class Entries extends React.Component {
       end,
       gpa,
     } = newEntryText;
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&type=${type}&begin=${begin}&end=${end}&gpa=${gpa}&subheader=${parent}&operation=create`, {
+    fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({
+        resumeid,
+        entryid,
+        header,
+        type,
+        begin,
+        end,
+        gpa,
+        parent,
+        text,
+      }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
@@ -366,10 +381,10 @@ class Entries extends React.Component {
               add
                 ? (
                   <form onSubmit={(e) => this.createEntry(0, 0, e)}>
-                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
-                    <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
-                    <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
-                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
+                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 'location')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'begin')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'end')} />
+                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 'gpa')} /> : null}
                     <input type="submit" />
                     <button type="button" onClick={this.setAddFalse}>Cancel</button>
                   </form>
