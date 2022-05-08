@@ -29,8 +29,8 @@ function splitByHeaders(sectionEntries, sectionEids) {
       splitEntries[entry.subheader] = [];
       splitEids[entry.subheader] = [];
     }
-    splitEntries[entry.subheader].concat(entry);
-    splitEids[entry.subheader].concat(e);
+    splitEntries[entry.subheader] = splitEntries[entry.subheader].concat(entry);
+    splitEids[entry.subheader] = splitEids[entry.subheader].concat(e);
   });
   return { splitEntries, splitEids };
 }
@@ -86,7 +86,7 @@ class ResumeBuilder extends React.Component {
         // render entries
 
         // 1. render the education and experience info
-        const fields = ['education', 'experience'];
+        let fields = ['education', 'experience'];
 
         fields.forEach((f) => {
           const post = document.getElementById(f);
@@ -118,7 +118,7 @@ class ResumeBuilder extends React.Component {
           );
         });
 
-        fields.concat('project');
+        fields = fields.concat('project');
 
         // 2. render the entries for each header
         //      split the entries of education & experience by their parent subheaders
@@ -146,13 +146,10 @@ class ResumeBuilder extends React.Component {
             const { splitEntries, splitEids } = splitByHeaders(sectionEntries, sectionEids);
 
             // map entries for each subheader
-
-            // eslint-disable-next-line array-callback-return
-            Object.keys(splitEntries).map((key) => {
-              const val = splitEntries[key];
+            Object.keys(splitEntries).map((key) => (
               ReactDOM.render(
                 <Entries
-                  entries={val}
+                  entries={splitEntries[key]}
                   eids={splitEids[key]}
                   resumeid={resumeid}
                   header={f}
@@ -160,8 +157,8 @@ class ResumeBuilder extends React.Component {
                   isEntries={isEntries}
                 />,
                 post.querySelector('.info').querySelector('.entries').querySelector(`.header${key}`),
-              );
-            });
+              )
+            ));
           }
         });
       })
