@@ -18,6 +18,8 @@ class Entries extends React.Component {
       newEntryText: {},
       // state attributes for type info
       add: false,
+      subEntries: {},
+      subEids: [],
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -41,6 +43,10 @@ class Entries extends React.Component {
       username,
       isEntries,
     } = this.props;
+
+    if (!isEntries) {
+      // fetch subentries
+    }
 
     this.setState({
       entries,
@@ -225,12 +231,16 @@ class Entries extends React.Component {
   render() {
     const {
       header,
+      resumeid,
+      username,
       eids,
       entries,
       text,
       newEntryText,
       isEntries,
       add,
+      subEntries,
+      subEids,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -276,7 +286,17 @@ class Entries extends React.Component {
                                 </p>
                                 {/* delete button */}
                                 <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                                {/* render subentries */}
+                                <Entries
+                                  entries={subEntries}
+                                  eids={subEids}
+                                  resumeid={resumeid}
+                                  header={header}
+                                  username={username}
+                                  isEntries={isEntries}
+                                />
                               </span>
+
                             )
                           }
 
