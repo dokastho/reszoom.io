@@ -15,6 +15,8 @@ INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 1', 1);
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 2', 0);
+INSERT INTO resumes(owner, name, typename)
+VALUES ('tdokas', 'resume 3', 1);
 -- add some entries for the resume
 
 -- experience
