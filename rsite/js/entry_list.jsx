@@ -18,6 +18,8 @@ class Entries extends React.Component {
       newEntryText: {},
       // state attributes for type info
       add: false,
+      subEntries: {},
+      subEids: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -42,6 +44,30 @@ class Entries extends React.Component {
       isEntries,
     } = this.props;
 
+    const {
+      subEntries,
+      subEids,
+    } = this.state;
+
+    if (!isEntries && eids.length > 0) {
+      // fetch subentries. one fetch per entryid in the info entries
+      // for example, there could be two entries in the experience header
+      // in such a case, it is necessary to fetch subentries of each, thus two fetches
+      eids.forEach((e) => {
+        const { entryid } = e;
+        fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, { credentials: 'same-origin' })
+          .then((response) => {
+            if (!response.ok) throw Error(response.statusText);
+            return response.json();
+          })
+          .then((data) => {
+            subEntries[entryid] = data.entries;
+            subEids[entryid] = data.eids;
+          })
+          .catch((error) => console.log(error));
+      });
+    }
+
     this.setState({
       entries,
       eids,
@@ -50,6 +76,8 @@ class Entries extends React.Component {
       username,
       isEntries,
       add: false,
+      subEntries,
+      subEids,
     });
     console.log('mount');
     console.log(this);
@@ -225,12 +253,16 @@ class Entries extends React.Component {
   render() {
     const {
       header,
+      resumeid,
+      username,
       eids,
       entries,
       text,
       newEntryText,
       isEntries,
       add,
+      subEntries,
+      subEids,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -276,6 +308,15 @@ class Entries extends React.Component {
                                 </p>
                                 {/* delete button */}
                                 <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                                {/* render subentries */}
+                                <Entries
+                                  entries={subEntries[e.entryid]}
+                                  eids={subEids[e.entryid]}
+                                  resumeid={resumeid}
+                                  header={header}
+                                  username={username}
+                                  isEntries={1}
+                                />
                               </span>
                             )
                           }
