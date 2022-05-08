@@ -331,9 +331,13 @@ class Entries extends React.Component {
   }
 }
 
+Entries.defaultProps = {
+  eids: [],
+};
+
 Entries.propTypes = {
   entries: PropTypes.instanceOf(Object).isRequired,
-  eids: PropTypes.instanceOf(Array).isRequired,
+  eids: PropTypes.instanceOf(Array),
   header: PropTypes.string.isRequired,
   resumeid: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
