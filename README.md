@@ -21,10 +21,11 @@ up next:
 - [ ] add experience edit
 - [x] fix experience add onchange
 - [x] fix experience add
-- [ ] fix experience entries showing up
+- [x] fix experience entries showing up
 
 down the road...
 - [ ] tags for entries
+- [ ] move to await
 - [x] brainstorm better way of editing without changing past resumes
 - [ ] prevent duplicate entries
 
