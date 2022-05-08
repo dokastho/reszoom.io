@@ -27,6 +27,10 @@ def post_entry():
     entryid = flask.request.args.get("entryid", type=int, default=0)
     header = flask.request.args.get("header", type=str, default='')
     op = flask.request.args.get("operation", type=str, default='')
+    entry_type = flask.request.args.get("type", type=str, default='')
+    begin = flask.request.args.get("begin", type=str, default='')
+    end = flask.request.args.get("end", type=str, default='')
+    gpa = flask.request.args.get("gpa", type=int)
 
     # entry must be in json format
     if not flask.request.is_json:
@@ -39,10 +43,10 @@ def post_entry():
 
     content = body['text']
 
-    if len(content) == 0 or len(header) == 0 or len(op) == 0 or resumeid == 0:
+    if len(content) == 0 or len(header) == 0 or len(op) == 0 or len(entry_type) == 0 or resumeid == 0:
         flask.abort(400)
     if op == "create":
-        data = do_create(logname, resumeid, entryid, header, content)
+        data = do_create(logname, resumeid, entryid, header, content, type=entry_type, begin=begin, end=end, gpa=gpa)
     elif op == "update":
         data = do_update(logname, resumeid, entryid, header, content)
 
@@ -201,7 +205,7 @@ def swap_entry():
 ###############################################################################
 
 
-def do_create(logname, resumeid, entryid, header, content, priority=1, pos=0):
+def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa, priority=1, pos=0):
     """Helper function for creating an entry."""
     database = rsite.model.get_db()
 
@@ -211,9 +215,9 @@ def do_create(logname, resumeid, entryid, header, content, priority=1, pos=0):
         # insert new
         cur = database.execute(
             "INSERT INTO entries "
-            "(frequency, priority, owner, header, content) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (freq, priority, logname, header, content, )
+            "(frequency, priority, owner, header, content, type, begin, end, gpa) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (freq, priority, logname, header, content, type, begin, end, gpa )
         )
         cur.fetchone()
 
@@ -288,7 +292,11 @@ def do_create(logname, resumeid, entryid, header, content, priority=1, pos=0):
             "frequency": freq,
             "priority": freq,
             "header": header,
-            "owner": logname
+            "owner": logname,
+            "type": type,
+            "begin": begin,
+            "end": end,
+            "gpa": gpa
         }
     }
 

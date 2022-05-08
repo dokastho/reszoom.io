@@ -120,8 +120,17 @@ class Entries extends React.Component {
       text,
       entries,
       username,
+      newEntryText,
     } = this.state;
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=create`, {
+
+    // load items from newEntryText
+    const {
+      type,
+      begin,
+      end,
+      gpa,
+    } = newEntryText;
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&type=${type}&begin=${begin}&end=${end}&gpa=${gpa}&operation=create`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
