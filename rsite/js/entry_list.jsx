@@ -130,6 +130,9 @@ class Entries extends React.Component {
       username,
       newEntryText,
       parent,
+      subEntries,
+      subEids,
+      isEntries,
     } = this.state;
 
     // load items from newEntryText
@@ -159,15 +162,19 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      this.setState((prevState) => {
-        entries[data.eid.entryid] = data.entry;
-        return {
-          eids: prevState.eids.concat(data.eid),
-          entries,
-          text: '',
-          add: false,
-        };
-      });
+      if (!isEntries) {
+        subEntries[data.eid.entryid] = {};
+        subEids[data.eid.entryid] = [];
+      }
+      entries[data.eid.entryid] = data.entry;
+      this.setState((prevState) => ({
+        eids: prevState.eids.concat(data.eid),
+        entries,
+        text: '',
+        add: false,
+        subEntries,
+        subEids,
+      }));
     })
       .catch((error) => console.log(error));
     console.log(username);
