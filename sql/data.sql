@@ -32,8 +32,8 @@ INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (1, 3, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 1, 'tdokas');
-INSERT INTO resume_to_entry(resumeid, entryid, owner)
-VALUES (2, 2, 'tdokas');
+-- INSERT INTO resume_to_entry(resumeid, entryid, owner)
+-- VALUES (2, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 3, 'tdokas');
 
