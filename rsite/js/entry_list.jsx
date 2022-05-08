@@ -21,6 +21,7 @@ class Entries extends React.Component {
       add: false,
       subEntries: {},
       subEids: {},
+      subFetched: false,
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -64,6 +65,7 @@ class Entries extends React.Component {
             this.setState({
               subEntries,
               subEids,
+              subFetched: true,
             });
           })
           .catch((error) => console.log(error));
@@ -295,6 +297,7 @@ class Entries extends React.Component {
       add,
       subEntries,
       subEids,
+      subFetched,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -342,7 +345,7 @@ class Entries extends React.Component {
                                 <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                                 {/* render subentries */}
                                 {
-                                  Object.keys(subEntries).length > 0
+                                  subFetched
                                     ? (
                                       <Entries
                                         entries={subEntries[e.entryid]}
