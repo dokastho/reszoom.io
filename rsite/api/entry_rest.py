@@ -7,6 +7,7 @@ URLs include:
 /api/v1/entry/meta/
 """
 
+from os import abort
 import flask
 import rsite
 from rsite.model import delete_helper, rest_api_auth_user
@@ -44,6 +45,70 @@ def post_entry():
         data = do_create(logname, resumeid, entryid, header, content)
     elif op == "update":
         data = do_update(logname, resumeid, entryid, header, content)
+
+    return flask.jsonify(data), 201
+
+
+@rsite.app.route("/api/v1/entry/<int:parent_entryid>/", methods=["GET"])
+def get_subentries(parent_entryid):
+    """Return subentries (and corresponding eids) of an entry"""
+    if parent_entryid == 0:
+        flask.abort(404)
+    
+    resumeid = flask.request.args.get("resumeid", type=int, default=0)
+
+    if resumeid == 0:
+        flask.abort(404)
+
+    logname, database = rest_api_auth_user()
+
+    # fetch entries with this entry as a subheader
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE subheader == ? "
+        "AND resumeid == ?",
+        (parent_entryid, resumeid, )
+    )
+    data = cur.fetchall()
+
+    entries = {}
+    eids = []
+    # verify request and user authority
+    if len(data) == 0:
+        flask.abort(400)
+    for entry in data:
+        if logname != entry['owner']:
+            flask.abort(403)
+
+        entryid = entry['entryid']
+        entries[entryid] = {
+            'frequency': entry['frequency'],
+            'priority': entry['priority'],
+            'owner': entry['owner'],
+            'header': entry['header'],
+            'subheader': entry['subheader'],
+            'content': entry['content'],
+            'type': entry['type'],
+            'begin': entry['begin'],
+            'end': entry['end'],
+            'gpa': entry['gpa']
+        }
+        # fetch eid for the entry
+        cur = database.execute(
+            "SELECT * "
+            "FROM resume_to_entries "
+            "WHERE resumeid == ? "
+            "AND entryid == ?",
+            (resumeid, entryid, )
+        )
+        eid = cur.fetchone()
+        eids.append(eid)
+
+    data = {
+        "entries": entries,
+        "eids": eids
+    }
 
     return flask.jsonify(data), 201
 
