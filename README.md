@@ -19,6 +19,7 @@ up next:
 - [ ] make those things viewable in the user profile
 - [x] fold experience into normal entries
 - [ ] add experience edit
+- [x] fix experience add onchange
 - [ ] fix experience add
 - [x] fix experience entries showing up
 
