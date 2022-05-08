@@ -86,7 +86,7 @@ class ResumeBuilder extends React.Component {
         // render entries
 
         // 1. render the education and experience info
-        const fields = ['education', 'experience'];
+        let fields = ['education', 'experience'];
 
         fields.forEach((f) => {
           const post = document.getElementById(f);
@@ -118,7 +118,7 @@ class ResumeBuilder extends React.Component {
           );
         });
 
-        fields.concat('project');
+        fields = fields.concat('project');
 
         // 2. render the entries for each header
         //      split the entries of education & experience by their parent subheaders
