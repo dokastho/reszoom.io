@@ -33,6 +33,7 @@ class Entries extends React.Component {
     this.handleInfoChange = this.handleInfoChange.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
+    this.fetchSubEntries = this.fetchSubEntries.bind(this);
   }
 
   componentDidMount() {
@@ -50,24 +51,7 @@ class Entries extends React.Component {
       // fetch subentries. one fetch per entryid in the info entries
       // for example, there could be two entries in the experience header
       // in such a case, it is necessary to fetch subentries of each, thus two fetches
-      eids.forEach((e) => {
-        const { entryid } = e;
-        fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, { credentials: 'same-origin' })
-          .then((response) => {
-            if (!response.ok) throw Error(response.statusText);
-            return response.json();
-          })
-          .then((data) => {
-            const { subEntries, subEids } = this.state;
-            subEntries[entryid] = data.entries;
-            subEids[entryid] = data.eids;
-            this.setState({
-              subEntries,
-              subEids,
-            });
-          })
-          .catch((error) => console.log(error));
-      });
+      this.fetchSubEntries(eids);
     }
 
     this.setState({
@@ -111,6 +95,33 @@ class Entries extends React.Component {
       newEntryText: {},
       add: false,
     });
+  }
+
+  fetchSubEntries(eids) {
+    if (eids.length === 0) {
+      return;
+    }
+    const { e } = eids.pop();
+    const { entryid } = e;
+    const { resumeid } = this.state;
+    fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        const { subEntries, subEids } = this.state;
+        subEntries[entryid] = data.entries;
+        subEids[entryid] = data.eids;
+        this.setState(
+          {
+            subEntries,
+            subEids,
+          },
+          this.fetchSubEntries(eids),
+        );
+      })
+      .catch((error) => console.log(error));
   }
 
   // create an entry
