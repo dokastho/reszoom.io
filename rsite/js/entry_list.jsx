@@ -33,6 +33,7 @@ class Entries extends React.Component {
     this.handleInfoChange = this.handleInfoChange.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
+    this.fetchSubEntries = this.fetchSubEntries.bind(this);
   }
 
   componentDidMount() {
@@ -52,21 +53,7 @@ class Entries extends React.Component {
       // in such a case, it is necessary to fetch subentries of each, thus two fetches
       eids.forEach((e) => {
         const { entryid } = e;
-        fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, { credentials: 'same-origin' })
-          .then((response) => {
-            if (!response.ok) throw Error(response.statusText);
-            return response.json();
-          })
-          .then((data) => {
-            const { subEntries, subEids } = this.state;
-            subEntries[entryid] = data.entries;
-            subEids[entryid] = data.eids;
-            this.setState({
-              subEntries,
-              subEids,
-            });
-          })
-          .catch((error) => console.log(error));
+        this.fetchSubEntries(entryid);
       });
     }
 
@@ -111,6 +98,25 @@ class Entries extends React.Component {
       newEntryText: {},
       add: false,
     });
+  }
+
+  fetchSubEntries(entryid) {
+    const { resumeid } = this.state;
+    fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        const { subEntries, subEids } = this.state;
+        subEntries[entryid] = data.entries;
+        subEids[entryid] = data.eids;
+        this.setState({
+          subEntries,
+          subEids,
+        });
+      })
+      .catch((error) => console.log(error));
   }
 
   // create an entry

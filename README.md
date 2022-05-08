@@ -20,7 +20,7 @@ up next:
 - [x] fold experience into normal entries
 - [ ] add experience edit
 - [ ] fix experience add
-- [ ] fix experience entries showing up
+- [x] fix experience entries showing up
 
 down the road...
 - [ ] tags for entries
