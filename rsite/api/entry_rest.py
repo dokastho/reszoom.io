@@ -84,6 +84,19 @@ def get_subentries(parent_entryid):
             flask.abort(403)
 
         entryid = entry['entryid']
+        # fetch eid for the entry
+        cur = database.execute(
+            "SELECT * "
+            "FROM resume_to_entry "
+            "WHERE resumeid == ? "
+            "AND entryid == ?",
+            (resumeid, entryid, )
+        )
+        eid = cur.fetchone()
+        # want to continue if the eid does not correspond to both resume and entry
+        if eid is None:
+            continue
+        eids.append(eid)
         entries[entryid] = {
             'frequency': entry['frequency'],
             'priority': entry['priority'],
@@ -96,16 +109,6 @@ def get_subentries(parent_entryid):
             'end': entry['end'],
             'gpa': entry['gpa']
         }
-        # fetch eid for the entry
-        cur = database.execute(
-            "SELECT * "
-            "FROM resume_to_entry "
-            "WHERE resumeid == ? "
-            "AND entryid == ?",
-            (resumeid, entryid, )
-        )
-        eid = cur.fetchone()
-        eids.append(eid)
 
     data = {
         "entries": entries,
