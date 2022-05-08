@@ -90,9 +90,10 @@ class Entries extends React.Component {
   }
 
   // update handler for an existing entry
-  handleEntryChange(event, entryid) {
+  // key = entryid for entries and various json keys for info
+  handleEntryChange(event, key) {
     const { newEntryText } = this.state;
-    newEntryText[entryid] = event.target.value;
+    newEntryText[key] = event.target.value;
     this.setState({ newEntryText });
   }
 
@@ -366,10 +367,10 @@ class Entries extends React.Component {
               add
                 ? (
                   <form onSubmit={(e) => this.createEntry(0, 0, e)}>
-                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
-                    <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
-                    <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
-                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleChange(e, 'gpa')} /> : null}
+                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 'location')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'begin')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'end')} />
+                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 'gpa')} /> : null}
                     <input type="submit" />
                     <button type="button" onClick={this.setAddFalse}>Cancel</button>
                   </form>
