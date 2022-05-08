@@ -19,8 +19,12 @@ class Entries extends React.Component {
       newEntryText: {},
       // state attributes for type info
       add: false,
+      // key: current entryid val: subentries belonging to this entry
       subEntries: {},
+      // key: current entryid val: array of eids belonging to subentries of this entry
       subEids: {},
+      // key: current entryid val: boolean of if subentries have been fetched
+      subFetched: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -58,12 +62,14 @@ class Entries extends React.Component {
             return response.json();
           })
           .then((data) => {
-            const { subEntries, subEids } = this.state;
+            const { subEntries, subEids, subFetched } = this.state;
             subEntries[entryid] = data.entries;
             subEids[entryid] = data.eids;
+            subFetched[entryid] = true;
             this.setState({
               subEntries,
               subEids,
+              subFetched,
             });
           })
           .catch((error) => console.log(error));
@@ -295,6 +301,7 @@ class Entries extends React.Component {
       add,
       subEntries,
       subEids,
+      subFetched,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -342,7 +349,7 @@ class Entries extends React.Component {
                                 <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                                 {/* render subentries */}
                                 {
-                                  Object.keys(subEntries).length > 0
+                                  subFetched[e.entryid]
                                     ? (
                                       <Entries
                                         entries={subEntries[e.entryid]}
