@@ -21,7 +21,7 @@ up next:
 - [ ] add experience edit
 - [x] fix experience add onchange
 - [x] fix experience add
-- [x] fix experience entries showing up
+- [ ] fix experience entries showing up
 
 down the road...
 - [ ] tags for entries
