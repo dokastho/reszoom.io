@@ -34,10 +34,14 @@ def post_entry():
     if "text" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
-            "end" not in body or "parent" not in body or \
-            "gpa" not in body:
-        flask.abort(400)    # insufficient arguments
+            "end" not in body or "parent" not in body:
+        # flask.abort(400)    # insufficient arguments
+        pass
 
+    if "gpa" not in body:
+        gpa = None
+    else:
+        gpa =  body['gpa']
     resumeid = body['resumeid']
     entryid =  body['entryid']
     header =  body['header']
@@ -45,10 +49,10 @@ def post_entry():
     begin =  body['begin']
     end =  body['end']
     subheader = body['parent']
-    gpa =  body['gpa']
+    
     content = body['text']
 
-    if len(content) == 0 or len(header) == 0 or len(op) == 0 or len(entry_type) == 0 or resumeid == 0:
+    if len(content) == 0 or len(header) == 0 or len(op) == 0 or resumeid == 0:
         flask.abort(400)
     if op == "create":
         data = do_create(logname, resumeid, entryid, header, content, type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader)

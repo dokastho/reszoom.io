@@ -334,20 +334,15 @@ class Entries extends React.Component {
                                 {/* delete button */}
                                 <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                                 {/* render subentries */}
-                                {
-                                  Object.keys(subEntries).length > 0
-                                    ? (
-                                      <Entries
-                                        entries={subEntries[e.entryid]}
-                                        eids={subEids[e.entryid]}
-                                        resumeid={resumeid}
-                                        header={header}
-                                        username={username}
-                                        isEntries={1}
-                                        parent={e.entryid}
-                                      />
-                                    ) : null
-                                }
+                                <Entries
+                                  entries={subEntries[e.entryid]}
+                                  eids={subEids[e.entryid]}
+                                  resumeid={resumeid}
+                                  header={header}
+                                  username={username}
+                                  isEntries={1}
+                                  parent={e.entryid}
+                                />
                               </span>
                             )
                           }
