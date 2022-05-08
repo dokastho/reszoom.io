@@ -17,8 +17,10 @@ up next:
 - [ ] make sure inputs arent too long
 - [ ] add "hide" option for education/experience
 - [ ] make those things viewable in the user profile
-- [ ] ***fold experience into normal entries***
-- [ ] use resume_to_entry table to point to entries
+- [x] fold experience into normal entries
+- [ ] add experience edit
+- [ ] fix experience add
+- [ ] fix experience entries showing up
 
 down the road...
 - [ ] tags for entries
