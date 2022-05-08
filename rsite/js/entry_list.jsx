@@ -14,6 +14,7 @@ class Entries extends React.Component {
       resumeid: props.resumeid,
       username: props.username,
       isEntries: props.isEntries,
+      parent: props.parent,
       // array of actively editing entries
       newEntryText: {},
       // state attributes for type info
@@ -42,6 +43,7 @@ class Entries extends React.Component {
       resumeid,
       username,
       isEntries,
+      parent,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -76,6 +78,7 @@ class Entries extends React.Component {
       username,
       isEntries,
       add: false,
+      parent,
     });
     console.log('mount');
     console.log(this);
@@ -111,7 +114,7 @@ class Entries extends React.Component {
   }
 
   // create an entry
-  createEntry(entryid, event) {
+  createEntry(entryid, type, event) {
     event.preventDefault();
 
     const {
@@ -120,8 +123,17 @@ class Entries extends React.Component {
       text,
       entries,
       username,
+      newEntryText,
+      parent,
     } = this.state;
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=create`, {
+
+    // load items from newEntryText
+    const {
+      begin,
+      end,
+      gpa,
+    } = newEntryText;
+    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&type=${type}&begin=${begin}&end=${end}&gpa=${gpa}&subheader=${parent}&operation=create`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
@@ -261,6 +273,7 @@ class Entries extends React.Component {
       add,
       subEntries,
       subEids,
+      parent,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -317,6 +330,7 @@ class Entries extends React.Component {
                                         header={header}
                                         username={username}
                                         isEntries={1}
+                                        parent={parent}
                                       />
                                     ) : null
                                 }
@@ -344,7 +358,7 @@ class Entries extends React.Component {
           // eslint-disable-next-line no-nested-ternary
           isEntries
             ? (
-              <form onSubmit={(event) => this.createEntry(0, event)}>
+              <form onSubmit={(event) => this.createEntry(0, 1, event)}>
                 <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
                 <input type="submit" />
               </form>
@@ -352,7 +366,7 @@ class Entries extends React.Component {
             : (
               add
                 ? (
-                  <form onSubmit={(e) => this.createEntry(0, e)}>
+                  <form onSubmit={(e) => this.createEntry(0, 0, e)}>
                     <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleChange(e, 'location')} />
                     <input type="month" onChange={(e) => this.handleChange(e, 'begin')} />
                     <input type="month" onChange={(e) => this.handleChange(e, 'end')} />
@@ -378,6 +392,7 @@ class Entries extends React.Component {
 Entries.defaultProps = {
   entries: {},
   eids: [],
+  parent: null,
 };
 
 Entries.propTypes = {
@@ -387,6 +402,7 @@ Entries.propTypes = {
   resumeid: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
   isEntries: PropTypes.number.isRequired,
+  parent: PropTypes.number,
 };
 
 export default Entries;
