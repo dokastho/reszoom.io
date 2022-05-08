@@ -23,15 +23,7 @@ def post_entry():
 
     logname, _ = rest_api_auth_user()
 
-    resumeid = flask.request.args.get("resumeid", type=int, default=0)
-    entryid = flask.request.args.get("entryid", type=int, default=0)
-    header = flask.request.args.get("header", type=str, default='')
     op = flask.request.args.get("operation", type=str, default='')
-    entry_type = flask.request.args.get("type", type=str, default='')
-    begin = flask.request.args.get("begin", type=str, default='')
-    end = flask.request.args.get("end", type=str, default='')
-    subheader = flask.request.args.get("subheader", type=int)
-    gpa = flask.request.args.get("gpa", type=int)
 
     # entry must be in json format
     if not flask.request.is_json:
@@ -39,8 +31,21 @@ def post_entry():
 
     body = flask.request.get_json()
 
-    if "text" not in body:
+    if "text" not in body or "resumeid" not in body or \
+            "entryid" not in body or "header" not in body or \
+            "entry_type" not in body or "begin" not in body or \
+            "end" not in body or "subheader" not in body or \
+            "gpa" not in body:
         flask.abort(400)    # insufficient arguments
+
+    resumeid = body['resumeid']
+    entryid =  body['entryid']
+    header =  body['header']
+    entry_type = body['entry_type']
+    begin =  body['begin']
+    end =  body['end']
+    subheader = body['subheader']
+    gpa =  body['gpa']
 
     content = body['text']
 
