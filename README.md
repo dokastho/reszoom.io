@@ -11,7 +11,7 @@ up next:
 - [x] edit button to load form entry *(get stuffed, twitter!)*
 - [x] update entry rest api
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
-- [ ] log in "try again" function
+- [ ] "try again" function for login and add entry attempt
 - [ ] make passwords strict
 - [x] education/experience content
 - [ ] make sure inputs arent too long
