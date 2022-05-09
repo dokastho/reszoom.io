@@ -21,11 +21,11 @@ VALUES ('tdokas', 'resume 3', 1);
 
 -- experience
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
-VALUES (2, 2, 'tdokas', 'education','University of Michigan', 0, 'AUG 2020', 'MAY 2023', 3.4);
+VALUES (2, 2, 'tdokas', 'education','University of Michigan', 0, '2020-08', '2023-05', 3.4);
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
-VALUES (2, 2, 'tdokas', 'education','Michigan State University', 0, 'AUG 2019', 'MAY 2020', 3.9);
+VALUES (2, 2, 'tdokas', 'education','Michigan State University', 0, '2019-08', '2020-05', 3.9);
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end)
-VALUES (2, 2, 'tdokas', 'experience','MBNI', 0, 'AUG 2020', 'MAY 2023');
+VALUES (2, 2, 'tdokas', 'experience','MBNI', 0, '2020-08', '2023-05');
 INSERT INTO resume_to_entry(resumeid, entryid, pos, owner)
 VALUES (1, 1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
