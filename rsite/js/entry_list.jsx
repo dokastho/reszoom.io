@@ -9,7 +9,6 @@ class Entries extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      text: '',
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
@@ -36,7 +35,6 @@ class Entries extends React.Component {
     this.setAddFalse = this.setAddFalse.bind(this);
     this.handleInfoChange = this.handleInfoChange.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
-    this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
   }
 
   componentDidMount() {
@@ -90,21 +88,12 @@ class Entries extends React.Component {
     console.log(this);
   }
 
-  // update handler for a new entry
-  handleNewEntryChange(event) {
-    this.setState({ text: event.target.value });
-  }
-
   // update handler for an existing entry
   // key = entryid for entries and various json keys for info
   handleEntryChange(event, key) {
     const { newEntryText } = this.state;
-    if (key === 'location') {
-      this.setState({ text: event.target.value });
-    } else {
-      newEntryText[key] = event.target.value;
-      this.setState({ newEntryText });
-    }
+    newEntryText[key] = event.target.value;
+    this.setState({ newEntryText });
   }
 
   handleInfoChange(event, attr) {
@@ -131,7 +120,6 @@ class Entries extends React.Component {
     const {
       resumeid,
       header,
-      text,
       entries,
       username,
       newEntryText,
@@ -146,6 +134,7 @@ class Entries extends React.Component {
       begin,
       end,
       gpa,
+      text,
     } = newEntryText;
     fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
@@ -173,13 +162,14 @@ class Entries extends React.Component {
         subEids[data.eid.entryid] = [];
       }
       entries[data.eid.entryid] = data.entry;
+      newEntryText['.text'] = '';
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
-        text: '',
         add: false,
         subEntries,
         subEids,
+        newEntryText,
       }));
     })
       .catch((error) => console.log(error));
@@ -234,16 +224,33 @@ class Entries extends React.Component {
       newEntryText,
     } = this.state;
 
-    const text = newEntryText[entryid];
+    const {
+      text,
+      type,
+      begin,
+      end,
+      gpa,
+      parent,
+    } = newEntryText[entryid];
     const { pos } = eids[idx];
 
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update&pos=${pos}`, {
+    fetch(`/api/v1/entry/?operation=create&pos=${pos}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({
+        resumeid,
+        entryid,
+        header,
+        type,
+        begin,
+        end,
+        gpa,
+        parent,
+        text,
+      }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
@@ -295,7 +302,6 @@ class Entries extends React.Component {
       username,
       eids,
       entries,
-      text,
       newEntryText,
       isEntries,
       add,
@@ -317,7 +323,12 @@ class Entries extends React.Component {
                     <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
                       {
                         // render edit form
-                        isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
+                        isEntries ? (
+                          <div>
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />
+                            <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          </div>
+                        ) : null
                       }
                     </form>
                   </span>
@@ -362,17 +373,16 @@ class Entries extends React.Component {
                           </span>
                         )
                       }
-
                     </span>
-                    {/* render up button for all entries not on first line */}
-                    {idx === 0 ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                    {/* render down button for all entries not on last line */}
-                    {idx === max ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                   </div>
                 )}
+              {/* render up button for all entries not on first line */}
+              {idx === 0 ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+              {/* render down button for all entries not on last line */}
+              {idx === max ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
             </div>
           ))
         }
@@ -382,7 +392,7 @@ class Entries extends React.Component {
           isEntries
             ? (
               <form onSubmit={(event) => this.createEntry(0, 1, event)}>
-                <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
+                <input type="text" onChange={(event) => this.handleEntryChange(event, 'text')} value={newEntryText['.text']} />
                 <input type="submit" />
               </form>
             )
@@ -390,7 +400,7 @@ class Entries extends React.Component {
               add
                 ? (
                   <form onSubmit={(e) => this.createEntry(0, 0, e)}>
-                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 'location')} />
+                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 'text')} />
                     <input type="month" onChange={(e) => this.handleEntryChange(e, 'begin')} />
                     <input type="month" onChange={(e) => this.handleEntryChange(e, 'end')} />
                     {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 'gpa')} /> : null}
