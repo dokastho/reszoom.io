@@ -12,7 +12,9 @@ class Entries extends React.Component {
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
+      // entries or info
       isEntries: props.isEntries,
+      // entryid of parent entry, if one exists
       parent: props.parent,
       // array of actively editing entries
       stagedEntries: {
@@ -206,7 +208,7 @@ class Entries extends React.Component {
     if (!(entryid in Object.keys(stagedEntries))) {
       stagedEntries[entryid] = {};
     }
-    stagedEntries[entryid].text = entries[entryid].content;
+    stagedEntries[entryid] = entries[entryid];
     this.setState({ stagedEntries });
   }
 
@@ -334,7 +336,12 @@ class Entries extends React.Component {
                             <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'text')} value={stagedEntries[e.entryid].text} />
                             <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                           </div>
-                        ) : null
+                        ) : (
+                          <div>
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'text')} value={stagedEntries[e.entryid].text} />
+                            <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          </div>
+                        )
                       }
                     </form>
                   </span>
@@ -359,7 +366,8 @@ class Entries extends React.Component {
                               -
                               {entries[e.entryid].end}
                             </p>
-                            {/* delete button */}
+                            {/* these buttons are identical to above */}
+                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                             <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                             {/* render subentries */}
                             {
