@@ -40,7 +40,7 @@ def post_entry():
     gpa = body['gpa']
     subheader = body['parent']
 
-    content = body['text']
+    content = body['content']
 
     if len(content) == 0 or len(header) == 0 or len(op) == 0 or resumeid == 0:
         flask.abort(400)
@@ -398,7 +398,7 @@ def load_body():
     """Load and set default values for a body json."""
     body = flask.request.get_json()
 
-    if "text" not in body or "resumeid" not in body or \
+    if "content" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
             "end" not in body or "parent" not in body:

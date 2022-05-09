@@ -16,15 +16,16 @@
 - [ ] add "hide" option for education/experience
 - [ ] make those things viewable in the user profile
 - [x] fold experience into normal entries
-- [ ] add experience edit
+- [x] add experience edit
 - [x] get edit button function up to date with rest api
 - [x] fix experience add onchange
 - [x] fix experience add
 - [x] fix experience entries showing up
+- [ ] fix experience edit
 
 down the road...
 - [ ] tags for entries
-- [ ] move to await
+- [ ] use await instead of subFetched
 - [x] brainstorm better way of editing without changing past resumes
 - [ ] prevent duplicate entries
 
