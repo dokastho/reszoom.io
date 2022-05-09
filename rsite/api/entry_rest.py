@@ -29,36 +29,16 @@ def post_entry():
     if not flask.request.is_json:
         flask.abort(400)    # incorrect body
 
-    body = flask.request.get_json()
-
-    if "text" not in body or "resumeid" not in body or \
-            "entryid" not in body or "header" not in body or \
-            "type" not in body or "begin" not in body or \
-            "end" not in body or "parent" not in body:
-        # flask.abort(400)    # insufficient arguments
-        pass
-
-    if "gpa" not in body:
-        gpa = None
-    else:
-        gpa = body['gpa']
-    if "begin" not in body:
-        begin = None
-    else:
-        begin = body['begin']
-    if "end" not in body:
-        end = None
-    else:
-        end = body['end']
-    if "parent" not in body:
-        subheader = None
-    else:
-        subheader = body['parent']
+    body = load_body()
 
     resumeid = body['resumeid']
     entryid = body['entryid']
     header = body['header']
     entry_type = body['type']
+    begin = body['begin']
+    end = body['end']
+    gpa = body['gpa']
+    subheader = body['parent']
 
     content = body['text']
 
@@ -325,7 +305,7 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
     }
 
 
-def do_update(logname, resumeid, entryid, header, content):
+def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader):
     """Helper function for updating an entry"""
     database = rsite.model.get_db()
 
@@ -348,9 +328,12 @@ def do_update(logname, resumeid, entryid, header, content):
     if freq == 1:
         cur = database.execute(
             "UPDATE entries "
-            "SET content = ? "
+            "SET content = ?, "
+            "begin = ?, "
+            "end = ?, "
+            "gpa = ? "
             "WHERE entryid == ?",
-            (content, entryid, )
+            (content, begin, end, gpa, entryid, )
         )
         cur.fetchone()
 
@@ -369,9 +352,14 @@ def do_update(logname, resumeid, entryid, header, content):
             "entry":
             {
                 "content": content,
+                "begin": begin,
+                "end": end,
+                "gpa": gpa,
                 "frequency": freq,
                 "priority": freq,
                 "header": header,
+                "type": type,
+                "subheader": subheader,
                 "owner": logname
             }
         }
@@ -399,6 +387,28 @@ def do_update(logname, resumeid, entryid, header, content):
         # priority here is duplicated with the old entry so that a newly edited
         # entry will not be poorly favored by the program
         #
-        data = do_create(logname, resumeid, 0, header, content, priority, pos)
+        data = do_create(logname, resumeid, 0, header, content, type, begin, end, gpa, subheader, priority, pos)
 
     return data
+
+def load_body():
+    """Load and set default values for a body json."""
+    body = flask.request.get_json()
+
+    if "text" not in body or "resumeid" not in body or \
+            "entryid" not in body or "header" not in body or \
+            "type" not in body or "begin" not in body or \
+            "end" not in body or "parent" not in body:
+        # flask.abort(400)    # insufficient arguments
+        pass
+
+    if "gpa" not in body:
+        body['gpa'] = None
+    if "begin" not in body:
+        body['begin'] = None
+    if "end" not in body:
+        body['end'] = None
+    if "parent" not in body:
+        body['parent'] = None
+    
+    return body
