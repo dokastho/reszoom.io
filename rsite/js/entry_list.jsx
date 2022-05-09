@@ -125,6 +125,7 @@ class Entries extends React.Component {
       parent,
       subEntries,
       subEids,
+      subFetched,
       isEntries,
     } = this.state;
 
@@ -162,6 +163,7 @@ class Entries extends React.Component {
       }
       entries[data.eid.entryid] = data.entry;
       stagedEntries[0].text = '';
+      subFetched[entryid] = true;
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
@@ -169,6 +171,7 @@ class Entries extends React.Component {
         subEntries,
         subEids,
         stagedEntries,
+        subFetched,
       }));
     })
       .catch((error) => console.log(error));
