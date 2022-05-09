@@ -324,7 +324,7 @@ class Entries extends React.Component {
               {e.entryid in stagedEntries
                 ? (
                   <span>
-                    <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEducation)} encType="multipart/form-data">
+                    <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} encType="multipart/form-data">
                       {
                         // EDIT FORM
                         isEntries ? (
