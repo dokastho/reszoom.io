@@ -317,7 +317,12 @@ class Entries extends React.Component {
                     <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
                       {
                         // render edit form
-                        isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
+                        isEntries ? (
+                          <div>
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />
+                            {/* <button type="button" onClick={this.cancelEdit(e.entryid)}>Cancel</button> */}
+                          </div>
+                        ) : null
                       }
                     </form>
                   </span>
@@ -362,17 +367,16 @@ class Entries extends React.Component {
                           </span>
                         )
                       }
-
                     </span>
-                    {/* render up button for all entries not on first line */}
-                    {idx === 0 ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                    {/* render down button for all entries not on last line */}
-                    {idx === max ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                   </div>
                 )}
+              {/* render up button for all entries not on first line */}
+              {idx === 0 ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+              {/* render down button for all entries not on last line */}
+              {idx === max ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
             </div>
           ))
         }
