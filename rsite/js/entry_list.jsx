@@ -161,11 +161,11 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      if (!isEntries) {
-        subEntries[data.eid.entryid] = {};
-        subEids[data.eid.entryid] = [];
-        subFetched[data.eid.entryid] = true;
-      }
+      // if (!isEntries) {
+      //   subEntries[data.eid.entryid] = {};
+      //   subEids[data.eid.entryid] = [];
+      //   subFetched[data.eid.entryid] = true;
+      // }
       entries[data.eid.entryid] = data.entry;
       delete stagedEntries[entryid];
       this.setState((prevState) => ({
