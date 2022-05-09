@@ -362,17 +362,16 @@ class Entries extends React.Component {
                           </span>
                         )
                       }
-
                     </span>
-                    {/* render up button for all entries not on first line */}
-                    {idx === 0 ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                    {/* render down button for all entries not on last line */}
-                    {idx === max ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                   </div>
                 )}
+              {/* render up button for all entries not on first line */}
+              {idx === 0 ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+              {/* render down button for all entries not on last line */}
+              {idx === max ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
             </div>
           ))
         }
