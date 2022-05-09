@@ -309,76 +309,71 @@ class Entries extends React.Component {
       <div>
         {
           eids.map((e, idx) => (
-            // TODO: I think this is unnecessary
-            entries[e.entryid].header === header
-              ? (
-                <div key={e.entryid}>
-                  {e.entryid in newEntryText
-                    // render the edit button but only for entry type
-                    ? (
-                      <span>
-                        <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
-                          {
-                            // render edit form
-                            isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
-                          }
-                        </form>
-                      </span>
-                    )
-                    // render the entry content and delete button
-                    : (
-                      <div>
-                        <span>
-                          {
-                            isEntries ? (
-                              <div>
-                                {entries[e.entryid].content}
-                                <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                              </div>
-                            ) : (
-                              <span key={e.entryid}>
-                                <h4>{entries[e.entryid].content}</h4>
-                                {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
-                                <p>
-                                  {entries[e.entryid].begin}
-                                  -
-                                  {entries[e.entryid].end}
-                                </p>
-                                {/* delete button */}
-                                <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                                {/* render subentries */}
-                                {
-                                  subFetched[e.entryid]
-                                    ? (
-                                      <Entries
-                                        entries={subEntries[e.entryid]}
-                                        eids={subEids[e.entryid]}
-                                        resumeid={resumeid}
-                                        header={header}
-                                        username={username}
-                                        isEntries={1}
-                                        parent={e.entryid}
-                                      />
-                                    ) : null
-                                }
-                              </span>
-                            )
-                          }
+            <div key={e.entryid}>
+              {e.entryid in newEntryText
+                // render the edit button but only for entry type
+                ? (
+                  <span>
+                    <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
+                      {
+                        // render edit form
+                        isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
+                      }
+                    </form>
+                  </span>
+                )
+                // render the entry content and delete button
+                : (
+                  <div>
+                    <span>
+                      {
+                        isEntries ? (
+                          <div>
+                            {entries[e.entryid].content}
+                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                          </div>
+                        ) : (
+                          <span key={e.entryid}>
+                            <h4>{entries[e.entryid].content}</h4>
+                            {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
+                            <p>
+                              {entries[e.entryid].begin}
+                              -
+                              {entries[e.entryid].end}
+                            </p>
+                            {/* delete button */}
+                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            {/* render subentries */}
+                            {
+                              subFetched[e.entryid]
+                                ? (
+                                  <Entries
+                                    entries={subEntries[e.entryid]}
+                                    eids={subEids[e.entryid]}
+                                    resumeid={resumeid}
+                                    header={header}
+                                    username={username}
+                                    isEntries={1}
+                                    parent={e.entryid}
+                                  />
+                                ) : null
+                            }
+                          </span>
+                        )
+                      }
 
-                        </span>
-                        {/* render up button for all entries not on first line */}
-                        {idx === 0 ? null
-                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+                    </span>
+                    {/* render up button for all entries not on first line */}
+                    {idx === 0 ? null
+                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
-                        {/* render down button for all entries not on last line */}
-                        {idx === max ? null
-                          : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-                      </div>
-                    )}
-                </div>
-              )
-              : null
+                    {/* render down button for all entries not on last line */}
+                    {idx === max ? null
+                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                  </div>
+                )}
+            </div>
           ))
         }
         {/* render create form */}
