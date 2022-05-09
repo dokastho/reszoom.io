@@ -24,6 +24,7 @@
 - [x] fix experience edit
 
 down the road...
+- [ ] suggest entries based on frequency
 - [ ] tags for entries
 - [ ] use await instead of subFetched
 - [x] brainstorm better way of editing without changing past resumes
