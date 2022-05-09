@@ -109,7 +109,9 @@ class Entries extends React.Component {
 
   setAddFalse() {
     this.setState({
-      stagedEntries: {},
+      // TODO: this is broken:
+      // stagedEntries: {},
+      // but should it clear the stagedEntries?
       add: false,
     });
   }
