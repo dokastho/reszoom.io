@@ -122,6 +122,9 @@ def post_resumes():
             )
             entry = cur.fetchone()
 
+            if entry is None:
+                continue
+
             if logname != entry['owner']:
                 flask.abort(403)
             
