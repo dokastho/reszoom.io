@@ -9,14 +9,20 @@ class Entries extends React.Component {
       // state attributes go here
       entries: props.entries,
       eids: props.eids,
-      text: '',
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
       isEntries: props.isEntries,
       parent: props.parent,
       // array of actively editing entries
-      newEntryText: {},
+      stagedEntries: {
+        0: {
+          text: '',
+          begin: '',
+          end: '',
+          gpa: null,
+        },
+      },
       // state attributes for type info
       add: false,
       // key: current entryid val: subentries belonging to this entry
@@ -34,9 +40,7 @@ class Entries extends React.Component {
     this.moveEntry = this.moveEntry.bind(this);
     this.setAddTrue = this.setAddTrue.bind(this);
     this.setAddFalse = this.setAddFalse.bind(this);
-    this.handleInfoChange = this.handleInfoChange.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
-    this.handleNewEntryChange = this.handleNewEntryChange.bind(this);
   }
 
   componentDidMount() {
@@ -90,27 +94,11 @@ class Entries extends React.Component {
     console.log(this);
   }
 
-  // update handler for a new entry
-  handleNewEntryChange(event) {
-    this.setState({ text: event.target.value });
-  }
-
   // update handler for an existing entry
-  // key = entryid for entries and various json keys for info
-  handleEntryChange(event, key) {
-    const { newEntryText } = this.state;
-    if (key === 'location') {
-      this.setState({ text: event.target.value });
-    } else {
-      newEntryText[key] = event.target.value;
-      this.setState({ newEntryText });
-    }
-  }
-
-  handleInfoChange(event, attr) {
-    const { newEntryText } = this.state;
-    newEntryText[attr] = event.target.value;
-    this.setState({ newEntryText });
+  handleEntryChange(event, entryid, key) {
+    const { stagedEntries } = this.state;
+    stagedEntries[entryid][key] = event.target.value;
+    this.setState({ stagedEntries });
   }
 
   setAddTrue() {
@@ -119,7 +107,7 @@ class Entries extends React.Component {
 
   setAddFalse() {
     this.setState({
-      newEntryText: {},
+      stagedEntries: {},
       add: false,
     });
   }
@@ -131,22 +119,22 @@ class Entries extends React.Component {
     const {
       resumeid,
       header,
-      text,
       entries,
       username,
-      newEntryText,
+      stagedEntries,
       parent,
       subEntries,
       subEids,
       isEntries,
     } = this.state;
 
-    // load items from newEntryText
+    // load items from stagedEntries
     const {
       begin,
       end,
       gpa,
-    } = newEntryText;
+      text,
+    } = stagedEntries[0];
     fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
       method: 'POST',
@@ -173,13 +161,14 @@ class Entries extends React.Component {
         subEids[data.eid.entryid] = [];
       }
       entries[data.eid.entryid] = data.entry;
+      stagedEntries[0].text = '';
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
-        text: '',
         add: false,
         subEntries,
         subEids,
+        stagedEntries,
       }));
     })
       .catch((error) => console.log(error));
@@ -210,16 +199,16 @@ class Entries extends React.Component {
 
   // set the newentry to initiate the edit form
   editEntry(entryid) {
-    const { newEntryText, entries } = this.state;
-    newEntryText[entryid] = entries[entryid].content;
-    this.setState({ newEntryText });
+    const { stagedEntries, entries } = this.state;
+    stagedEntries[entryid] = entries[entryid].content;
+    this.setState({ stagedEntries });
   }
 
   // cancel an edit by clearing the edited content
   cancelEdit(entryid) {
-    const { newEntryText } = this.state;
-    delete newEntryText[entryid];
-    this.setState({ newEntryText });
+    const { stagedEntries } = this.state;
+    delete stagedEntries[entryid];
+    this.setState({ stagedEntries });
   }
 
   // submit an edit to an entry
@@ -231,30 +220,47 @@ class Entries extends React.Component {
       entries,
       resumeid,
       header,
-      newEntryText,
+      stagedEntries,
     } = this.state;
 
-    const text = newEntryText[entryid];
+    const {
+      text,
+      type,
+      begin,
+      end,
+      gpa,
+      parent,
+    } = stagedEntries[entryid];
     const { pos } = eids[idx];
 
-    fetch(`/api/v1/entry/?resumeid=${resumeid}&entryid=${entryid}&header=${header}&operation=update&pos=${pos}`, {
+    fetch(`/api/v1/entry/?operation=create&pos=${pos}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({
+        resumeid,
+        entryid,
+        header,
+        type,
+        begin,
+        end,
+        gpa,
+        parent,
+        text,
+      }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      delete newEntryText[entryid];
+      delete stagedEntries[entryid];
       eids[idx] = data.eid;
       entries[entryid] = data.entry;
       this.setState({
         eids,
         entries,
-        newEntryText,
+        stagedEntries,
       });
     })
       .catch((error) => console.log(error));
@@ -295,8 +301,7 @@ class Entries extends React.Component {
       username,
       eids,
       entries,
-      text,
-      newEntryText,
+      stagedEntries,
       isEntries,
       add,
       subEntries,
@@ -310,14 +315,19 @@ class Entries extends React.Component {
         {
           eids.map((e, idx) => (
             <div key={e.entryid}>
-              {e.entryid in newEntryText
+              {e.entryid in stagedEntries
                 // render the edit button but only for entry type
                 ? (
                   <span>
                     <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx)} encType="multipart/form-data">
                       {
                         // render edit form
-                        isEntries ? (<input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid)} value={newEntryText[e.entryid]} />) : null
+                        isEntries ? (
+                          <div>
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'text')} value={stagedEntries[e.entryid]} />
+                            <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          </div>
+                        ) : null
                       }
                     </form>
                   </span>
@@ -362,17 +372,16 @@ class Entries extends React.Component {
                           </span>
                         )
                       }
-
                     </span>
-                    {/* render up button for all entries not on first line */}
-                    {idx === 0 ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                    {/* render down button for all entries not on last line */}
-                    {idx === max ? null
-                      : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
                   </div>
                 )}
+              {/* render up button for all entries not on first line */}
+              {idx === 0 ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+              {/* render down button for all entries not on last line */}
+              {idx === max ? null
+                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
             </div>
           ))
         }
@@ -382,7 +391,7 @@ class Entries extends React.Component {
           isEntries
             ? (
               <form onSubmit={(event) => this.createEntry(0, 1, event)}>
-                <input type="text" onChange={(event) => this.handleNewEntryChange(event)} value={text} />
+                <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'text')} value={stagedEntries['.text']} />
                 <input type="submit" />
               </form>
             )
@@ -390,10 +399,10 @@ class Entries extends React.Component {
               add
                 ? (
                   <form onSubmit={(e) => this.createEntry(0, 0, e)}>
-                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 'location')} />
-                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'begin')} />
-                    <input type="month" onChange={(e) => this.handleEntryChange(e, 'end')} />
-                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 'gpa')} /> : null}
+                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 0, 'text')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'begin')} />
+                    <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'end')} />
+                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 0, 'gpa')} /> : null}
                     <input type="submit" />
                     <button type="button" onClick={this.setAddFalse}>Cancel</button>
                   </form>
