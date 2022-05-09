@@ -32,7 +32,7 @@ CREATE TABLE entries(
   gpa FLOAT,
   content VARCHAR(256),
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
-  FOREIGN KEY(subheader) REFERENCES entries(entryid)
+  -- FOREIGN KEY(subheader) REFERENCES entries(entryid)
 );
 
 CREATE TABLE tags(

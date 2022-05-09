@@ -22,6 +22,8 @@
 - [x] fix experience add
 - [x] fix experience entries showing up
 - [x] fix experience edit
+- [ ] fix experience add subentry, delete experience
+- [ ] gpa display must be decimal format
 
 down the road...
 - [ ] suggest entries based on frequency
