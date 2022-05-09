@@ -19,7 +19,7 @@ up next:
 - [ ] make those things viewable in the user profile
 - [x] fold experience into normal entries
 - [ ] add experience edit
-- [ ] fix edit button
+- [ ] get edit button function up to date with rest api
 - [x] fix experience add onchange
 - [x] fix experience add
 - [x] fix experience entries showing up
