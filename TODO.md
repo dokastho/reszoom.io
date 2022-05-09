@@ -21,7 +21,7 @@
 - [x] fix experience add onchange
 - [x] fix experience add
 - [x] fix experience entries showing up
-- [ ] fix experience edit
+- [x] fix experience edit
 
 down the road...
 - [ ] tags for entries
