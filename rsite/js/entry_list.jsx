@@ -167,7 +167,13 @@ class Entries extends React.Component {
         subFetched[data.eid.entryid] = true;
       }
       entries[data.eid.entryid] = data.entry;
-      delete stagedEntries[entryid];
+      // clear key content
+      stagedEntries[entryid] = {
+        content: '',
+        begin: '',
+        end: '',
+        gpa: null,
+      };
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
@@ -260,7 +266,13 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      delete stagedEntries[entryid];
+      // clear key content
+      stagedEntries[entryid] = {
+        content: '',
+        begin: '',
+        end: '',
+        gpa: null,
+      };
       // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
       delete entries[entryid];
       eids[idx] = data.eid;
