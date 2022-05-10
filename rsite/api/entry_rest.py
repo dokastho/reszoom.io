@@ -206,7 +206,7 @@ def swap_entry():
         "WHERE pos == ? ",
         (pos1, pos2, )
     )
-    val = cur.fetchone()
+    cur.fetchone()
     # set pos1 to pos2
     cur = database.execute(
         "UPDATE resume_to_entry "
@@ -214,7 +214,7 @@ def swap_entry():
         "WHERE pos == ? ",
         (pos2, temp, )
     )
-    val = cur.fetchone()
+    cur.fetchone()
 
     return flask.Response(status=204)
 
