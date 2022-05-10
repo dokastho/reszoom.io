@@ -22,7 +22,7 @@ class Entries extends React.Component {
           content: '',
           begin: '',
           end: '',
-          gpa: null,
+          gpa: undefined,
         },
       },
       // state attributes for type info
@@ -109,9 +109,6 @@ class Entries extends React.Component {
 
   setAddFalse() {
     this.setState({
-      // TODO: this is broken:
-      // stagedEntries: {},
-      // but should it clear the stagedEntries?
       add: false,
     });
   }
@@ -172,7 +169,7 @@ class Entries extends React.Component {
         content: '',
         begin: '',
         end: '',
-        gpa: null,
+        gpa: undefined,
       };
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
@@ -271,10 +268,10 @@ class Entries extends React.Component {
         content: '',
         begin: '',
         end: '',
-        gpa: null,
+        gpa: undefined,
       };
       // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
-      delete entries[entryid];
+      // delete entries[entryid];
       eids[idx] = data.eid;
       entries[data.eid.entryid] = data.entry;
       this.setState({
@@ -349,10 +346,10 @@ class Entries extends React.Component {
                         ) : (
                           // info type
                           <div>
-                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
-                            {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} /> : null}
+                            {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
                           </div>
                         )
                       }
@@ -455,7 +452,7 @@ class Entries extends React.Component {
 Entries.defaultProps = {
   entries: {},
   eids: [],
-  parent: null,
+  parent: undefined,
 };
 
 Entries.propTypes = {
