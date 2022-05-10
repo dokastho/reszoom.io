@@ -139,7 +139,7 @@ class Entries extends React.Component {
       end,
       gpa,
       content,
-    } = stagedEntries[0];
+    } = stagedEntries[entryid];
     fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
       method: 'POST',
@@ -167,7 +167,7 @@ class Entries extends React.Component {
         subFetched[data.eid.entryid] = true;
       }
       entries[data.eid.entryid] = data.entry;
-      // clear key content
+      // clear staged content
       stagedEntries[entryid] = {
         content: '',
         begin: '',
@@ -266,7 +266,7 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
       return response.json();
     }).then((data) => {
-      // clear key content
+      // clear staged content
       stagedEntries[entryid] = {
         content: '',
         begin: '',
