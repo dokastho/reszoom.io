@@ -277,6 +277,7 @@ class Entries extends React.Component {
       delete entries[entryid];
       eids[idx] = data.eid;
       entries[data.eid.entryid] = data.entry;
+      // entries[data.eid.entryid] = parseFloat(entries[data.eid.entryid]).toFixed(2);
       this.setState({
         eids,
         entries,
@@ -349,10 +350,10 @@ class Entries extends React.Component {
                         ) : (
                           // info type
                           <div>
-                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
-                            {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} /> : null}
+                            {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
                           </div>
                         )
                       }
