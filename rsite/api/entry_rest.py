@@ -138,6 +138,21 @@ def delete_entry(entryid):
         flask.abort(403)
 
     delete_helper(entry['entryid'], entry['frequency'])
+    
+    # delete any subentries
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE subheader == ?",
+        (entryid, )
+    )
+    subentries = cur.fetchall()
+
+    for entry in subentries:
+        if logname != entry['owner']:
+            flask.abort(403)
+
+        delete_helper(entry['entryid'], entry['frequency'])
 
     return flask.Response(status=204)
 
