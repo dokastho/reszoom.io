@@ -167,7 +167,13 @@ class Entries extends React.Component {
         subFetched[data.eid.entryid] = true;
       }
       entries[data.eid.entryid] = data.entry;
-      delete stagedEntries[entryid];
+      // clear key content
+      stagedEntries[entryid] = {
+        content: '',
+        begin: '',
+        end: '',
+        gpa: null,
+      };
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
