@@ -21,6 +21,7 @@
 - [x] fix experience entries showing up
 - [x] fix experience edit
 - [x] fix experience add subentry, delete experience
+- [x] don't change entryid if no content changed on edit
 - [ ] gpa display must be decimal format
 - [ ] implement using past entries ... will need to add an eid
 - [ ] suggest entries based on frequency
