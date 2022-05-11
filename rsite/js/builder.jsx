@@ -190,6 +190,7 @@ class ResumeBuilder extends React.Component {
             <input type="submit" value="Delete Resume" />
           </form>
         </div>
+        <a href="/resume/">Go back to resumes</a>
         <p>resume content 😊</p>
       </div>
     );
