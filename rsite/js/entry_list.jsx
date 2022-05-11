@@ -374,7 +374,7 @@ class Entries extends React.Component {
                       // EDIT FORM
                       isEntries ? (
                         // entry type
-                        <form onSubmit={this.cancelEdit.bind(this, e.entryid)} encType="multipart/form-data">
+                        <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                           <input type="submit" />
@@ -386,8 +386,8 @@ class Entries extends React.Component {
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
                           {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
-                          <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for this resume" />
-                          {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for all resumes" /> : null}
+                          <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
+                          {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                         </form>
                       )
