@@ -416,8 +416,9 @@ def load_body():
     if "content" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
-            "end" not in body or "parent" not in body:
-        # flask.abort(400)    # insufficient arguments
+            "end" not in body or "parent" not in body \
+            or "all" not in body:
+        flask.abort(400)    # insufficient arguments
         pass
 
     if "gpa" not in body:
