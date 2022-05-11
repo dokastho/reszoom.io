@@ -369,7 +369,7 @@ class Entries extends React.Component {
               {e.entryid in stagedEntries && stagedEntries[e.entryid].add
                 ? (
                   <span>
-                    <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} encType="multipart/form-data">
+                    <form encType="multipart/form-data">
                       {
                         // EDIT FORM
                         isEntries ? (
@@ -384,6 +384,8 @@ class Entries extends React.Component {
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                             <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
                             {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
+                            <input type="submit" onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for this resume" />
+                            {e.frequency > 1 ? <input type="submit" onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for all resumes" /> : null }
                           </div>
                         )
                       }
