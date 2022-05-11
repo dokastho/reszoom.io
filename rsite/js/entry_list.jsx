@@ -20,6 +20,7 @@ class Entries extends React.Component {
       stagedEntries: {
         0: {
           add: false,
+          isChanged: false,
           content: '',
           begin: '',
           end: '',
@@ -99,6 +100,7 @@ class Entries extends React.Component {
   handleEntryChange(event, entryid, key) {
     const { stagedEntries } = this.state;
     stagedEntries[entryid][key] = event.target.value;
+    stagedEntries[entryid].isChanged = true;
     this.setState({ stagedEntries });
   }
 
@@ -168,6 +170,7 @@ class Entries extends React.Component {
       // clear staged content
       stagedEntries[entryid] = {
         add: false,
+        isChanged: false,
         content: '',
         begin: '',
         end: '',
@@ -196,6 +199,7 @@ class Entries extends React.Component {
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
       this.setState((prevState) => {
+        // TODO: delete staged entry?
         const newEntries = prevState.entries;
         delete newEntries[entryid];
         const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
@@ -213,6 +217,7 @@ class Entries extends React.Component {
     const { stagedEntries, entries } = this.state;
     stagedEntries[entryid] = entries[entryid];
     stagedEntries[entryid].add = true;
+    stagedEntries[entryid].isChanged = false;
     this.setState({ stagedEntries });
   }
 
@@ -221,6 +226,7 @@ class Entries extends React.Component {
     const { stagedEntries } = this.state;
     stagedEntries[entryid] = {
       add: false,
+      isChanged: false,
       content: '',
       begin: '',
       end: '',
@@ -240,8 +246,6 @@ class Entries extends React.Component {
       parent,
       header,
       stagedEntries,
-      subEntries,
-      subEids,
       subFetched,
       isEntries,
     } = this.state;
@@ -253,6 +257,20 @@ class Entries extends React.Component {
       gpa,
     } = stagedEntries[entryid];
     const { pos } = eids[idx];
+
+    if (!(stagedEntries[entryid].isChanged)) {
+      // clear staged entry
+      stagedEntries[entryid] = {
+        add: false,
+        isChanged: false,
+        content: '',
+        begin: '',
+        end: '',
+        gpa: '',
+      };
+      this.setState({ stagedEntries });
+      return;
+    }
 
     fetch(`/api/v1/entry/?operation=update&pos=${pos}`, {
       credentials: 'same-origin',
@@ -281,6 +299,7 @@ class Entries extends React.Component {
       // clear staged content
       stagedEntries[entryid] = {
         add: false,
+        isChanged: false,
         content: '',
         begin: '',
         end: '',
