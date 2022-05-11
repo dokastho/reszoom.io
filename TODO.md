@@ -8,11 +8,8 @@
 - [x] ordering and reordering of entries
 - [x] edit button to load form entry *(get stuffed, twitter!)*
 - [x] update entry rest api
-- [ ] "try again" function for login and add entry attempt
-- [ ] make passwords strict
 - [x] education/experience content
 - [x] make sure inputs aren't too long
-- [ ] make those things viewable in the user profile
 - [x] fold experience into normal entries
 - [x] add experience edit
 - [x] get edit button function up to date with rest api
@@ -22,7 +19,6 @@
 - [x] fix experience edit
 - [x] fix experience add subentry, delete experience
 - [x] don't change entryid if no content changed on edit
-- [ ] gpa display must be decimal format
 - [ ] implement using past entries ... will need to add an eid
 - [ ] suggest entries based on frequency
 - [ ] edit experience -> fork info entry -> propogate changes across subentries???
@@ -40,3 +36,7 @@ even farther down the road...
 
 random ideas
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
+- [ ] "try again" function for login and add entry attempt
+- [ ] make passwords strict
+- [ ] make resumes/entries/education/etc visible in the user profile
+- [ ] gpa display must be decimal format
