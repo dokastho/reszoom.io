@@ -1,5 +1,5 @@
 import React from 'react';
-// import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 class Entries extends React.Component {
@@ -34,6 +34,10 @@ class Entries extends React.Component {
       subEids: {},
       // key: current entryid val: boolean of if subentries have been fetched
       subFetched: {},
+      // recommended entries
+      // key: entryid val: CONTENTS & PRIORITY of entry
+      // note that on submit we create an eid
+      recommended: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -44,6 +48,7 @@ class Entries extends React.Component {
     this.setAddTrue = this.setAddTrue.bind(this);
     this.setAddFalse = this.setAddFalse.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
+    this.displayTop = this.displayTop.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +88,26 @@ class Entries extends React.Component {
       });
     }
 
+    // fetch recommended entries
+    fetch(`/api/v1/entry/${header}/`, {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        entries: Object.keys(entries),
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ recommended: data });
+      })
+      .catch((error) => console.log(error));
+
     this.setState({
       entries,
       eids,
@@ -117,7 +142,7 @@ class Entries extends React.Component {
   }
 
   // create an entry
-  createEntry(event, entryid, type) {
+  createEntry(event, entryid) {
     event.preventDefault();
 
     const {
@@ -140,7 +165,7 @@ class Entries extends React.Component {
       gpa,
       content,
     } = stagedEntries[entryid];
-    const all = ''
+    const all = '';
     fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
       method: 'POST',
@@ -151,7 +176,7 @@ class Entries extends React.Component {
         resumeid,
         entryid,
         header,
-        type,
+        type: isEntries,
         begin,
         end,
         gpa,
@@ -349,6 +374,27 @@ class Entries extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  // display the top n recommended entries
+  displayTop(n = 3) {
+    const { recommended } = this.state;
+
+    // sort recommended by priority
+    const sortable = Object.fromEntries(
+      // DEBUG HERE
+      Object.entries(recommended).sort(([, a], [, b]) => a - b),
+    );
+
+    // display top n entries
+    for (let index = 0; index < n; index += 1) {
+      const entryid = Object.keys(sortable)[index];
+      const element = sortable[entryid];
+      ReactDOM.render(
+        <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
+        document.getElementById('recommend'),
+      );
+    }
+  }
+
   render() {
     const {
       header,
@@ -457,29 +503,35 @@ class Entries extends React.Component {
           isEntries
             ? (
               // ENTRY TYPE
-              stagedEntries[0].add 
-              ? (
-              <form onSubmit={(event) => this.createEntry(event, 0, isEntries)}>
-                <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
-                <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
-                <input type="submit" />
-              </form>
-              ) : (
-                <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
-              )
+              stagedEntries[0].add
+                ? (
+                  <span>
+                    <form onSubmit={(event) => this.createEntry(event, 0)}>
+                      <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
+                      <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
+                      <input type="submit" />
+                    </form>
+                    <div id="recommend" />
+                  </span>
+                ) : (
+                  <button type="button" onClick={[this.setAddTrue.bind(this, 0), this.displayTop.bind(this)]}>Add entry</button>
+                )
             )
             : (
               // INFO TYPE
               stagedEntries[0].add
                 ? (
-                  <form onSubmit={(e) => this.createEntry(e, 0, isEntries)}>
-                    <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 0, 'content')} />
-                    <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'begin')} />
-                    <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'end')} />
-                    {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 0, 'gpa')} /> : null}
-                    <input type="submit" />
-                    <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
-                  </form>
+                  <span>
+                    <form onSubmit={(e) => this.createEntry(e, 0)}>
+                      <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 0, 'content')} />
+                      <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'begin')} />
+                      <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'end')} />
+                      {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 0, 'gpa')} /> : null}
+                      <input type="submit" />
+                      <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
+                    </form>
+                    <div id="recommend" />
+                  </span>
                 )
                 : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>
