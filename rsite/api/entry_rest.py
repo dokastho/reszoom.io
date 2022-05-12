@@ -157,6 +157,43 @@ def delete_entry(entryid):
     return flask.Response(status=204)
 
 
+@ rsite.app.route("/api/v1/entry/<string:header>/", methods=['POST'])
+def get_recommended(header):
+    """Get the other entries owned by this user for a given header."""
+    if header == '':
+        flask.abort(404)
+
+    logname, database = rest_api_auth_user()
+    
+    # get list of id's to not return from body
+    body = flask.request.get_json()
+    if "entries" not in body:
+        flask.abort(400)  # insufficient data
+    existing_entries = [int(x) for x in body['entries']]
+    
+    cur = database.execute(
+        "SELECT * "
+        "FROM entries "
+        "WHERE header == ? "
+        "AND owner == ?",
+        (header, logname, )
+    )
+    entries = cur.fetchall()
+    
+    # construct response
+    data = {}
+    for entry in entries:
+        entryid = entry['entryid']
+        # ignore those entries that are already in the resume 
+        if entryid in existing_entries:
+            continue
+        data[entryid] = {
+            "content": entry['content'],
+            "priority": entry['priority']
+        }
+    
+    return flask.jsonify(data), 201
+
 @ rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
 def swap_entry():
     """Update the resume_to_entry db entry with the new positions."""
