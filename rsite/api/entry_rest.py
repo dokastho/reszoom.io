@@ -138,7 +138,7 @@ def delete_entry(entryid):
         flask.abort(403)
 
     delete_helper(entry['entryid'], entry['frequency'])
-    
+
     # delete any subentries
     cur = database.execute(
         "SELECT * "
@@ -416,9 +416,9 @@ def load_body():
     if "content" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
-            "end" not in body or "parent" not in body:
-        # flask.abort(400)    # insufficient arguments
-        pass
+            "end" not in body or "parent" not in body \
+            or "all" not in body:
+        flask.abort(400)    # insufficient arguments
 
     if "gpa" not in body:
         body['gpa'] = None
