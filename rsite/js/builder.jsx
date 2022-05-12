@@ -101,6 +101,7 @@ class ResumeBuilder extends React.Component {
         });
 
         fields = fields.concat('project');
+        // 
 
         // 2. render the entries for each header
         //      split the entries of education & experience by their parent subheaders
