@@ -140,6 +140,7 @@ class Entries extends React.Component {
       gpa,
       content,
     } = stagedEntries[entryid];
+    const all = ''
     fetch('/api/v1/entry/?&operation=create', {
       credentials: 'same-origin',
       method: 'POST',
@@ -156,6 +157,7 @@ class Entries extends React.Component {
         gpa,
         parent,
         content,
+        all,
       }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
@@ -236,7 +238,7 @@ class Entries extends React.Component {
   }
 
   // submit an edit to an entry
-  updateEntry(event, entryid, idx, type) {
+  updateEntry(event, entryid, idx, type, all) {
     event.preventDefault();
 
     const {
@@ -288,6 +290,7 @@ class Entries extends React.Component {
         gpa,
         parent,
         content,
+        all,
       }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
@@ -374,7 +377,7 @@ class Entries extends React.Component {
                       // EDIT FORM
                       isEntries ? (
                         // entry type
-                        <form onSubmit={this.cancelEdit.bind(this, e.entryid)} encType="multipart/form-data">
+                        <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                           <input type="submit" />
@@ -386,13 +389,12 @@ class Entries extends React.Component {
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
                           {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
-                          <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for this resume" />
-                          {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries)} value="Submit edit for all resumes" /> : null}
+                          <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
+                          {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                         </form>
                       )
                     }
-                    {/* render common parts of each type */}
                   </span>
                 )
                 // render the entry content and delete button
@@ -454,15 +456,23 @@ class Entries extends React.Component {
           // eslint-disable-next-line no-nested-ternary
           isEntries
             ? (
-              <form onSubmit={(event) => this.createEntry(event, 0, 1)}>
+              // ENTRY TYPE
+              stagedEntries[0].add 
+              ? (
+              <form onSubmit={(event) => this.createEntry(event, 0, isEntries)}>
                 <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
+                <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                 <input type="submit" />
               </form>
+              ) : (
+                <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
+              )
             )
             : (
+              // INFO TYPE
               stagedEntries[0].add
                 ? (
-                  <form onSubmit={(e) => this.createEntry(e, 0, 0)}>
+                  <form onSubmit={(e) => this.createEntry(e, 0, isEntries)}>
                     <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 0, 'content')} />
                     <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'begin')} />
                     <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'end')} />
