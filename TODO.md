@@ -23,6 +23,7 @@
 - [ ] suggest entries based on frequency
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
 - [ ] add "edit for all" button to maintain entries
+- [ ] change reommend to array of objects instead of an object
 - [ ] tags for entries
   - [ ] create adds to entries_to_tags
   - [ ] recommend based on matching tags, offer from all

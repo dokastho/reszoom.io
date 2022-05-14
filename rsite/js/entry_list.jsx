@@ -36,7 +36,7 @@ class Entries extends React.Component {
       // recommended entries
       // key: entryid val: CONTENTS & PRIORITY of entry
       // note that on submit we create an eid
-      recommended: {},
+      recommended: [],
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -425,9 +425,9 @@ class Entries extends React.Component {
 
     // display top n entries
     const topn = [];
-    for (let index = 0; index < Math.min(count, Object.keys(recommended).length); index += 1) {
-      const entryid = Object.keys(recommended)[index];
-      const element = recommended[entryid];
+    for (let index = 0; index < Math.min(count, recommended.length); index += 1) {
+      const element = recommended[index];
+      const { entryid } = element;
       topn[index] = element;
 
       // update stagedEntries for create

@@ -190,18 +190,18 @@ def get_recommended(header):
     entries = cur.fetchall()
 
     # construct response
-    data = {}
+    data = []
     for entry in entries:
         entryid = entry['entryid']
         # ignore those entries that are already in the resume
         if entryid in existing_entries:
             continue
-        data[entryid] = entry
+        data.append(entry)
 
     # sort data by priority
-    sortedData = {k: v for k, v in sorted(data.items(), key=lambda item: item[1]['priority'], reverse=True)}
+    sortedData = sorted(data, key='priority')
 
-    return flask.jsonify(sortedData), 201
+    return flask.jsonify({'recommended': sortedData}), 201
 
 
 @ rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
