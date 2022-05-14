@@ -48,17 +48,14 @@ class Entries extends React.Component {
     this.setAddFalse = this.setAddFalse.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
+    this.fetchRecommended = this.fetchRecommended.bind(this);
   }
 
   componentDidMount() {
     const {
-      entries,
       eids,
-      header,
       resumeid,
-      username,
       isEntries,
-      parent,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -87,6 +84,43 @@ class Entries extends React.Component {
       });
     }
 
+    this.fetchRecommended();
+
+    console.log('mount');
+    console.log(this);
+  }
+
+  // update handler for an existing entry
+  handleEntryChange(event, entryid, key) {
+    const { stagedEntries } = this.state;
+    stagedEntries[entryid][key] = event.target.value;
+    stagedEntries[entryid].isChanged = true;
+    this.setState({ stagedEntries });
+  }
+
+  setAddTrue(entryid) {
+    // set add to true and display the recommended entries
+    const { stagedEntries } = this.state;
+    stagedEntries[entryid].add = true;
+    this.setState({ stagedEntries });
+  }
+
+  setAddFalse(entryid) {
+    const { stagedEntries } = this.state;
+    stagedEntries[entryid].add = false;
+    this.setState({ stagedEntries });
+  }
+
+  fetchRecommended() {
+    const {
+      entries,
+      header,
+      username,
+      parent,
+      isEntries,
+      eids,
+      resumeid,
+    } = this.state;
     // fetch recommended entries
     fetch(`/api/v1/entry/${header}/?type=${isEntries}`, {
       credentials: 'same-origin',
@@ -116,30 +150,6 @@ class Entries extends React.Component {
       isEntries,
       parent,
     });
-
-    console.log('mount');
-    console.log(this);
-  }
-
-  // update handler for an existing entry
-  handleEntryChange(event, entryid, key) {
-    const { stagedEntries } = this.state;
-    stagedEntries[entryid][key] = event.target.value;
-    stagedEntries[entryid].isChanged = true;
-    this.setState({ stagedEntries });
-  }
-
-  setAddTrue(entryid) {
-    // set add to true and display the recommended entries
-    const { stagedEntries } = this.state;
-    stagedEntries[entryid].add = true;
-    this.setState({ stagedEntries });
-  }
-
-  setAddFalse(entryid) {
-    const { stagedEntries } = this.state;
-    stagedEntries[entryid].add = false;
-    this.setState({ stagedEntries });
   }
 
   // create an entry
@@ -242,9 +252,7 @@ class Entries extends React.Component {
 
   // delete an entry
   deleteEntry(entryid) {
-    const { resumeid, entries, recommended } = this.state;
-
-    const entry = entries[entryid];
+    const { resumeid } = this.state;
 
     fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, {
       credentials: 'same-origin',
@@ -257,14 +265,14 @@ class Entries extends React.Component {
         delete newEntries[entryid];
         const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
 
-        // update recommended
-        recommended[entryid] = entry;
         return {
           entries: newEntries,
           eids: neweids,
-          recommended,
         };
       });
+    }).then(() => {
+      // update recommended
+      this.fetchRecommended();
     })
       .catch((error) => console.log(error));
   }
@@ -423,15 +431,10 @@ class Entries extends React.Component {
       const element = sortable[entryid];
       topn[index] = element;
 
-      // update stagedentries for create
-      stagedEntries[entryid] = {
-        add: true,
-        isChanged: true,
-        content: element.conent,
-        begin: element.content,
-        end: element.content,
-        gpa: element.content,
-      };
+      // update stagedEntries for create
+      stagedEntries[entryid] = element;
+      stagedEntries[entryid].isChanged = true;
+      stagedEntries[entryid].add = true;
     }
     return topn;
   }
