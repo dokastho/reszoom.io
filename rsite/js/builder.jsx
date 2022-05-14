@@ -87,6 +87,7 @@ class ResumeBuilder extends React.Component {
                 header={f}
                 username={username}
                 isEntries={isEntries}
+                post={post}
               />
               {
                 // render the divs for each entry
@@ -96,7 +97,7 @@ class ResumeBuilder extends React.Component {
               }
 
             </div>,
-            post.querySelector('.info'),
+            post.querySelector('.entries'),
           );
         });
 
@@ -121,6 +122,7 @@ class ResumeBuilder extends React.Component {
                 header={f}
                 username={username}
                 isEntries={isEntries}
+                post={post}
               />,
               post.querySelector('.entries'),
             );
