@@ -423,18 +423,11 @@ class Entries extends React.Component {
   displayTop(count = 3) {
     const { recommended, stagedEntries } = this.state;
 
-    // // sort recommended by priority
-    // const sortable = Object.fromEntries(
-    //   // DEBUG HERE
-    //   Object.entries(recommended).sort(([, a], [, b]) => a - b),
-    // );
-    const sortable = recommended;
-
     // display top n entries
     const topn = [];
-    for (let index = 0; index < Math.min(count, Object.keys(sortable).length); index += 1) {
-      const entryid = Object.keys(sortable)[index];
-      const element = sortable[entryid];
+    for (let index = 0; index < Math.min(count, Object.keys(recommended).length); index += 1) {
+      const entryid = Object.keys(recommended)[index];
+      const element = recommended[entryid];
       topn[index] = element;
 
       // update stagedEntries for create

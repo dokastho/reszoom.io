@@ -196,7 +196,10 @@ def get_recommended(header):
             continue
         data[entryid] = entry
 
-    return flask.jsonify(data), 201
+    # sort data by priority
+    sortedData = {k: v for k, v in sorted(data.items(), key=lambda item: item[1]['priority'], reverse=True)}
+
+    return flask.jsonify(sortedData), 201
 
 
 @ rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
