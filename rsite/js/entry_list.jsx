@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { min } from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -138,7 +136,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -396,7 +394,7 @@ class Entries extends React.Component {
   }
 
   // display the top n recommended entries
-  displayTop(n = 3) {
+  displayTop(count = 3) {
     const { recommended } = this.state;
 
     // sort recommended by priority
@@ -409,10 +407,17 @@ class Entries extends React.Component {
     for (let index = 0; index < Math.min(n, Object.keys(recommended).length); index += 1) {
       const entryid = Object.keys(sortable)[index];
       const element = sortable[entryid];
-      ReactDOM.render(
-        <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
-        document.getElementById('recommend'),
-      );
+      // method 1: reactDOM.render
+      // ReactDOM.render(
+      //   <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
+      //   document.getElementById('recommend'),
+      // );
+  
+      // method 2: ???
+      // <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
+  
+      // method 3: return array
+      
     }
   }
 
@@ -532,7 +537,11 @@ class Entries extends React.Component {
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
-                    <div id="recommend" />
+                    {
+                      this.displayTop(3).map((e) => (
+                        <button type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
+                      ))
+                    }
                   </span>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
@@ -551,7 +560,11 @@ class Entries extends React.Component {
                       <input type="submit" />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                     </form>
-                    <div id="recommend" />
+                    {
+                      this.displayTop(3).map((e) => (
+                        <button type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
+                      ))
+                    }
                   </span>
                 )
                 : (
