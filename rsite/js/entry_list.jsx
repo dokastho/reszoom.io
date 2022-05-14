@@ -424,14 +424,18 @@ class Entries extends React.Component {
       topn[index] = element;
 
       // update stagedentries for create
-      stagedEntries[entryid] = {
-        add: true,
-        isChanged: true,
-        content: element.conent,
-        begin: element.content,
-        end: element.content,
-        gpa: element.content,
-      };
+      // stagedEntries[entryid] = {
+      //   add: true,
+      //   isChanged: true,
+      //   content: element.content,
+      //   begin: element.begin,
+      //   end: element.end,
+      //   gpa: element.gpa,
+      // };
+      stagedEntries[entryid] = element;
+      stagedEntries[entryid].isChanged = true;
+      stagedEntries[entryid].add = true;
+      this.setState({ stagedEntries });
     }
     return topn;
   }
