@@ -427,10 +427,10 @@ class Entries extends React.Component {
       stagedEntries[entryid] = {
         add: true,
         isChanged: true,
-        content: element.conent,
-        begin: element.content,
-        end: element.content,
-        gpa: element.content,
+        content: element.content,
+        begin: element.begin,
+        end: element.end,
+        gpa: element.gpa,
       };
     }
     return topn;
