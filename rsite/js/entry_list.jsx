@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { min } from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -138,7 +137,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -527,12 +526,12 @@ class Entries extends React.Component {
               stagedEntries[0].add
                 ? (
                   <span>
+                    <div id="recommend" />
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
                       <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
-                    <div id="recommend" />
                   </span>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
