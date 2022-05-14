@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { min } from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -13,6 +12,8 @@ class Entries extends React.Component {
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
+      // html entry
+      post: props.post,
       // entries or info
       isEntries: props.isEntries,
       // entryid of parent entry, if one exists
@@ -61,6 +62,7 @@ class Entries extends React.Component {
       username,
       isEntries,
       parent,
+      post,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -117,6 +119,7 @@ class Entries extends React.Component {
       username,
       isEntries,
       parent,
+      post,
     });
 
     this.displayTop();
@@ -138,7 +141,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -397,7 +400,7 @@ class Entries extends React.Component {
 
   // display the top n recommended entries
   displayTop(n = 3) {
-    const { recommended } = this.state;
+    const { recommended, post } = this.state;
 
     // sort recommended by priority
     const sortable = Object.fromEntries(
@@ -411,7 +414,7 @@ class Entries extends React.Component {
       const element = sortable[entryid];
       ReactDOM.render(
         <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
-        document.getElementById('recommend'),
+        post.getElementById('recommend'),
       );
     }
   }
@@ -527,12 +530,12 @@ class Entries extends React.Component {
               stagedEntries[0].add
                 ? (
                   <span>
+                    <div id="recommend" />
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
                       <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
-                    <div id="recommend" />
                   </span>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
@@ -582,6 +585,7 @@ Entries.propTypes = {
   username: PropTypes.string.isRequired,
   isEntries: PropTypes.number.isRequired,
   parent: PropTypes.number,
+  post: PropTypes.instanceOf(HTMLElement).isRequired,
 };
 
 export default Entries;
