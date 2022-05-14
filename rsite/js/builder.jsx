@@ -88,12 +88,12 @@ class ResumeBuilder extends React.Component {
                 username={username}
                 isEntries={isEntries}
               />
-              {
+              {/* {
                 // render the divs for each entry
                 Object.keys(sectionEntries).map((entryid) => (
                   <div key={entryid} className={`header${entryid}`} />
                 ))
-              }
+              } */}
 
             </div>,
             post.querySelector('.info'),
