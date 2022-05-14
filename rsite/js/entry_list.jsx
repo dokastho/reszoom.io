@@ -245,6 +245,9 @@ class Entries extends React.Component {
         stagedEntries,
         subFetched,
       }));
+    }).then(() => {
+      // update recommended
+      this.fetchRecommended();
     })
       .catch((error) => console.log(error));
     console.log(username);
