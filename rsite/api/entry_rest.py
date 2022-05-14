@@ -169,14 +169,21 @@ def get_recommended(header):
     body = flask.request.get_json()
     if "entries" not in body:
         flask.abort(400)  # insufficient data
+
+    # get type from request
+    type = flask.request.args.get("type", type=str, default='')
+    if type == '':
+        flask.abort(400)  # insufficient data
+
     existing_entries = [int(x) for x in body['entries']]
     
     cur = database.execute(
         "SELECT * "
         "FROM entries "
         "WHERE header == ? "
-        "AND owner == ?",
-        (header, logname, )
+        "AND owner == ?"
+        "AND type == ?",
+        (header, logname, type, )
     )
     entries = cur.fetchall()
     
