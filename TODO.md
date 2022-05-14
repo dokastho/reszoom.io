@@ -27,6 +27,7 @@
 down the road...
 - [ ] tags for entries
 - [ ] use await instead of subFetched
+- [ ] callback entries in similar manner to recommended
 - [x] brainstorm better way of editing without changing past resumes
 - [ ] prevent duplicate entries
 
