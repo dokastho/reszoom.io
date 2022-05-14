@@ -384,6 +384,9 @@ class Entries extends React.Component {
         entries,
         stagedEntries,
       });
+    }).then(() => {
+      // update recommended
+      this.fetchRecommended();
     })
       .catch((error) => console.log(error));
   }
