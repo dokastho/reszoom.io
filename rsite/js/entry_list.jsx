@@ -88,7 +88,7 @@ class Entries extends React.Component {
     }
 
     // fetch recommended entries
-    fetch(`/api/v1/entry/${header}/`, {
+    fetch(`/api/v1/entry/${header}/?type=${isEntries}`, {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
@@ -117,7 +117,6 @@ class Entries extends React.Component {
       parent,
     });
 
-    this.displayTop();
     console.log('mount');
     console.log(this);
   }
@@ -136,7 +135,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop();
+    // this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -214,6 +213,15 @@ class Entries extends React.Component {
       entries[data.eid.entryid] = data.entry;
       // clear staged content
       stagedEntries[entryid] = {
+        add: false,
+        isChanged: false,
+        content: '',
+        begin: '',
+        end: '',
+        gpa: '',
+      };
+      // also clear stagedEntries[0] to fix form render
+      stagedEntries[0] = {
         add: false,
         isChanged: false,
         content: '',
@@ -395,17 +403,18 @@ class Entries extends React.Component {
 
   // display the top n recommended entries
   displayTop(count = 3) {
-    const { recommended } = this.state;
+    const { recommended, stagedEntries } = this.state;
 
-    // sort recommended by priority
-    const sortable = Object.fromEntries(
-      // DEBUG HERE
-      Object.entries(recommended).sort(([, a], [, b]) => a - b),
-    );
+    // // sort recommended by priority
+    // const sortable = Object.fromEntries(
+    //   // DEBUG HERE
+    //   Object.entries(recommended).sort(([, a], [, b]) => a - b),
+    // );
+    const sortable = recommended;
 
     // display top n entries
     const topn = [];
-    for (let index = 0; index < Math.min(count, Object.keys(recommended).length); index += 1) {
+    for (let index = 0; index < Math.min(count, Object.keys(sortable).length); index += 1) {
       const entryid = Object.keys(sortable)[index];
       const element = sortable[entryid];
       // method 1: reactDOM.render
@@ -415,10 +424,15 @@ class Entries extends React.Component {
       // );
 
       // method 2: ???
-      // <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
+        // <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>;
 
       // method 3: return array
       topn[index] = element;
+
+      // update stagedentries for create
+      stagedEntries[entryid] = element;
+      stagedEntries[entryid].add = true;
+      stagedEntries[entryid].isChanged = true;
     }
     return topn;
   }
@@ -564,7 +578,7 @@ class Entries extends React.Component {
                     </form>
                     {
                       this.displayTop(3).map((e) => (
-                        <button type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
+                        <button key={e.entryid} type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
                       ))
                     }
                   </span>

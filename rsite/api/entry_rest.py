@@ -164,35 +164,40 @@ def get_recommended(header):
         flask.abort(404)
 
     logname, database = rest_api_auth_user()
-    
+
     # get list of id's to not return from body
     body = flask.request.get_json()
     if "entries" not in body:
         flask.abort(400)  # insufficient data
+
+    # get type from request
+    type = flask.request.args.get("type", type=str, default='')
+    if type == '':
+        flask.abort(400)  # insufficient data
+
     existing_entries = [int(x) for x in body['entries']]
-    
+
     cur = database.execute(
         "SELECT * "
         "FROM entries "
         "WHERE header == ? "
-        "AND owner == ?",
-        (header, logname, )
+        "AND owner == ?"
+        "AND type == ?",
+        (header, logname, type, )
     )
     entries = cur.fetchall()
-    
+
     # construct response
     data = {}
     for entry in entries:
         entryid = entry['entryid']
-        # ignore those entries that are already in the resume 
+        # ignore those entries that are already in the resume
         if entryid in existing_entries:
             continue
-        data[entryid] = {
-            "content": entry['content'],
-            "priority": entry['priority']
-        }
-    
+        data[entryid] = entry
+
     return flask.jsonify(data), 201
+
 
 @ rsite.app.route("/api/v1/entry/meta/", methods=['POST'])
 def swap_entry():
@@ -266,6 +271,17 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
     database = rsite.model.get_db()
 
     freq = 1
+
+    # get id
+    # TODO: in a busy DB, getting the max like this will likely not work
+    cur = database.execute(
+        "SELECT MAX(entryid) "
+        "AS id "
+        "FROM entries"
+    )
+    data = cur.fetchone()
+    newEntryid = data['id']
+
     # entryid not supplied, so entry is new
     if entryid == 0:
         # insert new
@@ -277,16 +293,6 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
              type, begin, end, gpa, subheader, )
         )
         cur.fetchone()
-
-        # get id
-        # TODO: in a busy DB, getting the max like this will likely not work
-        cur = database.execute(
-            "SELECT MAX(entryid) "
-            "AS id "
-            "FROM entries"
-        )
-        data = cur.fetchone()
-        newEntryid = data['id']
 
         # if pos is specified, then we want to update resume_to_entry
         if pos == 0:
@@ -309,8 +315,6 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
             )
             cur.fetchone()
 
-        entryid = newEntryid
-
     else:
         # entry already in db so increment freq
         cur = database.execute(
@@ -323,6 +327,15 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
         freq = data['frequency']
         freq += 1
 
+        # insert id into resume_to_entry
+        cur = database.execute(
+            "INSERT INTO resume_to_entry "
+            "(resumeid, entryid, owner) "
+            "VALUES (?, ?, ?)",
+            (resumeid, newEntryid, logname, )
+        )
+        cur.fetchone()
+
         cur = database.execute(
             "UPDATE entries "
             "SET frequency = ?, priority = ? "
@@ -330,6 +343,8 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
             (freq, freq, entryid, )
         )
         cur.fetchone()
+    
+    entryid = newEntryid
 
     # get eid from resume_to_entry (including the pos autoincrement)
     cur = database.execute(
@@ -453,8 +468,7 @@ def load_body():
     if "content" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
-            "end" not in body or "parent" not in body \
-            or "all" not in body:
+            "end" not in body or "all" not in body:
         flask.abort(400)    # insufficient arguments
 
     if "gpa" not in body:
