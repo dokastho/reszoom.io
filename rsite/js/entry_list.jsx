@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { min } from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -138,7 +136,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -405,15 +403,14 @@ class Entries extends React.Component {
       Object.entries(recommended).sort(([, a], [, b]) => a - b),
     );
 
+    const tops = [];
+
     // display top n entries
     for (let index = 0; index < Math.min(n, Object.keys(recommended).length); index += 1) {
-      const entryid = Object.keys(sortable)[index];
-      const element = sortable[entryid];
-      ReactDOM.render(
-        <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
-        document.getElementById('recommend'),
-      );
+      tops[index] = sortable[index];
     }
+
+    return tops;
   }
 
   render() {
@@ -532,7 +529,11 @@ class Entries extends React.Component {
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
-                    <div id="recommend" />
+                    {
+                      this.displayTop().map((e) => (
+                        <button type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
+                      ))
+                    }
                   </span>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
