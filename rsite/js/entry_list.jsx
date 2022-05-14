@@ -404,7 +404,8 @@ class Entries extends React.Component {
     );
 
     // display top n entries
-    for (let index = 0; index < Math.min(n, Object.keys(recommended).length); index += 1) {
+    const topn = [];
+    for (let index = 0; index < Math.min(count, Object.keys(recommended).length); index += 1) {
       const entryid = Object.keys(sortable)[index];
       const element = sortable[entryid];
       // method 1: reactDOM.render
@@ -417,8 +418,9 @@ class Entries extends React.Component {
       // <button type="button" onClick={(e) => this.createEntry(e, entryid)}>{element.content}</button>,
   
       // method 3: return array
-      
+      topn[index] = element;
     }
+    return topn;
   }
 
   render() {
