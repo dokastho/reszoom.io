@@ -160,6 +160,8 @@ def delete_entry(entryid):
 @ rsite.app.route("/api/v1/entry/<string:header>/", methods=['POST'])
 def get_recommended(header):
     """Get the other entries owned by this user for a given header."""
+    """Send: array of recommended entries"""
+    # TODO: recommend the entries matching tags
     if header == '':
         flask.abort(404)
 
