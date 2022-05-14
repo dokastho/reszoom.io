@@ -60,3 +60,13 @@ INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 6, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 7, 'tdokas');
+
+-- another education & experience to test recommending for resume 1
+INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa)
+VALUES (1, 1, 'tdokas', 'education','test school', 0, '1970-01', '2023-05', 0.0);
+INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end)
+VALUES (1, 1, 'tdokas', 'experience','test work', 0, '2020-08', '2023-05');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 8, 'tdokas');
+INSERT INTO resume_to_entry(resumeid, entryid, owner)
+VALUES (2, 9, 'tdokas');
