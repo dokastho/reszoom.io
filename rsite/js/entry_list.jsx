@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { min } from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -13,6 +12,8 @@ class Entries extends React.Component {
       header: props.header,
       resumeid: props.resumeid,
       username: props.username,
+      // html entry
+      post: props.post,
       // entries or info
       isEntries: props.isEntries,
       // entryid of parent entry, if one exists
@@ -61,6 +62,7 @@ class Entries extends React.Component {
       username,
       isEntries,
       parent,
+      post,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -117,6 +119,7 @@ class Entries extends React.Component {
       username,
       isEntries,
       parent,
+      post,
     });
 
     this.displayTop();
@@ -138,7 +141,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
@@ -397,7 +400,7 @@ class Entries extends React.Component {
 
   // display the top n recommended entries
   displayTop(n = 3) {
-    const { recommended } = this.state;
+    const { recommended, post } = this.state;
 
     // sort recommended by priority
     const sortable = Object.fromEntries(
@@ -428,95 +431,100 @@ class Entries extends React.Component {
       subEntries,
       subEids,
       subFetched,
+      post,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
     return (
       <div>
         {
-          eids.map((e, idx) => (
-            <div key={e.entryid}>
-              {e.entryid in stagedEntries && stagedEntries[e.entryid].add
-                ? (
-                  <span>
-
-                    {
-                      // EDIT FORM
-                      isEntries ? (
-                        // entry type
-                        <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
-                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
-                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
-                          <input type="submit" />
-                        </form>
-                      ) : (
-                        // info type
-                        <form encType="multipart/form-data">
-                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
-                          <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
-                          <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
-                          {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
-                          <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
-                          {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
-                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
-                        </form>
-                      )
-                    }
-                  </span>
-                )
-                // render the entry content and delete button
-                : (
-                  <div>
+          ReactDOM.render(
+            eids.map((e, idx) => (
+              <div key={e.entryid}>
+                {e.entryid in stagedEntries && stagedEntries[e.entryid].add
+                  ? (
                     <span>
+
                       {
+                        // EDIT FORM
                         isEntries ? (
-                          <div>
-                            {entries[e.entryid].content}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                          </div>
+                          // entry type
+                          <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
+                            <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                            <input type="submit" />
+                          </form>
                         ) : (
-                          <span key={e.entryid}>
-                            <h4>{entries[e.entryid].content}</h4>
-                            {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
-                            <p>
-                              {entries[e.entryid].begin}
-                              -
-                              {entries[e.entryid].end}
-                            </p>
-                            {/* these buttons are identical to above */}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                            {/* render subentries */}
-                            {
-                              subFetched[e.entryid]
-                                ? (
-                                  <Entries
-                                    entries={subEntries[e.entryid]}
-                                    eids={subEids[e.entryid]}
-                                    resumeid={resumeid}
-                                    header={header}
-                                    username={username}
-                                    isEntries={1}
-                                    parent={e.entryid}
-                                  />
-                                ) : null
-                            }
-                          </span>
+                          // info type
+                          <form encType="multipart/form-data">
+                            <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
+                            <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
+                            <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
+                            {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
+                            <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
+                            {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
+                            <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          </form>
                         )
                       }
                     </span>
-                  </div>
-                )}
-              {/* render up button for all entries not on first line */}
-              {idx === 0 ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+                  )
+                  // render the entry content and delete button
+                  : (
+                    <div>
+                      <span>
+                        {
+                          isEntries ? (
+                            <div>
+                              {entries[e.entryid].content}
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </div>
+                          ) : (
+                            <span key={e.entryid}>
+                              <h4>{entries[e.entryid].content}</h4>
+                              {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
+                              <p>
+                                {entries[e.entryid].begin}
+                                -
+                                {entries[e.entryid].end}
+                              </p>
+                              {/* these buttons are identical to above */}
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                              {/* render subentries */}
+                              {
+                                subFetched[e.entryid]
+                                  ? (
+                                    <Entries
+                                      entries={subEntries[e.entryid]}
+                                      eids={subEids[e.entryid]}
+                                      resumeid={resumeid}
+                                      header={header}
+                                      username={username}
+                                      isEntries={1}
+                                      parent={e.entryid}
+                                      post={post}
+                                    />
+                                  ) : null
+                              }
+                            </span>
+                          )
+                        }
+                      </span>
+                    </div>
+                  )}
+                {/* render up button for all entries not on first line */}
+                {idx === 0 ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
-              {/* render down button for all entries not on last line */}
-              {idx === max ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-            </div>
-          ))
+                {/* render down button for all entries not on last line */}
+                {idx === max ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+              </div>
+            )),
+            post.querySelector('.entries'),
+          )
         }
         {/* render create form */}
         {
@@ -527,12 +535,12 @@ class Entries extends React.Component {
               stagedEntries[0].add
                 ? (
                   <span>
+                    <div id="recommend" />
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
                       <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
-                    <div id="recommend" />
                   </span>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
@@ -577,6 +585,7 @@ Entries.defaultProps = {
 Entries.propTypes = {
   entries: PropTypes.instanceOf(Object),
   eids: PropTypes.instanceOf(Array),
+  post: PropTypes.instanceOf(HTMLElement).isRequired,
   header: PropTypes.string.isRequired,
   resumeid: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
