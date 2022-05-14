@@ -23,9 +23,14 @@
 - [ ] suggest entries based on frequency
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
 - [ ] add "edit for all" button to maintain entries
+- [ ] tags for entries
+  - [ ] create adds to entries_to_tags
+  - [ ] recommend based on matching tags, offer from all
+  - [ ] adding an entry will update tags based on the posts
+  - [ ] select tags on create
+  - [ ] edit updates tags 
 
 down the road...
-- [ ] tags for entries
 - [ ] use await instead of subFetched
 - [ ] callback entries in similar manner to recommended
 - [x] brainstorm better way of editing without changing past resumes
