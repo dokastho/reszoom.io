@@ -138,7 +138,7 @@ class Entries extends React.Component {
     stagedEntries[entryid].add = true;
     this.setState({ stagedEntries });
 
-    this.displayTop.bind(this);
+    this.displayTop();
   }
 
   setAddFalse(entryid) {
