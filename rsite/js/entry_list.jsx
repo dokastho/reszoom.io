@@ -476,8 +476,10 @@ class Entries extends React.Component {
                           // ENTRY TYPE
                           <div>
                             {'\t• '.concat(entries[e.entryid].content)}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            <div className="editdelete">
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </div>
                           </div>
                         ) : (
                           // INFO TYPE
@@ -504,8 +506,10 @@ class Entries extends React.Component {
                               {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
                             </span>
                             {/* these buttons are identical to above */}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            <div className="editdelete">
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </div>
                             {/* render subentries */}
                             {
                               subFetched[e.entryid]
@@ -527,13 +531,15 @@ class Entries extends React.Component {
                     </span>
                   </div>
                 )}
-              {/* render up button for all entries not on first line */}
-              {idx === 0 ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+              <div className="updown">
+                {/* render up button for all entries not on first line */}
+                {idx === 0 ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
-              {/* render down button for all entries not on last line */}
-              {idx === max ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                {/* render down button for all entries not on last line */}
+                {idx === max ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+              </div>
             </div>
           ))
         }
