@@ -476,36 +476,45 @@ class Entries extends React.Component {
                           // ENTRY TYPE
                           <div>
                             {'\t• '.concat(entries[e.entryid].content)}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            <div className="editdelete">
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </div>
                           </div>
                         ) : (
                           // INFO TYPE
                           <span key={e.entryid}>
-                            {/* render name of institution */}
-                            <span className="content">
-                              <h4>{entries[e.entryid].content}</h4>
-                            </span>
-                            {/* render title */}
-                            <span className="title">
-                              {entries[e.entryid].title}
-                            </span>
-                            {/* render location */}
-                            <span className="location">
-                              {entries[e.entryid].location}
-                            </span>
-                            {/* render date */}
-                            <span className="date">
-                              {entries[e.entryid].begin}
-                              -
-                              {entries[e.entryid].end}
-                            </span>
-                            <span className="gpa">
-                              {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
-                            </span>
+                            <div>
+                              {/* render name of institution */}
+                              <span className="content">
+                                {entries[e.entryid].content}
+                              </span>
+                              {/* render gpa */}
+                              <span className="gpa">
+                                {isEducation ? entries[e.entryid].gpa : null}
+                              </span>
+                              {/* render title */}
+                              <span className="title">
+                                {entries[e.entryid].title}
+                              </span>
+                              {/* render location */}
+                              <span className="location">
+                                {entries[e.entryid].location}
+                              </span>
+                            </div>
+                            <div>
+                              {/* render date */}
+                              <span className="date">
+                                {entries[e.entryid].begin}
+                                -
+                                {entries[e.entryid].end}
+                              </span>
+                            </div>
                             {/* these buttons are identical to above */}
-                            <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                            <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            <div className="editdelete">
+                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
+                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                            </div>
                             {/* render subentries */}
                             {
                               subFetched[e.entryid]
@@ -527,13 +536,15 @@ class Entries extends React.Component {
                     </span>
                   </div>
                 )}
-              {/* render up button for all entries not on first line */}
-              {idx === 0 ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+              <div className="updown">
+                {/* render up button for all entries not on first line */}
+                {idx === 0 ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
 
-              {/* render down button for all entries not on last line */}
-              {idx === max ? null
-                : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                {/* render down button for all entries not on last line */}
+                {idx === max ? null
+                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+              </div>
             </div>
           ))
         }
