@@ -30,6 +30,7 @@ CREATE TABLE entries(
   begin VARCHAR(20),
   end VARCHAR(20),
   gpa FLOAT,
+  title VARCHAR(64),
   location VARCHAR(64),
   content VARCHAR(256),
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE

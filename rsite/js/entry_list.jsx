@@ -465,14 +465,14 @@ class Entries extends React.Component {
                     {
                       // EDIT FORM
                       isEntries ? (
-                        // entry type
+                        // ENTRY TYPE
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                           <input type="submit" />
                         </form>
                       ) : (
-                        // info type
+                        // INFO TYPE
                         <form encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
@@ -492,12 +492,14 @@ class Entries extends React.Component {
                     <span>
                       {
                         isEntries ? (
+                          // ENTRY TYPE
                           <div>
                             {'\t• '.concat(entries[e.entryid].content)}
                             <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                             <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                           </div>
                         ) : (
+                          // INFO TYPE
                           <span key={e.entryid}>
                             <h4>{entries[e.entryid].content}</h4>
                             {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
