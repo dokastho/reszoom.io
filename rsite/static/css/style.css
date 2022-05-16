@@ -6,9 +6,33 @@
 
 h2 {
     size: 100px;
-}
+} */
 
 a {
     text-decoration: none;
-    color: black;
-} */
+    color: gray;
+}
+
+a:hover {
+    background-color: lightblue;
+    border-radius: 2px;
+    text-decoration: underline;
+    transition: all .2s ease-out;
+    padding: 2px;
+}
+
+button {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0 0.14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: 0.5833em 0.833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: 0.28571429rem;
+    transition: all .2s ease-out;
+}

@@ -254,7 +254,7 @@ def swap_entry():
 
 def do_create(body):
     """Helper function for creating an entry."""
-    database = rsite.model.get_db()
+    logname, database = rest_api_auth_user()
 
     # set default values for creating
     if 'priority' not in body:
@@ -273,7 +273,7 @@ def do_create(body):
             "INSERT INTO entries "
             "(frequency, priority, owner, header, content, type, begin, end, gpa, subheader) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (freq, body['priority'], body['logname'], body['header'], body['content'],
+            (freq, body['priority'], logname, body['header'], body['content'],
              body['type'], body['begin'], body['end'], body['gpa'], body['subheader'],
              body['title'], body['location'])
         )
@@ -296,7 +296,7 @@ def do_create(body):
                 "INSERT INTO resume_to_entry "
                 "(resumeid, entryid, owner) "
                 "VALUES (?, ?, ?)",
-                (body['resumeid'], newEntryid, body['logname'], )
+                (body['resumeid'], newEntryid, logname, )
             )
             cur.fetchone()
 
@@ -329,7 +329,7 @@ def do_create(body):
             "INSERT INTO resume_to_entry "
             "(resumeid, entryid, owner) "
             "VALUES (?, ?, ?)",
-            (body['resumeid'], entryid, body['logname'], )
+            (body['resumeid'], entryid, logname, )
         )
         cur.fetchone()
 
@@ -348,7 +348,7 @@ def do_create(body):
         "WHERE resumeid == ? "
         "AND entryid == ? "
         "AND owner == ? ",
-        (body['resumeid'], entryid, body['logname'], )
+        (body['resumeid'], entryid, logname, )
     )
     eid = cur.fetchone()
 
@@ -361,7 +361,7 @@ def do_create(body):
             "frequency": freq,
             "priority": freq,
             "header": body['header'],
-            "owner": body['logname'],
+            "owner": logname,
             "type": body['type'],
             "begin": body['begin'],
             "end": body['end'],
@@ -375,7 +375,7 @@ def do_create(body):
 # def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, update_all):
 def do_update(body: dict):
     """Helper function for updating an entry"""
-    database = rsite.model.get_db()
+    logname, database = rest_api_auth_user()
 
     entryid = body['entryid']
 
@@ -395,7 +395,7 @@ def do_update(body: dict):
         flask.abort(400)
 
     # if freq is 1, just change content, or if we want to update the entry across all entries
-    if freq == 1 or body['update_all']:
+    if freq == 1 or body['all']:
         cur = database.execute(
             "UPDATE entries "
             "SET content = ?, "
@@ -417,7 +417,7 @@ def do_update(body: dict):
             "WHERE resumeid == ? "
             "AND entryid == ? "
             "AND owner == ? ",
-            (body['resumeid'], entryid, body['logname'], )
+            (body['resumeid'], entryid, logname, )
         )
         eid = cur.fetchone()
         data = {
@@ -433,7 +433,7 @@ def do_update(body: dict):
                 "header": body['header'],
                 "type": body['type'],
                 "subheader": body['subheader'],
-                "owner": body['logname'],
+                "owner": logname,
                 "title": body['title'],
                 "location": body['location']
             }
