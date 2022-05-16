@@ -126,7 +126,7 @@ class Entries extends React.Component {
       location: '',
       title: '',
     };
-    this.setState({ stagedEntries });
+    return stagedEntries;
   }
 
   fetchRecommended() {
@@ -179,13 +179,13 @@ class Entries extends React.Component {
       header,
       entries,
       username,
-      stagedEntries,
       parent,
       subEntries,
       subEids,
       subFetched,
       isEntries,
     } = this.state;
+    let { stagedEntries } = this.state;
 
     // load items from stagedEntries
     const {
@@ -200,7 +200,7 @@ class Entries extends React.Component {
     // abort empty messages
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
-      this.setStagedEntriesEmpty(entryid);
+      stagedEntries = this.setStagedEntriesEmpty(entryid);
       this.setState({ stagedEntries });
       return;
     }
@@ -235,9 +235,9 @@ class Entries extends React.Component {
       }
       entries[data.eid.entryid] = data.entry;
       // clear staged content
-      this.setStagedEntriesEmpty(entryid);
+      stagedEntries = this.setStagedEntriesEmpty(entryid);
       // also clear stagedEntries[0] to fix form render
-      this.setStagedEntriesEmpty(0);
+      stagedEntries = this.setStagedEntriesEmpty(0);
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
@@ -291,7 +291,8 @@ class Entries extends React.Component {
 
   // cancel an edit by clearing the edited content
   cancelEdit(entryid) {
-    this.setStagedEntriesEmpty(entryid);
+    const stagedEntries = this.setStagedEntriesEmpty(entryid);
+    this.setState({ stagedEntries });
   }
 
   // submit an edit to an entry
@@ -304,10 +305,10 @@ class Entries extends React.Component {
       resumeid,
       parent,
       header,
-      stagedEntries,
       subFetched,
       isEntries,
     } = this.state;
+    let { stagedEntries } = this.state;
 
     const {
       content,
@@ -322,7 +323,7 @@ class Entries extends React.Component {
     // abort unchanged entries
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
-      this.setStagedEntriesEmpty(entryid);
+      stagedEntries = this.setStagedEntriesEmpty(entryid);
       return;
     }
 
@@ -354,7 +355,7 @@ class Entries extends React.Component {
         subFetched[data.eid.entryid] = true;
       }
       // clear staged content
-      this.setStagedEntriesEmpty(entryid);
+      stagedEntries = this.setStagedEntriesEmpty(entryid);
       // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
       delete entries[entryid];
       eids[idx] = data.eid;
@@ -491,7 +492,12 @@ class Entries extends React.Component {
                               </span>
                               {/* render gpa */}
                               <span className="gpa">
-                                {isEducation ? entries[e.entryid].gpa : null}
+                                {isEducation ? (
+                                  <span>
+                                    GPA:
+                                    {entries[e.entryid].gpa}
+                                  </span>
+                                ) : null}
                               </span>
                               {/* render location */}
                               <span className="location">
