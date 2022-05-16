@@ -22,7 +22,7 @@
 - [x] implement using past entries ... will need to add an eid
 - [x] suggest entries based on frequency
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
-- [ ] add "edit for all" button to maintain entries
+- [x] add "edit for all" button to maintain entries
 - [x] change recommend to array of objects instead of an object
 - [ ] tags for entries
   - [ ] create adds to entries_to_tags

@@ -39,6 +39,7 @@ def post_entry():
     end = body['end']
     gpa = body['gpa']
     subheader = body['parent']
+    all = body['all']
 
     content = body['content']
 
@@ -49,7 +50,7 @@ def post_entry():
                          type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader)
     elif op == "update":
         data = do_update(logname, resumeid, entryid, header, content,
-                         type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader)
+                         type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader, update_all=all)
 
     return flask.jsonify(data), 201
 
@@ -377,7 +378,7 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
     }
 
 
-def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader):
+def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, update_all):
     """Helper function for updating an entry"""
     database = rsite.model.get_db()
 
@@ -396,8 +397,8 @@ def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa
     if oldentry is None:
         flask.abort(400)
 
-    # if freq is 1, just change content
-    if freq == 1:
+    # if freq is 1, just change content, or if we want to update the entry across all entries
+    if freq == 1 or update_all:
         cur = database.execute(
             "UPDATE entries "
             "SET content = ?, "
