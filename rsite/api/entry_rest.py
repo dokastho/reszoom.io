@@ -464,6 +464,7 @@ def do_update(body: dict):
         #
         body['priority'] = priority
         body['pos'] = pos
+        body['entryid'] = 0
         data = do_create(body)
 
     return data
