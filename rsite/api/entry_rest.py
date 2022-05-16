@@ -55,11 +55,11 @@ def get_subentries(parent_entryid):
 
     logname, database = rest_api_auth_user()
 
-    # fetch entries with this entry as a subheader
+    # fetch entries with this entry as a parent
     cur = database.execute(
         "SELECT * "
         "FROM entries "
-        "WHERE subheader == ? ",
+        "WHERE parent == ? ",
         (parent_entryid, )
     )
     data = cur.fetchall()
@@ -124,7 +124,7 @@ def delete_entry(entryid):
     cur = database.execute(
         "SELECT * "
         "FROM entries "
-        "WHERE subheader == ?",
+        "WHERE parent == ?",
         (entryid, )
     )
     subentries = cur.fetchall()
@@ -271,7 +271,7 @@ def do_create(body):
         # insert new
         cur = database.execute(
             "INSERT INTO entries "
-            "(frequency, priority, owner, header, content, type, begin, end, gpa, subheader, title, location) "
+            "(frequency, priority, owner, header, content, type, begin, end, gpa, parent, title, location) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (freq, body['priority'], logname, body['header'], body['content'],
              body['type'], body['begin'], body['end'], body['gpa'], body['parent'],
@@ -372,7 +372,7 @@ def do_create(body):
     }
 
 
-# def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, update_all):
+# def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, parent, update_all):
 def do_update(body: dict):
     """Helper function for updating an entry"""
     logname, database = rest_api_auth_user()
@@ -432,7 +432,7 @@ def do_update(body: dict):
                 "priority": freq,
                 "header": body['header'],
                 "type": body['type'],
-                "subheader": body['parent'],
+                "parent": body['parent'],
                 "owner": logname,
                 "title": body['title'],
                 "location": body['location']

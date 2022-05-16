@@ -25,7 +25,7 @@ CREATE TABLE entries(
   frequency INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
   header VARCHAR(64) NOT NULL,
-  subheader INTEGER,
+  parent INTEGER,
   type INTEGER(1) NOT NULL,
   begin VARCHAR(20),
   end VARCHAR(20),
