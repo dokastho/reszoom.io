@@ -21,7 +21,8 @@ from rsite.model import delete_helper, rest_api_auth_user
 def post_entry():
     """Post an entry."""
 
-    logname, _ = rest_api_auth_user()
+    # just check user credentials
+    rest_api_auth_user()
 
     op = flask.request.args.get("operation", type=str, default='')
 
@@ -31,26 +32,12 @@ def post_entry():
 
     body = load_body()
 
-    resumeid = body['resumeid']
-    entryid = body['entryid']
-    header = body['header']
-    entry_type = body['type']
-    begin = body['begin']
-    end = body['end']
-    gpa = body['gpa']
-    subheader = body['parent']
-    all = body['all']
-
-    content = body['content']
-
-    if len(content) == 0 or len(header) == 0 or len(op) == 0 or resumeid == 0:
+    if len(body['content']) == 0 or len(body['header']) == 0 or len(op) == 0 or body['resumeid'] == 0:
         flask.abort(400)
     if op == "create":
-        data = do_create(logname, resumeid, entryid, header, content,
-                         type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader)
+        data = do_create(body)
     elif op == "update":
-        data = do_update(logname, resumeid, entryid, header, content,
-                         type=entry_type, begin=begin, end=end, gpa=gpa, subheader=subheader, update_all=all)
+        data = do_update(body)
 
     return flask.jsonify(data), 201
 
@@ -80,6 +67,7 @@ def get_subentries(parent_entryid):
     entries = {}
     eids = []
     # verify request and user authority
+    entry: dict
     for entry in data:
         if logname != entry['owner']:
             flask.abort(403)
@@ -98,18 +86,10 @@ def get_subentries(parent_entryid):
         if eid is None:
             continue
         eids.append(eid)
-        entries[entryid] = {
-            'frequency': entry['frequency'],
-            'priority': entry['priority'],
-            'owner': entry['owner'],
-            'header': entry['header'],
-            'subheader': entry['subheader'],
-            'content': entry['content'],
-            'type': entry['type'],
-            'begin': entry['begin'],
-            'end': entry['end'],
-            'gpa': entry['gpa']
-        }
+
+        # remove from reply
+        entry.popitem('entryid')
+        entries[entryid] = entry
 
     data = {
         "entries": entries,
@@ -272,20 +252,30 @@ def swap_entry():
 ###############################################################################
 
 
-def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, priority=1, pos=0):
+def do_create(body):
     """Helper function for creating an entry."""
     database = rsite.model.get_db()
 
+    # set default values for creating
+    if 'priority' not in body:
+        body['priority'] = 1
+
+    if 'pos' not in body:
+        body['pos'] = 0
+
     freq = 1
+
+    entryid = body['entryid']
     # entryid not supplied, so entry is new
     if entryid == 0:
         # insert new
         cur = database.execute(
             "INSERT INTO entries "
             "(frequency, priority, owner, header, content, type, begin, end, gpa, subheader) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (freq, priority, logname, header, content,
-             type, begin, end, gpa, subheader, )
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (freq, body['priority'], body['logname'], body['header'], body['content'],
+             body['type'], body['begin'], body['end'], body['gpa'], body['subheader'],
+             body['title'], body['location'])
         )
         cur.fetchone()
 
@@ -300,13 +290,13 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
         newEntryid = data['id']
 
         # if pos is specified, then we want to update resume_to_entry
-        if pos == 0:
+        if body['pos'] == 0:
             # insert id into resume_to_entry
             cur = database.execute(
                 "INSERT INTO resume_to_entry "
                 "(resumeid, entryid, owner) "
                 "VALUES (?, ?, ?)",
-                (resumeid, newEntryid, logname, )
+                (body['resumeid'], newEntryid, body['logname'], )
             )
             cur.fetchone()
 
@@ -316,7 +306,7 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
                 "UPDATE resume_to_entry "
                 "SET entryid=? "
                 "WHERE pos == ?",
-                (newEntryid, pos, )
+                (newEntryid, body['pos'], )
             )
             cur.fetchone()
 
@@ -339,7 +329,7 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
             "INSERT INTO resume_to_entry "
             "(resumeid, entryid, owner) "
             "VALUES (?, ?, ?)",
-            (resumeid, entryid, logname, )
+            (body['resumeid'], entryid, body['logname'], )
         )
         cur.fetchone()
 
@@ -358,29 +348,36 @@ def do_create(logname, resumeid, entryid, header, content, type, begin, end, gpa
         "WHERE resumeid == ? "
         "AND entryid == ? "
         "AND owner == ? ",
-        (resumeid, entryid, logname, )
+        (body['resumeid'], entryid, body['logname'], )
     )
     eid = cur.fetchone()
+
+    # construct entry
     return {
         "eid": eid,
         "entry":
         {
-            "content": content,
+            "content": body['content'],
             "frequency": freq,
             "priority": freq,
-            "header": header,
-            "owner": logname,
-            "type": type,
-            "begin": begin,
-            "end": end,
-            "gpa": gpa
+            "header": body['header'],
+            "owner": body['logname'],
+            "type": body['type'],
+            "begin": body['begin'],
+            "end": body['end'],
+            "gpa": body['gpa'],
+            "title": body['title'],
+            "location": body['location']
         }
     }
 
 
-def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, update_all):
+# def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa, subheader, update_all):
+def do_update(body: dict):
     """Helper function for updating an entry"""
     database = rsite.model.get_db()
+
+    entryid = body['entryid']
 
     # get the entry
     cur = database.execute(
@@ -398,15 +395,18 @@ def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa
         flask.abort(400)
 
     # if freq is 1, just change content, or if we want to update the entry across all entries
-    if freq == 1 or update_all:
+    if freq == 1 or body['update_all']:
         cur = database.execute(
             "UPDATE entries "
             "SET content = ?, "
             "begin = ?, "
             "end = ?, "
             "gpa = ? "
+            "title = ? "
+            "location = ? "
             "WHERE entryid == ?",
-            (content, begin, end, gpa, entryid, )
+            (body['content'], body['begin'], body['end'],
+             body['gpa'], body['title'], body['location'], entryid, )
         )
         cur.fetchone()
 
@@ -417,23 +417,25 @@ def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa
             "WHERE resumeid == ? "
             "AND entryid == ? "
             "AND owner == ? ",
-            (resumeid, entryid, logname, )
+            (body['resumeid'], entryid, body['logname'], )
         )
         eid = cur.fetchone()
         data = {
             "eid": eid,
             "entry":
             {
-                "content": content,
-                "begin": begin,
-                "end": end,
-                "gpa": gpa,
+                "content": body['content'],
+                "begin": body['begin'],
+                "end": body['end'],
+                "gpa": body['gpa'],
                 "frequency": freq,
                 "priority": freq,
-                "header": header,
-                "type": type,
-                "subheader": subheader,
-                "owner": logname
+                "header": body['header'],
+                "type": body['type'],
+                "subheader": body['subheader'],
+                "owner": body['logname'],
+                "title": body['title'],
+                "location": body['location']
             }
         }
 
@@ -460,8 +462,9 @@ def do_update(logname, resumeid, entryid, header, content, type, begin, end, gpa
         # priority here is duplicated with the old entry so that a newly edited
         # entry will not be poorly favored by the program
         #
-        data = do_create(logname, resumeid, 0, header, content,
-                         type, begin, end, gpa, subheader, priority, pos)
+        body['priority'] = priority
+        body['pos'] = pos
+        data = do_create(body)
 
     return data
 
@@ -473,7 +476,8 @@ def load_body():
     if "content" not in body or "resumeid" not in body or \
             "entryid" not in body or "header" not in body or \
             "type" not in body or "begin" not in body or \
-            "end" not in body or "all" not in body:
+            "end" not in body or "all" not in body or \
+            "location" not in body or "title" not in body:
         flask.abort(400)    # insufficient arguments
 
     if "gpa" not in body:

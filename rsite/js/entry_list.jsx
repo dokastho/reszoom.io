@@ -24,6 +24,8 @@ class Entries extends React.Component {
           begin: '',
           end: '',
           gpa: '',
+          title: '',
+          location: '',
         },
       },
       // state attributes for type info
@@ -46,6 +48,7 @@ class Entries extends React.Component {
     this.moveEntry = this.moveEntry.bind(this);
     this.setAddTrue = this.setAddTrue.bind(this);
     this.setAddFalse = this.setAddFalse.bind(this);
+    this.setStagedEntriesEmpty = this.setStagedEntriesEmpty.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
     this.fetchRecommended = this.fetchRecommended.bind(this);
@@ -108,6 +111,21 @@ class Entries extends React.Component {
   setAddFalse(entryid) {
     const { stagedEntries } = this.state;
     stagedEntries[entryid].add = false;
+    this.setState({ stagedEntries });
+  }
+
+  setStagedEntriesEmpty(entryid) {
+    const { stagedEntries } = this.state;
+    stagedEntries[entryid] = {
+      add: false,
+      isChanged: false,
+      content: '',
+      begin: '',
+      end: '',
+      gpa: '',
+      location: '',
+      title: '',
+    };
     this.setState({ stagedEntries });
   }
 
@@ -175,19 +193,14 @@ class Entries extends React.Component {
       end,
       gpa,
       content,
+      location,
+      title,
     } = stagedEntries[entryid];
     const all = '';
     // abort empty messages
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
-      stagedEntries[entryid] = {
-        add: false,
-        isChanged: false,
-        content: '',
-        begin: '',
-        end: '',
-        gpa: '',
-      };
+      this.setStagedEntriesEmpty(entryid);
       this.setState({ stagedEntries });
       return;
     }
@@ -208,6 +221,8 @@ class Entries extends React.Component {
         parent,
         content,
         all,
+        location,
+        title,
       }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
@@ -220,29 +235,14 @@ class Entries extends React.Component {
       }
       entries[data.eid.entryid] = data.entry;
       // clear staged content
-      stagedEntries[entryid] = {
-        add: false,
-        isChanged: false,
-        content: '',
-        begin: '',
-        end: '',
-        gpa: '',
-      };
+      this.setStagedEntriesEmpty(entryid);
       // also clear stagedEntries[0] to fix form render
-      stagedEntries[0] = {
-        add: false,
-        isChanged: false,
-        content: '',
-        begin: '',
-        end: '',
-        gpa: '',
-      };
+      this.setStagedEntriesEmpty(0);
       this.setState((prevState) => ({
         eids: prevState.eids.concat(data.eid),
         entries,
         subEntries,
         subEids,
-        stagedEntries,
         subFetched,
       }));
     }).then(() => {
@@ -291,16 +291,7 @@ class Entries extends React.Component {
 
   // cancel an edit by clearing the edited content
   cancelEdit(entryid) {
-    const { stagedEntries } = this.state;
-    stagedEntries[entryid] = {
-      add: false,
-      isChanged: false,
-      content: '',
-      begin: '',
-      end: '',
-      gpa: '',
-    };
-    this.setState({ stagedEntries });
+    this.setStagedEntriesEmpty(entryid);
   }
 
   // submit an edit to an entry
@@ -323,21 +314,15 @@ class Entries extends React.Component {
       begin,
       end,
       gpa,
+      location,
+      title,
     } = stagedEntries[entryid];
     const { pos } = eids[idx];
 
     // abort unchanged entries
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
-      stagedEntries[entryid] = {
-        add: false,
-        isChanged: false,
-        content: '',
-        begin: '',
-        end: '',
-        gpa: '',
-      };
-      this.setState({ stagedEntries });
+      this.setStagedEntriesEmpty(entryid);
       return;
     }
 
@@ -358,6 +343,8 @@ class Entries extends React.Component {
         parent,
         content,
         all,
+        location,
+        title,
       }),
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
@@ -367,14 +354,7 @@ class Entries extends React.Component {
         subFetched[data.eid.entryid] = true;
       }
       // clear staged content
-      stagedEntries[entryid] = {
-        add: false,
-        isChanged: false,
-        content: '',
-        begin: '',
-        end: '',
-        gpa: '',
-      };
+      this.setStagedEntriesEmpty(entryid);
       // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
       delete entries[entryid];
       eids[idx] = data.eid;
@@ -382,7 +362,6 @@ class Entries extends React.Component {
       this.setState({
         eids,
         entries,
-        stagedEntries,
       });
     }).then(() => {
       // update recommended
@@ -477,6 +456,8 @@ class Entries extends React.Component {
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} maxLength="256" />
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'begin')} value={stagedEntries[e.entryid].begin} />
                           <input type="month" onChange={(event) => this.handleEntryChange(event, e.entryid, 'end')} value={stagedEntries[e.entryid].end} />
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'location')} value={stagedEntries[e.entryid].location} maxLength="64" placeholder="Location" />
+                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'title')} value={stagedEntries[e.entryid].title} maxLength="64" placeholder={isEducation ? 'Degree' : 'Title'} />
                           {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
                           <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
                           {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
