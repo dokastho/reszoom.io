@@ -42,7 +42,7 @@ VALUES (2, 3, 'tdokas');
 -- entries
 INSERT INTO entries(frequency, priority, owner, header, content, type)
 VALUES (1, 1, 'tdokas', 'project', 'Programmed a dynamic resume compilation site which saw lots and lots of users!', 1);
-INSERT INTO entries(frequency, priority, owner, header, subheader, content, type)
+INSERT INTO entries(frequency, priority, owner, header, parent, content, type)
 VALUES (2, 2, 'tdokas', 'experience', 3, 'Worked at a lab and received a raise for my abilities', 1);
 INSERT INTO entries(frequency, priority, owner, header, content, type)
 VALUES (2, 2, 'tdokas', 'project', 'Built and managed my own server for remote development', 1);
