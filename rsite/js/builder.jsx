@@ -141,14 +141,12 @@ class ResumeBuilder extends React.Component {
       email,
     } = this.state;
     return (
-      <div id="resume-content">
-        <h1>{resumename}</h1>
-        <h3>{resumetype ? 'Student Resume' : 'Employee Resume'}</h3>
-        <div id="user-header">
-          <div className="about-me">
-            <h1>{fullname}</h1>
-            <h3>{email}</h3>
-          </div>
+      <div className="resume-content">
+        <div className="name">{resumename}</div>
+        <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
+        <div className="about-me">
+          <div className="name"><h1>{fullname}</h1></div>
+          <div className="email"><h3>{email}</h3></div>
         </div>
         {
           // render education-experience based on type
