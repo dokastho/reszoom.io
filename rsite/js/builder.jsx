@@ -157,10 +157,12 @@ class ResumeBuilder extends React.Component {
               <div>
                 <div id="education">
                   <h1>Education</h1>
+                  <hr />
                   <div className="info" />
                 </div>
                 <div id="experience">
                   <h1>Experience</h1>
+                  <hr />
                   <div className="info" />
                 </div>
               </div>
@@ -169,10 +171,12 @@ class ResumeBuilder extends React.Component {
               <div>
                 <div id="experience">
                   <h1>Experience</h1>
+                  <hr />
                   <div className="info" />
                 </div>
                 <div id="education">
                   <h1>Education</h1>
+                  <hr />
                   <div className="info" />
                 </div>
               </div>
@@ -180,6 +184,7 @@ class ResumeBuilder extends React.Component {
         }
         <div id="project">
           <h1>Project</h1>
+          <hr />
           <div className="info" />
           <div className="entries" />
         </div>

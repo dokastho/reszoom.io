@@ -31,6 +31,7 @@
 - [ ] resume thumbnails
 - [ ] prevent duplicate entries
 - [ ] offer custom headings, optional headings (leadership experience)
+  - [ ] redesign builder.jsx render() method
 
 down the road...
 - [ ] animations
