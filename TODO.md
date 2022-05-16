@@ -29,6 +29,7 @@
 - [ ] prevent duplicate entries
 
 down the road...
+- [ ] offer different templates (see ecrc)
 - [ ] resume thumbnails
 - [ ] animations
 - [ ] tags for entries
