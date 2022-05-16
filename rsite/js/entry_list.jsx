@@ -493,7 +493,7 @@ class Entries extends React.Component {
                       {
                         isEntries ? (
                           <div>
-                            {entries[e.entryid].content}
+                            {'\t• '.concat(entries[e.entryid].content)}
                             <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                             <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                           </div>

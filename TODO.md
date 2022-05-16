@@ -25,12 +25,14 @@
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
 - [x] add "edit for all" button to maintain entries
 - [x] change recommend to array of objects instead of an object
+- [ ] add location to info headings
 - [ ] front end design
-- [ ] prevent duplicate entries
-
-down the road...
 - [ ] offer different templates (see ecrc)
 - [ ] resume thumbnails
+- [ ] prevent duplicate entries
+- [ ] offer custom headings, optional headings (leadership experience)
+
+down the road...
 - [ ] animations
 - [ ] tags for entries
   - [ ] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
