@@ -137,7 +137,7 @@ class Entries extends React.Component {
         return response.json();
       })
       .then((data) => {
-        this.setState({ recommended: data });
+        this.setState({ recommended: data.recommended });
       })
       .catch((error) => console.log(error));
 
