@@ -21,11 +21,11 @@ VALUES ('tdokas', 'resume 3', 1);
 
 -- experience
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa, location, title)
-VALUES (2, 2, 'tdokas', 'education','University of Michigan', 0, '2020-08', '2023-05', 3.4, "Ann Arbo, "foo title"r, MI");
+VALUES (2, 2, 'tdokas', 'education','University of Michigan', 0, '2020-08', '2023-05', 3.4, "Ann Arbor, MI", "Bachelor in Computer Science & Engineering");
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa, location, title)
-VALUES (2, 2, 'tdokas', 'education','Michigan State University', 0, '2019-08', '2020-05', 3.9, "Ann A, "foo title"rbor, MI");
+VALUES (2, 2, 'tdokas', 'education','Michigan State University', 0, '2019-08', '2020-05', 3.9, "East Lansing, MI", "Bachelor in Computer Science & Engineering");
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, location, title)
-VALUES (2, 2, 'tdokas', 'experience','MBNI', 0, '2020-08', '2023-05', "Ann Arbor, MI", "foo title");
+VALUES (2, 2, 'tdokas', 'experience','MBNI', 0, '2020-08', '2023-05', "Ann Arbor, MI", "Programming Assistant");
 INSERT INTO resume_to_entry(resumeid, entryid, pos, owner)
 VALUES (1, 1, 2, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
@@ -63,9 +63,9 @@ VALUES (2, 7, 'tdokas');
 
 -- another education & experience to test recommending for resume 1
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa, location, title)
-VALUES (1, 1, 'tdokas', 'education','test school', 0, '1970-01', '2023-05', 0.0, "Ann Arbor, MI", "foo title");
+VALUES (1, 1, 'tdokas', 'education','test school', 0, '1970-01', '2023-05', 0.0, "foo", "bar");
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, location, title)
-VALUES (1, 1, 'tdokas', 'experience','test work', 0, '2020-08', '2023-05', "Ann Arbor, MI", "foo title");
+VALUES (1, 1, 'tdokas', 'experience','test work', 0, '2020-08', '2023-05', "foo", "bar");
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 8, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)

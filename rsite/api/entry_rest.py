@@ -88,7 +88,7 @@ def get_subentries(parent_entryid):
         eids.append(eid)
 
         # remove from reply
-        entry.popitem('entryid')
+        del entry['entryid']
         entries[entryid] = entry
 
     data = {
