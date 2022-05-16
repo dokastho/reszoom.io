@@ -6,9 +6,81 @@
 
 h2 {
     size: 100px;
-}
+} */
 
 a {
     text-decoration: none;
-    color: black;
+    color: gray;
+}
+
+a:hover {
+    background-color: lightblue;
+    border-radius: 2px;
+    text-decoration: underline;
+    transition: all .2s ease-out;
+    padding: 2px;
+}
+
+button {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: baseline;
+    margin: 0.14285714em;
+    background-color: #e8e8e8;
+    background-image: none;
+    padding: 0.5833em 0.833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: 0.28571429rem;
+}
+
+button:hover {
+    transition: all .2s ease-out;
+    font-weight: bold;
+}
+
+/* resume view */
+
+/* .resume-content */
+
+.about-me {
+    text-align: center;
+}
+.name {
+    font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.email {
+    font-size: medium;
+}
+
+/* info entry */
+
+/* reminder that content in this context is institution name */
+span.content {
+    text-decoration: underline;
+    font-weight: bold;
+    margin-right: 2px; /* space for GPA*/
+}
+
+span.gpa {
+    font-weight: bold;
+}
+
+span.location {
+    text-align: right;
+    float: right;
+    font-weight: bold;
+}
+
+/* span.title {
+
 } */
+
+span.date {
+    text-align: right;
+    float: right;
+}
