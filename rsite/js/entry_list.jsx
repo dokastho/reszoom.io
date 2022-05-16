@@ -482,13 +482,27 @@ class Entries extends React.Component {
                         ) : (
                           // INFO TYPE
                           <span key={e.entryid}>
-                            <h4>{entries[e.entryid].content}</h4>
-                            {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
-                            <p>
+                            {/* render name of institution */}
+                            <span className="content">
+                              <h4>{entries[e.entryid].content}</h4>
+                            </span>
+                            {/* render title */}
+                            <span className="title">
+                              {entries[e.entryid].title}
+                            </span>
+                            {/* render location */}
+                            <span className="location">
+                              {entries[e.entryid].location}
+                            </span>
+                            {/* render date */}
+                            <span className="date">
                               {entries[e.entryid].begin}
                               -
                               {entries[e.entryid].end}
-                            </p>
+                            </span>
+                            <span className="gpa">
+                              {isEducation ? <h4>{entries[e.entryid].gpa}</h4> : null}
+                            </span>
                             {/* these buttons are identical to above */}
                             <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                             <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
