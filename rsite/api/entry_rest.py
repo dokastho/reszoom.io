@@ -199,7 +199,7 @@ def get_recommended(header):
         data.append(entry)
 
     # sort data by priority
-    sortedData = sorted(data, key='priority')
+    sortedData = sorted(data, key=lambda d: d['priority'], reverse=True)
 
     return flask.jsonify({'recommended': sortedData}), 201
 
