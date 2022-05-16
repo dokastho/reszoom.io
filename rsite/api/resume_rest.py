@@ -42,18 +42,10 @@ def load_resumes():
             # construct entries map
             entries = {}
             for entry in data:
-                entries[entry['entryid']] = {
-                    'frequency': entry['frequency'],
-                    'priority': entry['priority'],
-                    'owner': entry['owner'],
-                    'header': entry['header'],
-                    'subheader': entry['subheader'],
-                    'content': entry['content'],
-                    'type': entry['type'],
-                    'begin': entry['begin'],
-                    'end': entry['end'],
-                    'gpa': entry['gpa']
-                }
+                entryid = entry['entryid']
+                # remove entryid from entry
+                del entry['entryid']
+                entries[entryid] = entry
 
             # get eids for the resume id
             if rid == 0:
