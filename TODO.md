@@ -11,6 +11,7 @@
 - [x] education/experience content
 - [x] make sure inputs aren't too long
 - [x] fold experience into normal entries
+- [x] brainstorm better way of editing without changing past resumes
 - [x] add experience edit
 - [x] get edit button function up to date with rest api
 - [x] fix experience add onchange
@@ -24,23 +25,19 @@
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
 - [x] add "edit for all" button to maintain entries
 - [x] change recommend to array of objects instead of an object
+- [ ] front end design
+- [ ] prevent duplicate entries
+
+down the road...
+- [ ] resume thumbnails
+- [ ] animations
 - [ ] tags for entries
+  - [ ] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
   - [ ] create adds to entries_to_tags
   - [ ] recommend based on matching tags, offer from all
   - [ ] adding an entry will update tags based on the posts
   - [ ] select tags on create
   - [ ] edit updates tags 
-
-down the road...
-- [ ] use await instead of subFetched
-- [ ] callback entries in similar manner to recommended
-- [x] brainstorm better way of editing without changing past resumes
-- [ ] prevent duplicate entries
-
-even farther down the road...
-- [ ] front end design
-- [ ] resume thumbnails
-- [ ] animations
 
 random ideas
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
@@ -48,3 +45,5 @@ random ideas
 - [ ] make passwords strict
 - [ ] make resumes/entries/education/etc visible in the user profile
 - [ ] gpa display must be decimal format
+- [ ] use await instead of subFetched
+- [ ] callback entries in similar manner to recommended
