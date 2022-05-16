@@ -401,17 +401,25 @@ class Entries extends React.Component {
 
   // display the top n recommended entries
   displayTop(count = 3) {
-    const { recommended, stagedEntries } = this.state;
+    const { recommended, stagedEntries, parent } = this.state;
 
     // display top n entries
     const topn = [];
     for (let index = 0; index < Math.min(count, recommended.length); index += 1) {
-      const element = recommended[index];
-      const { entryid } = element;
-      topn[index] = element;
+      const entry = recommended[index];
+      const { entryid } = entry;
+
+      // do not allow "crosstalk" of subentries between institutions
+      if (entry.subheader !== null) {
+        if (entry.subheader !== parent) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+      }
+      topn[index] = entry;
 
       // update stagedEntries for create
-      stagedEntries[entryid] = element;
+      stagedEntries[entryid] = entry;
       stagedEntries[entryid].isChanged = true;
       stagedEntries[entryid].add = true;
     }
