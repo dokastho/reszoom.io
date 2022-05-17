@@ -72,6 +72,11 @@ int handle_connection(int connectionfd)
     out << "Client " << connectionfd << " says " << msg_cstr;
     lock_print(out.str().c_str());
 
+    // (3) Send reply
+    out.str(""); 
+    out << "Sent " << msg_cstr << " to " << msg_cstr;
+    lock_print(out.str().c_str());
+    
     send_bytes(connectionfd, msg_cstr, MAX_MESSAGE_SIZE);
 
     // (4) Close connection
