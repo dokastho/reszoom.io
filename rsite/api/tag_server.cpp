@@ -7,6 +7,21 @@
 #include <memory>
 #include <iostream>
 #include <sstream>
+#include <fstream>
+
+std::mutex rcv_msg_lock, cout_lock;
+
+const unsigned int MAX_MESSAGE_SIZE = 256;
+
+// copy of keywords in memory
+std::map<std::string, std::vector<std::string>> tag_words;
+
+const std::vector<std::string> TAG_LISTS = {
+    "backend.tags",
+    "db.tags",
+    "frontend.tags",
+    "lang.tags",
+    "web.tags"};
 
 // print with the cout_lock
 void lock_print(const char *str)
@@ -35,11 +50,30 @@ int get_port_number(int sockfd)
     if (getsockname(sockfd, (sockaddr *)&addr, &length) == -1)
     {
         perror("Error getting port of socket");
-        //exit(1);
+        // exit(1);
         return -1;
     }
     // Use ntohs to convert from network byte order to host byte order.
     return ntohs(addr.sin_port);
+}
+
+// read the contents of each tag keyword file into memory
+int init()
+{
+    for (size_t i = 0; i < TAG_LISTS.size(); i++)
+    {
+        // read files
+        std::string tagFile = TAG_LISTS[i];
+        std::fstream fp;
+        fp.open(tagFile);
+
+        // store the keywords for each tag in memory
+        std::string line;
+        while (getline(fp, line))
+        {
+            tag_words[tagFile].push_back(line);
+        }
+    }
 }
 
 int handle_connection(int connectionfd)
@@ -73,10 +107,10 @@ int handle_connection(int connectionfd)
     lock_print(out.str().c_str());
 
     // (3) Send reply
-    out.str(""); 
+    out.str("");
     out << "Sent " << msg_cstr << " to " << msg_cstr;
     lock_print(out.str().c_str());
-    
+
     send_bytes(connectionfd, msg_cstr, MAX_MESSAGE_SIZE);
 
     // (4) Close connection
@@ -85,7 +119,7 @@ int handle_connection(int connectionfd)
     return 0;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     int port = argc == 1 ? 0 : atoi(argv[1]);
 
@@ -101,7 +135,7 @@ int main(int argc, char* argv[])
     if (sock == -1)
     {
         perror("Error opening stream socket");
-        //exit(1);
+        // exit(1);
         return -1;
     }
 
@@ -110,14 +144,14 @@ int main(int argc, char* argv[])
     if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof(yesval)) == -1)
     {
         perror("Error setting socket options");
-        //exit(1);
+        // exit(1);
         return -1;
     }
     // (3) Bind to the port.
     if (bind(sock, (sockaddr *)&addr, sizeof(addr)) == -1)
     {
         perror("Error binding stream socket");
-        //exit(1);
+        // exit(1);
         return -1;
     }
 
@@ -128,11 +162,14 @@ int main(int argc, char* argv[])
     }
     else if (port < 0 || port > 0xFFFF)
     {
-        //exit(1);
+        // exit(1);
         return -1;
     }
 
     listen(sock, 30);
+
+    // initialize tag keywords
+    init();
 
     std::cout << "\n@@@ port " << port << std::endl;
     while (true)

@@ -42,6 +42,10 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "fstream": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "codecvt": "cpp",
+        "cstring": "cpp",
+        "functional": "cpp",
+        "iomanip": "cpp"
     }
 }
