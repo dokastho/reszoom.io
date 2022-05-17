@@ -5,6 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "TAG SERVER",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/tag_server",
+            "args": [
+                "8888",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true,
+                    // "text": "handle SIGUSR1 nostop noprint"
+                }
+            ],
+            "preLaunchTask": "C/C++: make",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
