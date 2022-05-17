@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <vector>
 
 std::mutex rcv_msg_lock, cout_lock;
 
@@ -106,14 +107,29 @@ int handle_connection(int connectionfd)
     out << "Client " << connectionfd << " says " << msg_cstr;
     lock_print(out.str().c_str());
 
-    // (3) Send reply
+    // (3) Compute tags
+    Tags t(msg_cstr);
+    t.assign_tags();
+
+    std::vector<std::string> tags = t.get_tags();
+
+    // construct space-separated reply
+    std::stringstream ss;
+    for (size_t i = 0; i < tags.size(); i++)
+    {
+        ss << tags[i] << " ";
+    }
+    
+    const char* response = ss.str().c_str();
+
+    // (4) Send reply
     out.str("");
-    out << "Sent " << msg_cstr << " to " << msg_cstr;
+    out << "Sent " << response << " to " << connectionfd;
     lock_print(out.str().c_str());
 
-    send_bytes(connectionfd, msg_cstr, MAX_MESSAGE_SIZE);
+    send_bytes(connectionfd, response, MAX_MESSAGE_SIZE);
 
-    // (4) Close connection
+    // (5) Close connection
     close(connectionfd);
 
     return 0;
