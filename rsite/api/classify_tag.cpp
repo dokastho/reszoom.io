@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <ctype.h>
 #include <algorithm>
 
 bool Tags::is_in(std::string word, std::string category)
@@ -10,7 +11,7 @@ bool Tags::is_in(std::string word, std::string category)
     for (size_t i = 0; i < tag_words[category].size(); i++)
     {
         std::string keyword = tag_words[category][i];
-        if (word == keyword)
+        if (!strcmp(word.c_str(), keyword.c_str()))
         {
             return true;
         }
@@ -42,6 +43,9 @@ Tags::Tags(char *msg_str)
             ss << c;
         }
     }
+    std::string word = ss.str();
+    // verify that word is not a stopword
+    words[word] = 1;
 }
 
 void Tags::assign_tags()
@@ -50,18 +54,19 @@ void Tags::assign_tags()
     for (size_t i = 0; i < TAG_LISTS.size(); i++)
     {
         std::string cat = TAG_LISTS[i];
-        for (size_t j = 0; j < tag_words[cat].size(); j++)
+        for (auto it = words.begin(); it != words.end(); it++)
         {
-            std::string w = tag_words[cat][j];
-            if (is_in(w, cat))
+            std::string word = it->first;
+            if (is_in(word, cat))
             {
-                tags[w] = 1.0;
+                tags[cat] = 1.0;
             }
         }
     }
 }
 
-std::vector<std::string> Tags::get_tags() {
+std::vector<std::string> Tags::get_tags()
+{
     // return a vector of the best tags
     // atm: just return boolean "exists in file" with no probability
     std::vector<std::string> vec;

@@ -66,7 +66,7 @@ int init()
         // read files
         std::string tagFile = TAG_LISTS[i];
         std::fstream fp;
-        fp.open(tagFile);
+        fp.open("files/"+tagFile);
 
         if (!fp.is_open())
         {
@@ -127,14 +127,16 @@ int handle_connection(int connectionfd)
         ss << tags[i] << " ";
     }
     
-    const char* response = ss.str().c_str();
+    std::string response = ss.str();
+
+    const char* reply = response.c_str();
 
     // (4) Send reply
     out.str("");
-    out << "Sent " << response << " to " << connectionfd;
+    out << "Sent " << reply << " to " << connectionfd;
     lock_print(out.str().c_str());
 
-    send_bytes(connectionfd, response, MAX_MESSAGE_SIZE);
+    send_bytes(connectionfd, reply, MAX_MESSAGE_SIZE);
 
     // (5) Close connection
     close(connectionfd);
