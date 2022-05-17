@@ -68,6 +68,12 @@ int init()
         std::fstream fp;
         fp.open(tagFile);
 
+        if (!fp.is_open())
+        {
+            return 1;
+        }
+        
+
         // store the keywords for each tag in memory
         std::string line;
         while (getline(fp, line))
@@ -75,6 +81,7 @@ int init()
             tag_words[tagFile].push_back(line);
         }
     }
+    return 0;
 }
 
 int handle_connection(int connectionfd)
@@ -185,7 +192,11 @@ int main(int argc, char *argv[])
     listen(sock, 30);
 
     // initialize tag keywords
-    init();
+    if (init())
+    {
+        // file could not be opened
+        return -1;
+    }
 
     std::cout << "\n@@@ port " << port << std::endl;
     while (true)
