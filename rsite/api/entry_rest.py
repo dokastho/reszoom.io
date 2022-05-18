@@ -315,9 +315,10 @@ def do_create(body):
         entryid = newEntryid
         
         # set tags
-        # only necessary for new tags
-        t = Thread(target=set_tags, args=(entryid, body['content'],))
-        t.start()
+        # only necessary for new tags that are type entry
+        if body['type']:
+            t = Thread(target=set_tags, args=(entryid, body['content'],))
+            t.start()
 
     else:
         # entry already in db so increment freq
@@ -411,9 +412,10 @@ def do_update(body: dict):
         )
         cur.fetchone()
         
-        # set new tags
-        t = Thread(target=set_tags, args=(entryid, body['content'],))
-        t.start()
+        if body['type']:
+            # set new tags
+            t = Thread(target=set_tags, args=(entryid, body['content'],))
+            t.start()
         
         cur = database.execute(
             "UPDATE entries "
