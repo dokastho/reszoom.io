@@ -7,10 +7,9 @@ URLs include:
 /api/v1/entry/meta/
 """
 
-from os import abort
 import flask
 import rsite
-from rsite.model import delete_helper, rest_api_auth_user
+from rsite.model import delete_helper, get_db, rest_api_auth_user, print_log
 from threading import Thread
 import socket
 
@@ -345,7 +344,8 @@ def do_create(body):
         cur.fetchone()
         
     # set tags
-    set_tags(entryid, body['content'])
+    t = Thread(target=set_tags, args=(entryid, body['content'],))
+    t.start()
 
     # get eid from resume_to_entry (including the pos autoincrement)
     cur = database.execute(
@@ -402,6 +402,18 @@ def do_update(body: dict):
 
     # if freq is 1, just change content, or if we want to update the entry across all entries
     if freq == 1 or body['all']:
+        # delete all tags with this entryid
+        cur = database.execute(
+            "DELETE FROM entry_to_tag "
+            "WHERE entryid == ? ",
+            (entryid, )
+        )
+        cur.fetchone()
+        
+        # set new tags
+        t = Thread(target=set_tags, args=(entryid, body['content'],))
+        t.start()
+        
         cur = database.execute(
             "UPDATE entries "
             "SET content = ?, "
@@ -533,7 +545,7 @@ def set_tags(entryid, content: str):
             except socket.timeout:
                 continue
             # debug info
-            print("Connection from", address[0])
+            print_log("Connection from " + address[0], "OK")
             with clientsocket:
                 message_chunks = []
                 while True:
@@ -553,46 +565,48 @@ def set_tags(entryid, content: str):
 
             msg_tags = message_str.split()
             break
-    # handle tags
-    _, database = rest_api_auth_user()
-    cur = database.execute(
-        "SELECT * "
-        "FROM tags "
-    )
-    db_tags = cur.fetchall()
+    with rsite.app.app_context():
+        # handle tags
+        database = get_db()
+        cur = database.execute(
+            "SELECT * "
+            "FROM tags "
+        )
+        db_tags = cur.fetchall()
 
-    # construct db tags dict
-    db_tags_dict = {}
-    for tag in db_tags:
-        db_tags_dict[tag['name']] = tag['tagid']
+        # construct db tags dict
+        db_tags_dict = {}
+        for tag in db_tags:
+            db_tags_dict[tag['name']] = tag['tagid']
 
-    # insert tags if necessary
-    for tag in msg_tags:
-        if tag not in db_tags_dict.keys():
-            # insert tag into db
+        # insert tags if necessary
+        for tag in msg_tags:
+            if tag not in db_tags_dict.keys():
+                # insert tag into db
+                cur = database.execute(
+                    "INSERT INTO tags "
+                    "(tagname) "
+                    "VALUES(?)",
+                    (tag, )
+                )
+                cur.fetchone()
+                cur = database.execute(
+                    "SELECT MAX(tagid) "
+                    "AS id "
+                    "FROM tags"
+                )
+                data = cur.fetchone()
+                tagid = int(data['id'])
+
+            else:
+                tagid = int(db_tags_dict[tag])
+
+            # insert tagid
             cur = database.execute(
-                "INSERT INTO tags "
-                "(tagname) "
-                "VALUES(?)",
-                (tag, )
+                "INSERT INTO entry_to_tag "
+                "(entryid, tagid) "
+                "VALUES(?, ?)",
+                (entryid, tagid, )
             )
             cur.fetchone()
-            cur = database.execute(
-                "SELECT MAX(tagid) "
-                "AS id "
-                "FROM tags"
-            )
-            data = cur.fetchone()
-            tagid = int(data['id'])
-
-        else:
-            tagid = int(db_tags_dict[tag])
-
-        # insert tagid
-        cur = database.execute(
-            "INSERT INTO entry_to_tag "
-            "(entryid, tagid) "
-            "VALUES(?, ?)",
-            (entryid, tagid, )
-        )
-        cur.fetchone()
+            print_log(f'{entryid}: added tag "{tag}"', "OK")

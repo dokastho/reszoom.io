@@ -1,4 +1,5 @@
 """Site model (database) API."""
+from datetime import datetime
 import hashlib
 import sqlite3
 import uuid
@@ -217,3 +218,8 @@ def rest_api_auth_user():
 
     database = get_db()
     return logname, database
+
+def print_log(msg: str, code: None) -> str:
+    now = datetime.utcnow()
+    now = now.strftime("%d/%b/%Y %H:%M:%S")
+    print(f'localhost - - [{now}] {msg} {code}')
