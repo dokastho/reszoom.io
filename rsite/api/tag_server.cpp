@@ -131,7 +131,11 @@ int handle_connection(int connectionfd)
 
     std::string response = ss.str();
 
-    const char *reply = response.c_str();
+    char reply[MAX_MESSAGE_SIZE] = {'\0'};
+    for (size_t i = 0; i < strlen(response.c_str()); i++)
+    {
+        reply[i] = response.c_str()[i];
+    }
 
     // (4) Send reply
     out.str("");

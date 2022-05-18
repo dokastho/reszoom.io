@@ -546,7 +546,8 @@ def set_tags(entryid, content: str):
                     message_chunks.append(data)
             # Decode list-of-byte-strings to UTF8 and parse JSON data
             message_bytes = b''.join(message_chunks)
-            message_str = message_bytes.decode("utf-8")
+            message_decode = message_bytes.decode("utf-8")
+            message_str = message_decode.replace("\x00", "")
 
             msg_tags = message_str.split()
             break

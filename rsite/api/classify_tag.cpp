@@ -29,17 +29,20 @@ Tags::Tags()
 Tags::Tags(char *msg_str)
 {
     // unpack port
-    int port = 0;
+    int port = 0, portlen = 5;
     for (size_t i = 0; i < 5; i++)
     {
         // base 10 ops
         port *= 10;  // move digit over
-        if (msg_str[i] > 9)
+        const char c = msg_str[i];
+        int digit = (int)c - 48;
+        if (digit > 9)
         {
             // end of port num
+            portlen = i;
             break;
         }
-        port += msg_str[i];
+        port += digit;
     }
     // create a socket with the port
     sockaddr_in addr;
@@ -56,7 +59,7 @@ Tags::Tags(char *msg_str)
 
     // unpack message
     std::stringstream ss;
-    for (size_t i = 0; i < strlen(msg_str); i++)
+    for (size_t i = portlen; i < strlen(msg_str); i++)
     {
         char c = msg_str[i];
         // split message by spaces
