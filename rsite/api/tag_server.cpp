@@ -116,7 +116,21 @@ int handle_connection(int connectionfd)
 
     // (3) Compute tags
     Tags t(msg_cstr);
+
+    // ensure connection is valid
+    if (!t.is_valid())
+    {
+        return 0;
+    }
+    
     t.assign_tags();
+
+    // connect to dest and exit if not able to connect
+    if (t.connect_dest())
+    {
+        return 0;
+    }
+    
 
     int send_sock = t.get_dest_sock();
 

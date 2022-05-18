@@ -36,9 +36,9 @@ case $1 in
     sqlite3 -batch -line var/resume.sqlite3 'select * from users'
     sqlite3 -batch -line var/resume.sqlite3 'select * from resumes'
     sqlite3 -batch -line var/resume.sqlite3 'select * from entries'
-    sqlite3 -batch -line var/resume.sqlite3 'select * from tags'
     sqlite3 -batch -line var/resume.sqlite3 'select * from resume_to_entry'
-    sqlite3 -batch -line var/resume.sqlite3 'select * from experience'
+    sqlite3 -batch -line var/resume.sqlite3 'select * from tags'
+    sqlite3 -batch -line var/resume.sqlite3 'select * from entry_to_tag'
     ;;
   "random")
     SHUF=shuf

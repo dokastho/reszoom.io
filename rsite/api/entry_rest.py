@@ -269,9 +269,6 @@ def do_create(body):
 
     entryid = body['entryid']
 
-    # set tags
-    set_tags(entryid, body['content'])
-
     # entryid not supplied, so entry is new
     if entryid == 0:
         # insert new
@@ -346,6 +343,9 @@ def do_create(body):
             (freq, freq, entryid, )
         )
         cur.fetchone()
+        
+    # set tags
+    set_tags(entryid, body['content'])
 
     # get eid from resume_to_entry (including the pos autoincrement)
     cur = database.execute(
@@ -507,7 +507,7 @@ def set_tags(entryid, content: str):
     server_host = "localhost"
     server_port = 8888
 
-    MSG_SIZE = 261
+    MSG_SIZE = 264
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listen_sock:
         # bind worker socket to its server
@@ -516,7 +516,7 @@ def set_tags(entryid, content: str):
         listen_sock.bind((host, port))
         port = listen_sock.getsockname()[1]
         
-        msg = str(port) + content + '\0'*(MSG_SIZE - len(content))
+        msg = "@@@" + str(port) + content + '\0'*(MSG_SIZE - len(content))
 
         listen_sock.listen()
         # send msg
@@ -547,6 +547,8 @@ def set_tags(entryid, content: str):
             # Decode list-of-byte-strings to UTF8 and parse JSON data
             message_bytes = b''.join(message_chunks)
             message_decode = message_bytes.decode("utf-8")
+            
+            # remove trailing empty portion of message
             message_str = message_decode.replace("\x00", "")
 
             msg_tags = message_str.split()
@@ -572,7 +574,7 @@ def set_tags(entryid, content: str):
                 "INSERT INTO tags "
                 "(tagname) "
                 "VALUES(?)",
-                (tag)
+                (tag, )
             )
             cur.fetchone()
             cur = database.execute(
@@ -591,6 +593,6 @@ def set_tags(entryid, content: str):
             "INSERT INTO entry_to_tag "
             "(entryid, tagid) "
             "VALUES(?, ?)",
-            (entryid, tagid)
+            (entryid, tagid, )
         )
         cur.fetchone()

@@ -15,11 +15,19 @@ extern const std::vector<std::string> TAG_LISTS;
 
 extern std::map<std::string, std::vector<std::string>> tag_words;
 
+enum class VALID : bool {
+    GOOD,
+    BAD,
+};
+
 // tag engine class
 
 class Tags {
     private:
 
+    VALID v;
+
+    int dest_port;
     int dest;
 
     // words map: {word, freq}
@@ -43,9 +51,15 @@ class Tags {
 
     // return the tags vector
     std::vector<std::string> get_tags();
+    
+    // connect to the dest socket
+    int connect_dest();
 
     // return dest socket
     int get_dest_sock();
+
+
+    bool is_valid();
 };
 
 #endif

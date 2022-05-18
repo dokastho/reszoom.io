@@ -28,9 +28,20 @@ Tags::Tags()
 
 Tags::Tags(char *msg_str)
 {
+    // validate message
+    for (size_t i = 0; i < 3; i++)
+    {
+        if (msg_str[i] != '@')
+        {
+            v = VALID::BAD;
+            return;
+        }
+        
+    }
+    
     // unpack port
-    int port = 0, portlen = 5;
-    for (size_t i = 0; i < 5; i++)
+    int port = 0, portlen = 8;
+    for (size_t i = 3; i < 8; i++)
     {
         // base 10 ops
         port *= 10;  // move digit over
@@ -44,18 +55,8 @@ Tags::Tags(char *msg_str)
         }
         port += digit;
     }
-    // create a socket with the port
-    sockaddr_in addr;
 
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = htons(port);
-
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    connect(sock, (sockaddr *)&addr, sizeof(addr));
-
-    this->dest = sock;
+    dest_port = port;
 
     // unpack message
     std::stringstream ss;
@@ -110,7 +111,32 @@ std::vector<std::string> Tags::get_tags()
     return vec;
 }
 
+int Tags::connect_dest()
+{
+    // create a socket with the port
+    sockaddr_in addr;
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(dest_port);
+
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (connect(sock, (sockaddr *)&addr, sizeof(addr)) == -1)
+    {
+        return 1;
+    };
+
+    this->dest = sock;
+    return 0;
+}
+
 int Tags::get_dest_sock()
 {
     return dest;
+}
+
+bool Tags::is_valid()
+{
+    return v == VALID::GOOD;
 }
