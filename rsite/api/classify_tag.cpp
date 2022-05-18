@@ -14,7 +14,7 @@ std::string to_lower(std::string s)
     std::string l = s;
     for (size_t i = 0; i < s.size(); i++)
     {
-        if (s[i] <= 90 && s[i] >= 65)
+        if (s[i] <= 'Z' && s[i] >= 'A')
         {
             l[i] = tolower(s[i]);
         }
