@@ -230,4 +230,4 @@ def rest_api_auth_user():
 def print_log(msg: str, code: None) -> str:
     now = datetime.utcnow()
     now = now.strftime("%d/%b/%Y %H:%M:%S")
-    print(f'localhost - - [{now}] {msg} {code}')
+    print(f'localhost - - [{now}] {msg} {code} -')

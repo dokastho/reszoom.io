@@ -313,6 +313,11 @@ def do_create(body):
             cur.fetchone()
 
         entryid = newEntryid
+        
+        # set tags
+        # only necessary for new tags
+        t = Thread(target=set_tags, args=(entryid, body['content'],))
+        t.start()
 
     else:
         # entry already in db so increment freq
@@ -342,10 +347,6 @@ def do_create(body):
             (freq, freq, entryid, )
         )
         cur.fetchone()
-        
-    # set tags
-    t = Thread(target=set_tags, args=(entryid, body['content'],))
-    t.start()
 
     # get eid from resume_to_entry (including the pos autoincrement)
     cur = database.execute(
