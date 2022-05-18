@@ -18,11 +18,11 @@ const unsigned int MAX_MESSAGE_SIZE = 256;
 std::map<std::string, std::vector<std::string>> tag_words;
 
 const std::vector<std::string> TAG_LISTS = {
-    "backend.tags",
-    "db.tags",
-    "frontend.tags",
-    "lang.tags",
-    "web.tags"};
+    "backend",
+    "db",
+    "frontend",
+    "lang",
+    "web"};
 
 // print with the cout_lock
 void lock_print(const char *str)
@@ -66,13 +66,12 @@ int init()
         // read files
         std::string tagFile = TAG_LISTS[i];
         std::fstream fp;
-        fp.open("files/"+tagFile);
+        fp.open("files/" + tagFile + ".tags");
 
         if (!fp.is_open())
         {
             return 1;
         }
-        
 
         // store the keywords for each tag in memory
         std::string line;
@@ -109,6 +108,7 @@ int handle_connection(int connectionfd)
         recvd += rval;
     } while (msg_cstr[strlen(msg_cstr)] != '\0'); // old: recv() returns 0 when client closes
     rcv_msg_lock.unlock();
+    close(connectionfd);
     // (2) Print out the message
     std::stringstream out;
     out << "Client " << connectionfd << " says " << msg_cstr;
@@ -118,6 +118,8 @@ int handle_connection(int connectionfd)
     Tags t(msg_cstr);
     t.assign_tags();
 
+    int send_sock = t.get_dest_sock();
+
     std::vector<std::string> tags = t.get_tags();
 
     // construct space-separated reply
@@ -126,20 +128,20 @@ int handle_connection(int connectionfd)
     {
         ss << tags[i] << " ";
     }
-    
+
     std::string response = ss.str();
 
-    const char* reply = response.c_str();
+    const char *reply = response.c_str();
 
     // (4) Send reply
     out.str("");
-    out << "Sent " << reply << " to " << connectionfd;
+    out << "Sent " << reply << " to " << send_sock;
     lock_print(out.str().c_str());
 
-    send_bytes(connectionfd, reply, MAX_MESSAGE_SIZE);
+    send_bytes(send_sock, reply, MAX_MESSAGE_SIZE);
 
     // (5) Close connection
-    close(connectionfd);
+    close(send_sock);
 
     return 0;
 }

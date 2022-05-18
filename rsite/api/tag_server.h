@@ -20,6 +20,8 @@ extern std::map<std::string, std::vector<std::string>> tag_words;
 class Tags {
     private:
 
+    int dest;
+
     // words map: {word, freq}
     std::map<std::string, int> words;
 
@@ -41,6 +43,9 @@ class Tags {
 
     // return the tags vector
     std::vector<std::string> get_tags();
+
+    // return dest socket
+    int get_dest_sock();
 };
 
 #endif

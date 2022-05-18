@@ -507,16 +507,19 @@ def set_tags(entryid, content: str):
     server_host = "localhost"
     server_port = 8888
 
-    MSG_SIZE = 256
-
-    msg = content + '\0'*(MSG_SIZE - len(content))
+    MSG_SIZE = 261
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listen_sock:
         # bind worker socket to its server
         listen_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
         listen_sock.bind((host, port))
+        port = listen_sock.getsockname()[1]
+        
+        msg = str(port) + content + '\0'*(MSG_SIZE - len(content))
 
         listen_sock.listen()
+        # send msg
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as send_sock:
 
             send_sock.connect((server_host, server_port))

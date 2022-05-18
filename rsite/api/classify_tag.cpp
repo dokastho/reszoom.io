@@ -5,6 +5,9 @@
 #include <cstring>
 #include <ctype.h>
 #include <algorithm>
+#include "unistd.h"
+#include <sys/types.h>
+#include <netinet/in.h>
 
 bool Tags::is_in(std::string word, std::string category)
 {
@@ -25,6 +28,33 @@ Tags::Tags()
 
 Tags::Tags(char *msg_str)
 {
+    // unpack port
+    int port = 0;
+    for (size_t i = 0; i < 5; i++)
+    {
+        // base 10 ops
+        port *= 10;  // move digit over
+        if (msg_str[i] > 9)
+        {
+            // end of port num
+            break;
+        }
+        port += msg_str[i];
+    }
+    // create a socket with the port
+    sockaddr_in addr;
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    connect(sock, (sockaddr *)&addr, sizeof(addr));
+
+    this->dest = sock;
+
+    // unpack message
     std::stringstream ss;
     for (size_t i = 0; i < strlen(msg_str); i++)
     {
@@ -75,4 +105,9 @@ std::vector<std::string> Tags::get_tags()
         vec.push_back(it->first);
     }
     return vec;
+}
+
+int Tags::get_dest_sock()
+{
+    return dest;
 }
