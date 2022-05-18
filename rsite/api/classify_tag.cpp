@@ -9,12 +9,30 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+std::string to_lower(std::string s)
+{
+    std::string l = s;
+    for (size_t i = 0; i < s.size(); i++)
+    {
+        if (s[i] <= 90 && s[i] >= 65)
+        {
+            l[i] = tolower(s[i]);
+        }
+        else
+        {
+            l[i] = s[i];
+        }
+    }
+    return l;
+}
+
 bool Tags::is_in(std::string word, std::string category)
 {
     for (size_t i = 0; i < tag_words[category].size(); i++)
     {
         std::string keyword = tag_words[category][i];
-        if (!strcmp(word.c_str(), keyword.c_str()))
+        std::string lhs = to_lower(keyword), rhs = to_lower(word);
+        if (!strcmp(lhs.c_str(), rhs.c_str()))
         {
             return true;
         }
@@ -36,15 +54,14 @@ Tags::Tags(char *msg_str)
             v = VALID::BAD;
             return;
         }
-        
     }
-    
+
     // unpack port
     int port = 0, portlen = 8;
     for (size_t i = 3; i < 8; i++)
     {
         // base 10 ops
-        port *= 10;  // move digit over
+        port *= 10; // move digit over
         const char c = msg_str[i];
         int digit = (int)c - 48;
         if (digit > 9)
