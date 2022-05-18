@@ -577,7 +577,7 @@ def set_tags(entryid, content: str):
         # construct db tags dict
         db_tags_dict = {}
         for tag in db_tags:
-            db_tags_dict[tag['name']] = tag['tagid']
+            db_tags_dict[tag['tagname']] = tag['tagid']
 
         # insert tags if necessary
         for tag in msg_tags:

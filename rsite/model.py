@@ -187,6 +187,14 @@ def delete_helper(entryid, freq):
             (entryid,)
         )
         cur.fetchone()
+        
+        # delete teids associated with this entry
+        cur = database.execute(
+            "DELETE FROM entry_to_tag "
+            "WHERE entryid == ?",
+            (entryid,)
+        )
+        cur.fetchone()
 
     else:
         rid = flask.request.args.get("resumeid")
