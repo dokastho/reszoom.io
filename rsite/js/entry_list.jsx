@@ -544,13 +544,13 @@ class Entries extends React.Component {
                           // ENTRY TYPE
                           <div>
                             {/* render content */}
-                            {'\t• '.concat(entries[e.entryid].content)}
+                            <div>{'\t• '.concat(entries[e.entryid].content)}</div>
                             {/* render tags */}
                             {
                               e.entryid in tags
                                 ? (
                                   tags[e.entryid].map((t) => (
-                                    <span key={t.tagid}>{t.tagname}</span>
+                                    <span key={t.tagid}>{`${t.tagname} `}</span>
                                   ))
                                 ) : null
                             }

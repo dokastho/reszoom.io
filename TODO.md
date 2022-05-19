@@ -38,7 +38,9 @@
   - [x] adding an entry will update tags based on the posts
   - [ ] select tags on create
   - [x] edit updates tags
+  - [ ] reload page periodically to update tags
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
+- [ ] testing! mark done when I feel like it
 
 down the road...
 - [ ] animations
