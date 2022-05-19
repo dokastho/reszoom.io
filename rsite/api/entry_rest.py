@@ -537,6 +537,7 @@ def set_tags(entryid, content: str):
         # send msg
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as send_sock:
 
+            # attempt to establish connection with tag server
             try:
                 send_sock.connect((server_host, server_port))
             except:

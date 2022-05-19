@@ -31,7 +31,7 @@ def get_tags(entryid):
     tags = cur.fetchall()
 
     # construct response
-    # entryid: array of tag names
+    # entryid: array of tag name/id pairs
     data = {
         "tags": []
         }
@@ -43,6 +43,6 @@ def get_tags(entryid):
             (tag['tagid'],)
         )
         t = cur.fetchone()
-        data["tags"].append(t['tagname'])
+        data["tags"].append(t)
 
     return flask.jsonify(data), 201
