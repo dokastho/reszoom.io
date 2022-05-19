@@ -25,23 +25,23 @@
 - [x] edit experience -> fork info entry -> propogate changes across subentries???
 - [x] add "edit for all" button to maintain entries
 - [x] change recommend to array of objects instead of an object
-- [ ] add location to info headings
-- [ ] front end design
+- [x] add location to info headings
 - [ ] offer different templates (see ecrc)
 - [ ] resume thumbnails
 - [ ] prevent duplicate entries
 - [ ] offer custom headings, optional headings (leadership experience)
   - [ ] redesign builder.jsx render() method
+- [ ] tags for entries
+  - [ ] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
+  - [x] create adds to entries_to_tags
+  - [x] recommend based on matching tags, offer from all
+  - [x] adding an entry will update tags based on the posts
+  - [ ] select tags on create
+  - [x] edit updates tags
+- [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 
 down the road...
 - [ ] animations
-- [ ] tags for entries
-  - [ ] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
-  - [ ] create adds to entries_to_tags
-  - [ ] recommend based on matching tags, offer from all
-  - [ ] adding an entry will update tags based on the posts
-  - [ ] select tags on create
-  - [ ] edit updates tags 
 
 random ideas
 - [ ] cache entries so that if you delete the last entry but want to undo before saving
