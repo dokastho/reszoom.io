@@ -550,7 +550,7 @@ class Entries extends React.Component {
                               e.entryid in tags
                                 ? (
                                   tags[e.entryid].map((t) => (
-                                    <span key={e.entryid}>{t}</span>
+                                    <span key={t.tagid}>{t.tagname}</span>
                                   ))
                                 ) : null
                             }
