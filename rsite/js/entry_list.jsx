@@ -39,6 +39,9 @@ class Entries extends React.Component {
       // key: entryid val: CONTENTS & PRIORITY of entry
       // note that on submit we create an eid
       recommended: [],
+      // tags for entries
+      // key: entryid value: array of tag names
+      tags: {},
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -52,13 +55,18 @@ class Entries extends React.Component {
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
     this.fetchRecommended = this.fetchRecommended.bind(this);
+    this.fetchTags = this.fetchTags.bind(this);
   }
 
   componentDidMount() {
     const {
       eids,
+      entries,
+      header,
+      username,
       resumeid,
       isEntries,
+      parent,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -87,7 +95,25 @@ class Entries extends React.Component {
       });
     }
 
+    // fetch recommended entries
     this.fetchRecommended();
+
+    // fetch tags for each entry
+    const entryidList = Object.keys(entries);
+    entryidList.forEach((entryid) => {
+      this.fetchTags(entryid);
+    });
+
+    // set state
+    this.setState({
+      eids,
+      entries,
+      header,
+      username,
+      resumeid,
+      isEntries,
+      parent,
+    });
 
     console.log('mount');
     console.log(this);
@@ -170,6 +196,21 @@ class Entries extends React.Component {
     });
   }
 
+  fetchTags(entryid) {
+    // fetch tags for entry
+    fetch(`/api/v1/${entryid}/tags`, { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        const { tags } = this.state;
+        tags[entryid] = data.tags;
+        this.setState({ tags });
+      })
+      .catch((error) => console.log(error));
+  }
+
   // create an entry
   createEntry(event, entryid) {
     event.preventDefault();
@@ -224,31 +265,38 @@ class Entries extends React.Component {
         location,
         title,
       }),
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      return response.json();
-    }).then((data) => {
-      if (!isEntries) {
-        subEntries[data.eid.entryid] = {};
-        subEids[data.eid.entryid] = [];
-        subFetched[data.eid.entryid] = true;
-      }
-      entries[data.eid.entryid] = data.entry;
-      // clear staged content
-      stagedEntries = this.setStagedEntriesEmpty(entryid);
-      // also clear stagedEntries[0] to fix form render
-      stagedEntries = this.setStagedEntriesEmpty(0);
-      this.setState((prevState) => ({
-        eids: prevState.eids.concat(data.eid),
-        entries,
-        subEntries,
-        subEids,
-        subFetched,
-      }));
-    }).then(() => {
-      // update recommended
-      this.fetchRecommended();
     })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        if (!isEntries) {
+          subEntries[data.eid.entryid] = {};
+          subEids[data.eid.entryid] = [];
+          subFetched[data.eid.entryid] = true;
+        }
+        entries[data.eid.entryid] = data.entry;
+        // clear staged content
+        stagedEntries = this.setStagedEntriesEmpty(entryid);
+        // also clear stagedEntries[0] to fix form render
+        stagedEntries = this.setStagedEntriesEmpty(0);
+        this.setState((prevState) => ({
+          eids: prevState.eids.concat(data.eid),
+          entries,
+          subEntries,
+          subEids,
+          subFetched,
+        }));
+      })
+      .then(() => {
+        // update recommended
+        this.fetchRecommended();
+      })
+      .then(() => {
+        // fetch tags
+        this.fetchTags();
+      })
       .catch((error) => console.log(error));
     console.log(username);
   }
@@ -265,12 +313,15 @@ class Entries extends React.Component {
       this.setState((prevState) => {
         // TODO: delete staged entry?
         const newEntries = prevState.entries;
+        const { tags } = prevState;
         delete newEntries[entryid];
+        delete tags[entryid];
         const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
 
         return {
           entries: newEntries,
           eids: neweids,
+          tags,
         };
       });
     }).then(() => {
@@ -347,27 +398,34 @@ class Entries extends React.Component {
         location,
         title,
       }),
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-      return response.json();
-    }).then((data) => {
-      if (!isEntries) {
-        subFetched[data.eid.entryid] = true;
-      }
-      // clear staged content
-      stagedEntries = this.setStagedEntriesEmpty(entryid);
-      // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
-      delete entries[entryid];
-      eids[idx] = data.eid;
-      entries[data.eid.entryid] = data.entry;
-      this.setState({
-        eids,
-        entries,
-      });
-    }).then(() => {
-      // update recommended
-      this.fetchRecommended();
     })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        if (!isEntries) {
+          subFetched[data.eid.entryid] = true;
+        }
+        // clear staged content
+        stagedEntries = this.setStagedEntriesEmpty(entryid);
+        // delete old entry in case the entryid has changed (ie when a duplicated entry is edited)
+        delete entries[entryid];
+        eids[idx] = data.eid;
+        entries[data.eid.entryid] = data.entry;
+        this.setState({
+          eids,
+          entries,
+        });
+      })
+      .then(() => {
+        // update recommended
+        this.fetchRecommended();
+      })
+      .then(() => {
+        // fetch tags
+        this.fetchTags();
+      })
       .catch((error) => console.log(error));
   }
 
@@ -438,6 +496,7 @@ class Entries extends React.Component {
       subEntries,
       subEids,
       subFetched,
+      tags,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -484,7 +543,18 @@ class Entries extends React.Component {
                         isEntries ? (
                           // ENTRY TYPE
                           <div>
+                            {/* render content */}
                             {'\t• '.concat(entries[e.entryid].content)}
+                            {/* render tags */}
+                            {
+                              e.entryid in tags
+                                ? (
+                                  tags[e.entryid].map((t) => (
+                                    <span key={e.entryid}>{t}</span>
+                                  ))
+                                ) : null
+                            }
+                            {/* render buttons */}
                             <div className="editdelete">
                               <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
                               <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
