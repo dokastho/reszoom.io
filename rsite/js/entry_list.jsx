@@ -507,7 +507,7 @@ class Entries extends React.Component {
             <div key={e.entryid}>
               {e.entryid in stagedEntries && stagedEntries[e.entryid].add
                 ? (
-                  <span>
+                  <div className="edit-wrapper">
 
                     {
                       // EDIT FORM
