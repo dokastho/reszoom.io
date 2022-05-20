@@ -89,6 +89,14 @@ input[type=submit] {
 
 /* entries */
 
+.edit-wrapper {
+    border: black;
+    border-radius: 8px;
+    border-width: 2px;
+    background-color:#ccc;
+    padding: 2px;
+}
+
 .entry-wrapper:hover {
     border: black;
     border-radius: 8px;
