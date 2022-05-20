@@ -33,7 +33,7 @@
                     // "text": "handle SIGUSR1 nostop noprint"
                 }
             ],
-            "preLaunchTask": "C/C++: make",
+            "preLaunchTask": "Make binaries",
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {

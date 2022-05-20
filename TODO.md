@@ -58,3 +58,4 @@ random ideas
 
 tag server
 - [ ] sanitize & validate inputs
+- [ ] make tasks run both tag server and webserver
