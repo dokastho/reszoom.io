@@ -537,7 +537,7 @@ class Entries extends React.Component {
                 )
                 // render the entry content and delete button
                 : (
-                  <div>
+                  <div className="entry-wrapper">
                     <span>
                       {
                         isEntries ? (

@@ -79,6 +79,14 @@ input[type=submit] {
     font-size: medium;
 }
 
+/* entries */
+
+.entry-wrapper:hover {
+    border: black;
+    border-radius: 8px;
+    border-width: 2px;
+}
+
 /* info entry */
 
 /* reminder that content in this context is institution name */
