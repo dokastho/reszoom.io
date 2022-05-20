@@ -42,7 +42,7 @@
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 - [ ] testing! mark done when I feel like it
 - [x] make buttons appear on div click
-- [ ] **fix:** elements of div are squashed by the div click (buttons, subentries)
+- [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
 
 down the road...
 - [ ] animations
@@ -58,4 +58,4 @@ random ideas
 
 tag server
 - [ ] sanitize & validate inputs
-- [ ] make tasks run both tag server and webserver
+- [x] make tasks run both tag server and webserver
