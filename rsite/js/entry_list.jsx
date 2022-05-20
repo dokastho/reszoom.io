@@ -553,79 +553,75 @@ class Entries extends React.Component {
                 )
                 // render the entry content and delete button
                 : (
-                  <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
-                    <span>
-                      {
-                        isEntries ? (
-                          // ENTRY TYPE
-                          <div>
-                            {/* render content */}
-                            <div>{'\t• '.concat(entries[e.entryid].content)}</div>
-                            {/* render tags */}
-                            {
-                              e.entryid in tags ? (
-                                tags[e.entryid].map((t) => (
-                                  <span key={t.tagid}>{`${t.tagname} `}</span>
-                                ))
-                              ) : null
-                            }
+                  <span>
+                    {
+                      isEntries ? (
+                        // ENTRY TYPE
+                        <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
+                          {/* render content */}
+                          <div>{'\t• '.concat(entries[e.entryid].content)}</div>
+                          {/* render tags */}
+                          {
+                            e.entryid in tags ? (
+                              tags[e.entryid].map((t) => (
+                                <span key={t.tagid}>{`${t.tagname} `}</span>
+                              ))
+                            ) : null
+                          }
+                        </div>
+                      ) : (
+                        // INFO TYPE
+                        <span key={e.entryid}>
+                          <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
+                            {/* render name of institution */}
+                            <span className="content">
+                              {entries[e.entryid].content}
+                            </span>
+                            {/* render location */}
+                            <span className="location">
+                              {entries[e.entryid].location}
+                            </span>
+                            {/* render gpa */}
+                            <div>
+                              <span className="gpa">
+                                {isEducation ? (
+                                  <span>
+                                    GPA:
+                                    {' '.concat(entries[e.entryid].gpa)}
+                                  </span>
+                                ) : null}
+                              </span>
+                            </div>
+                            {/* render title */}
+                            <span className="title">
+                              {entries[e.entryid].title}
+                            </span>
+                            {/* render date */}
+                            <span className="date">
+                              {entries[e.entryid].begin}
+                              -
+                              {entries[e.entryid].end}
+                            </span>
                           </div>
-                        ) : (
-                          // INFO TYPE
-                          <span key={e.entryid}>
-                            <div>
-                              {/* render name of institution */}
-                              <span className="content">
-                                {entries[e.entryid].content}
-                              </span>
-                              {/* render location */}
-                              <span className="location">
-                                {entries[e.entryid].location}
-                              </span>
-                              {/* render gpa */}
-                              <div>
-                                <span className="gpa">
-                                  {isEducation ? (
-                                    <span>
-                                      GPA:
-                                      {' '.concat(entries[e.entryid].gpa)}
-                                    </span>
-                                  ) : null}
-                                </span>
-                              </div>
-                            </div>
-                            <div>
-                              {/* render title */}
-                              <span className="title">
-                                {entries[e.entryid].title}
-                              </span>
-                              {/* render date */}
-                              <span className="date">
-                                {entries[e.entryid].begin}
-                                -
-                                {entries[e.entryid].end}
-                              </span>
-                            </div>
-                            {/* render subentries */}
-                            {
-                              subFetched[e.entryid]
-                                ? (
-                                  <Entries
-                                    entries={subEntries[e.entryid]}
-                                    eids={subEids[e.entryid]}
-                                    resumeid={resumeid}
-                                    header={header}
-                                    username={username}
-                                    isEntries={1}
-                                    parent={e.entryid}
-                                  />
-                                ) : null
-                            }
-                          </span>
-                        )
-                      }
-                    </span>
-                  </div>
+                          {/* render subentries */}
+                          {
+                            subFetched[e.entryid]
+                              ? (
+                                <Entries
+                                  entries={subEntries[e.entryid]}
+                                  eids={subEids[e.entryid]}
+                                  resumeid={resumeid}
+                                  header={header}
+                                  username={username}
+                                  isEntries={1}
+                                  parent={e.entryid}
+                                />
+                              ) : null
+                          }
+                        </span>
+                      )
+                    }
+                  </span>
                 )}
             </div>
           ))

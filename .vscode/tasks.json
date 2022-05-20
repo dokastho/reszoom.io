@@ -85,6 +85,18 @@
             },
             "detail": "Reset the sqlite database"
         },
+        {
+            "type": "shell",
+            "label": "React Build",
+            "command": "./bin/build",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            },
+            "detail": "Reset the sqlite database"
+        },
     ],
     "version": "2.0.0"
 }
