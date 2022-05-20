@@ -41,6 +41,7 @@
   - [ ] reload page periodically to update tags
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 - [ ] testing! mark done when I feel like it
+- [ ] make buttons appear on div click
 
 down the road...
 - [ ] animations
