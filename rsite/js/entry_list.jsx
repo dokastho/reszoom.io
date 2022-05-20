@@ -515,6 +515,14 @@ class Entries extends React.Component {
                         // ENTRY TYPE
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
                           <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
+                          {/* OG buttons */}
+                          {idx === 0 ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                          {/* render down button for all entries not on last line */}
+                          {idx === max ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                          <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                           <input type="submit" />
                         </form>
@@ -529,6 +537,14 @@ class Entries extends React.Component {
                           {isEducation ? <input type="number" step="0.01" onChange={(event) => this.handleEntryChange(event, e.entryid, 'gpa')} value={stagedEntries[e.entryid].gpa} min="0.0" max="4.0" /> : null}
                           <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
                           {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
+                          {/* OG buttons */}
+                          {idx === 0 ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
+
+                          {/* render down button for all entries not on last line */}
+                          {idx === max ? null
+                            : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                          <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                         </form>
                       )
@@ -537,7 +553,7 @@ class Entries extends React.Component {
                 )
                 // render the entry content and delete button
                 : (
-                  <div>
+                  <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
                     <span>
                       {
                         isEntries ? (
@@ -547,18 +563,12 @@ class Entries extends React.Component {
                             <div>{'\t• '.concat(entries[e.entryid].content)}</div>
                             {/* render tags */}
                             {
-                              e.entryid in tags
-                                ? (
-                                  tags[e.entryid].map((t) => (
-                                    <span key={t.tagid}>{`${t.tagname} `}</span>
-                                  ))
-                                ) : null
+                              e.entryid in tags ? (
+                                tags[e.entryid].map((t) => (
+                                  <span key={t.tagid}>{`${t.tagname} `}</span>
+                                ))
+                              ) : null
                             }
-                            {/* render buttons */}
-                            <div className="editdelete">
-                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                            </div>
                           </div>
                         ) : (
                           // INFO TYPE
@@ -596,11 +606,6 @@ class Entries extends React.Component {
                                 {entries[e.entryid].end}
                               </span>
                             </div>
-                            {/* these buttons are identical to above */}
-                            <div className="editdelete">
-                              <button type="button" onClick={this.editEntry.bind(this, e.entryid)}>Edit</button>
-                              <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                            </div>
                             {/* render subentries */}
                             {
                               subFetched[e.entryid]
@@ -622,15 +627,6 @@ class Entries extends React.Component {
                     </span>
                   </div>
                 )}
-              <div className="updown">
-                {/* render up button for all entries not on first line */}
-                {idx === 0 ? null
-                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
-
-                {/* render down button for all entries not on last line */}
-                {idx === max ? null
-                  : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-              </div>
             </div>
           ))
         }

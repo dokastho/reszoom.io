@@ -65,7 +65,15 @@ input[type=submit] {
 
 /* resume view */
 
-/* .resume-content */
+.resume-content {
+    max-width: 816px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 16px;
+}
 
 .about-me {
     text-align: center;
@@ -77,6 +85,17 @@ input[type=submit] {
 }
 .email {
     font-size: medium;
+}
+
+/* entries */
+
+.entry-wrapper:hover {
+    border: black;
+    border-radius: 8px;
+    border-width: 2px;
+    background-color:#ccc;
+    padding: 2px;
+    transition: all .2s ease-out;
 }
 
 /* info entry */
