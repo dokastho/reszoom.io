@@ -42,6 +42,8 @@ class Entries extends React.Component {
       // tags for entries
       // key: entryid value: array of tag names
       tags: {},
+      // entryid that is being focused on
+      focus: 0,
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -52,6 +54,7 @@ class Entries extends React.Component {
     this.setAddTrue = this.setAddTrue.bind(this);
     this.setAddFalse = this.setAddFalse.bind(this);
     this.setStagedEntriesEmpty = this.setStagedEntriesEmpty.bind(this);
+    this.setFocus = this.setFocus.bind(this);
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
     this.fetchRecommended = this.fetchRecommended.bind(this);
@@ -153,6 +156,10 @@ class Entries extends React.Component {
       title: '',
     };
     return stagedEntries;
+  }
+
+  setFocus(entryid) {
+    this.setState({ focus: entryid });
   }
 
   fetchRecommended() {
@@ -537,7 +544,7 @@ class Entries extends React.Component {
                 )
                 // render the entry content and delete button
                 : (
-                  <div>
+                  <div className="entry-wrapper" onClick={() => this.setFocus(e.entryid)}>
                     <span>
                       {
                         isEntries ? (
