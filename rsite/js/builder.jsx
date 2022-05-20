@@ -142,6 +142,7 @@ class ResumeBuilder extends React.Component {
     } = this.state;
     return (
       <div className="resume-content">
+        <a href="/resume/">Go back to resumes</a>
         <div className="name">{resumename}</div>
         <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
         <div className="about-me">
@@ -193,7 +194,7 @@ class ResumeBuilder extends React.Component {
             <input type="submit" value="Delete Resume" />
           </form>
         </div>
-        <a href="/resume/">Go back to resumes</a>
+
         <p>resume content 😊</p>
       </div>
     );
