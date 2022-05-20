@@ -41,7 +41,8 @@
   - [ ] reload page periodically to update tags
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 - [ ] testing! mark done when I feel like it
-- [ ] make buttons appear on div click
+- [x] make buttons appear on div click
+- [ ] **fix:** elements of div are squashed by the div click (buttons, subentries)
 
 down the road...
 - [ ] animations
