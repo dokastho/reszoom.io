@@ -141,60 +141,63 @@ class ResumeBuilder extends React.Component {
       email,
     } = this.state;
     return (
-      <div className="resume-content">
-        <div className="name">{resumename}</div>
-        <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
-        <div className="about-me">
-          <div className="name"><h1>{fullname}</h1></div>
-          <div className="email"><h3>{email}</h3></div>
-        </div>
-        {
-          // render education-experience based on type
-          resumetype
-            ? (
-              <div>
-                <div id="education">
-                  <h1>Education</h1>
-                  <hr />
-                  <div className="info" />
-                </div>
-                <div id="experience">
-                  <h1>Experience</h1>
-                  <hr />
-                  <div className="info" />
-                </div>
-              </div>
-            )
-            : (
-              <div>
-                <div id="experience">
-                  <h1>Experience</h1>
-                  <hr />
-                  <div className="info" />
-                </div>
-                <div id="education">
-                  <h1>Education</h1>
-                  <hr />
-                  <div className="info" />
-                </div>
-              </div>
-            )
-        }
-        <div id="project">
-          <h1>Project</h1>
-          <hr />
-          <div className="info" />
-          <div className="entries" />
-        </div>
-        <div className="edit-form">
-          <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
-            <input type="hidden" name="id" value={resumeid} />
-            <input type="hidden" name="operation" value="delete" />
-            <input type="submit" value="Delete Resume" />
-          </form>
-        </div>
+      <div>
         <a href="/resume/">Go back to resumes</a>
-        <p>resume content 😊</p>
+        <div className="resume-content">
+          <div className="name">{resumename}</div>
+          <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
+          <div className="about-me">
+            <div className="name"><h1>{fullname}</h1></div>
+            <div className="email"><h3>{email}</h3></div>
+          </div>
+          {
+            // render education-experience based on type
+            resumetype
+              ? (
+                <div>
+                  <div id="education">
+                    <h1>Education</h1>
+                    <hr />
+                    <div className="info" />
+                  </div>
+                  <div id="experience">
+                    <h1>Experience</h1>
+                    <hr />
+                    <div className="info" />
+                  </div>
+                </div>
+              )
+              : (
+                <div>
+                  <div id="experience">
+                    <h1>Experience</h1>
+                    <hr />
+                    <div className="info" />
+                  </div>
+                  <div id="education">
+                    <h1>Education</h1>
+                    <hr />
+                    <div className="info" />
+                  </div>
+                </div>
+              )
+          }
+          <div id="project">
+            <h1>Project</h1>
+            <hr />
+            <div className="info" />
+            <div className="entries" />
+          </div>
+          <div className="edit-form">
+            <form action="/resume/commit/?target=/resume" method="post" encType="multipart/form-data">
+              <input type="hidden" name="id" value={resumeid} />
+              <input type="hidden" name="operation" value="delete" />
+              <input type="submit" value="Delete Resume" />
+            </form>
+          </div>
+
+          <p>resume content 😊</p>
+        </div>
       </div>
     );
   }
