@@ -21,8 +21,9 @@
             "detail": "Compile the tag_server binary"
         },
         {
-            "type": "shell",
-            "label": "tagserver_start",
+            "type": "process",
+            "label": "Tag Server",
+            "isBackground": true,
             "command": "./tag_server",
             "args": [
                 "8888"
@@ -35,8 +36,9 @@
             ],
             "group": {
                 "kind": "build",
-                "isDefault": false
+                "isDefault": true
             },
+            "detail": "Start the tag server",
             "problemMatcher": [
                 {
                   "pattern": [
@@ -53,22 +55,36 @@
                     "endsPattern": ".",
                   }
                 }
-              ],
-            "detail": "Start the tag_server"
+              ]
         },
         {
             "type": "shell",
-            "label": "siterun",
+            "label": "Resume Site Run",
             "command": "./bin/siterun",
             "dependsOn":[
-                "tagserver_start"
+                "Tag Server"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "detail": "Run the entire site"
-        }
+        },
+        {
+            "type": "shell",
+            "label": "DB reset",
+            "command": "./bin/sitedb",
+            "args": [
+                "reset",
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            },
+            "detail": "Reset the sqlite database"
+        },
     ],
     "version": "2.0.0"
 }
