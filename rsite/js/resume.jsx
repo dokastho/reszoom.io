@@ -20,7 +20,7 @@ class ResumePage extends React.Component {
     ReactDOM.render(
       // render the floating sidebar
       <Sidebar />,
-      post.querySelector('.sidebar'),
+      document.getElementById('floating-sidebar'),
     );
     // Call REST API to get the resume information for the user
     fetch('/api/v1/resume/load/?fetch=list', { credentials: 'same-origin' })
@@ -56,7 +56,6 @@ class ResumePage extends React.Component {
     return (
       <div id="resume-content" className="list">
         <div className="resume-list" />
-        <div className="floating-sidebar" />
       </div>
     );
   }
