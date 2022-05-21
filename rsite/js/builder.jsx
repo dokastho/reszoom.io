@@ -40,9 +40,11 @@ class ResumeBuilder extends React.Component {
   componentDidMount() {
     const rid = Number(Cookies.get('resumeid'));
 
+    const sidebar = document.getElementById('floating-sidebar');
+
     ReactDOM.render(
       <a href="/resume/">Go back to resumes</a>,
-      document.getElementById('floating-sidebar'),
+      sidebar.querySelector('render-content'),
     );
 
     // Call REST API to get the user's past entries
