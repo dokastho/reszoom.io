@@ -6,20 +6,22 @@
     </head>
     <body>
         <div id="floating-sidebar">
-            <h1><a href="/">home</a></h1>
-            <h2>
-                login
-            </h2>
-        </div>
-        <div class="site">
-            <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
-                <input type="text" name="username" required/>
-                <input type="password" name="password" required/>
-                <input type="submit" value="login"/>
-                <input type="hidden" name="operation" value="login"/>
-            </form>
-            <p>don't have an account?</p>
-            <a href="/accounts/create/">create one!</a>
+            <div class="wrapper">
+                <h1><a href="/">home</a></h1>
+                <h2>
+                    login
+                </h2>
+            </div>
+            <div class="site">
+                <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+                    <input type="text" name="username" required/>
+                    <input type="password" name="password" required/>
+                    <input type="submit" value="login"/>
+                    <input type="hidden" name="operation" value="login"/>
+                </form>
+                <p>don't have an account?</p>
+                <a href="/accounts/create/">create one!</a>
+            </div>
         </div>
     </body>
 </html>
