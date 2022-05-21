@@ -56,7 +56,6 @@ class ResumePage extends React.Component {
     return (
       <div id="resume-content" className="list">
         <div className="resume-list" />
-        <div className="floating-sidebar" />
       </div>
     );
   }
