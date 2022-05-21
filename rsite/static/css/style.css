@@ -82,6 +82,10 @@ input[type=submit] {
     border-radius: 0.28571429rem;
 }
 
+input.new-resume {
+    background-color: #2da44e;
+}
+
 /* resume view */
 
 .resume-content {
