@@ -40,6 +40,11 @@ class ResumeBuilder extends React.Component {
   componentDidMount() {
     const rid = Number(Cookies.get('resumeid'));
 
+    ReactDOM.render(
+      <a href="/resume/">Go back to resumes</a>,
+      document.querySelector('floating-sidebar'),
+    );
+
     // Call REST API to get the user's past entries
     fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${rid}`, { credentials: 'same-origin' })
       .then((response) => {
@@ -142,7 +147,6 @@ class ResumeBuilder extends React.Component {
     } = this.state;
     return (
       <div>
-        <a href="/resume/">Go back to resumes</a>
         <div className="name">{resumename}</div>
         <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
         <div className="resume-content">

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>insta485</title>
+        <title>Site</title>
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <div class="stuff">
+        <div id="floating-sidebar">
             <h1><a href="/">home</a></h1>
             <h2>
                 <a href="/users/{{logname}}/">{{logname}}</a>
             </h2>
-            <div class="site">
-                <form action="/accounts/?target=/accounts/edit/" method="post" enctype="multipart/form-data">
-                   <p>Profile Picture <input type="file" name="file" accept="image/*"/></p> 
-                   <p>Full Name <input type="text" name="fullname" value="{{fullname}}" required/></p> 
-                   <p>Email <input type="text" name="email" value="{{email}}" required/></p> 
-                    <input type="submit" name="update" value="submit"/>
-                    <input type="hidden" name="operation" value="edit_account"/>
-                  </form>
-            </div>
+        </div>
+        <div class="site">
+            <form action="/accounts/?target=/accounts/edit/" method="post" enctype="multipart/form-data">
+                <p>Profile Picture <input type="file" name="file" accept="image/*"/></p> 
+                <p>Full Name <input type="text" name="fullname" value="{{fullname}}" required/></p> 
+                <p>Email <input type="text" name="email" value="{{email}}" required/></p> 
+                <input type="submit" name="update" value="submit"/>
+                <input type="hidden" name="operation" value="edit_account"/>
+                </form>
         </div>
     </body>
 </html>

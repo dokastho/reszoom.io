@@ -5,17 +5,17 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <div class="stuff">
+        <div id="floating-sidebar">
             <h1><a href="/">home</a></h1>
             <h2>
                 <a href="/users/{{logname}}/">{{logname}}</a>
             </h2>
-            <div class="site">
-                <form action="/accounts/?target=/accounts/create/" method="post" enctype="multipart/form-data">
-                    <input type="submit" name="delete" value="confirm delete account"/>
-                    <input type="hidden" name="operation" value="delete"/>
-                </form>
-            </div>
+        </div>
+        <div class="site">
+            <form action="/accounts/?target=/accounts/create/" method="post" enctype="multipart/form-data">
+                <input type="submit" name="delete" value="confirm delete account"/>
+                <input type="hidden" name="operation" value="delete"/>
+            </form>
         </div>
     </body>
 </html>

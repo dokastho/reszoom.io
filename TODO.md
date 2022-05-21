@@ -55,6 +55,7 @@ random ideas
 - [ ] gpa display must be decimal format
 - [ ] use await instead of subFetched
 - [ ] callback entries in similar manner to recommended
+- [ ] put links to all resumes in sidebar 
 
 tag server
 - [ ] sanitize & validate inputs
