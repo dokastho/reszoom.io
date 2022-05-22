@@ -27,8 +27,6 @@ class NewResume extends React.Component {
             </form>
           </div>
         </div>
-        <p>resume content 😊</p>
-        <p>this pg will have options for filling out basic info, then fwd to resumeid pg</p>
       </div>
     );
   }

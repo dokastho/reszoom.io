@@ -15,7 +15,7 @@ class Sidebar extends React.Component {
   render() {
     return (
       <form action="/resume/new">
-        <input type="submit" value="Create a new resume" />
+        <input className="new-resume" type="submit" value="Create a new resume" />
       </form>
     );
   }
