@@ -33,15 +33,12 @@ class Sidebar extends React.Component {
         <h1>{pagename}</h1>
         {
           // render extra content
-          content.map((c, i) => (
-            <div key={i}>
+          content.map((c) => (
+            <div className="resume-name" key={c.text}>
               {c.link === null ? <p>{c.text}</p> : <a href={c.link}>{c.text}</a>}
             </div>
           ))
         }
-        <form action="/resume/new">
-          <input className="new-resume" type="submit" value="Create a new resume" />
-        </form>
       </div>
     );
   }
