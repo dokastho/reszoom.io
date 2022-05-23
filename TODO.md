@@ -43,6 +43,11 @@
 - [ ] testing! mark done when I feel like it
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
+- [ ] pretty up the resume list page
+  - [ ] show tags for each
+  - [ ] show description with ... if it gets too long
+    - [ ] add desc to resume schema
+    - [ ] display desc at top of resume page
 
 down the road...
 - [ ] animations
