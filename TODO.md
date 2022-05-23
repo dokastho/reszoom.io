@@ -40,14 +40,15 @@
   - [x] edit updates tags
   - [ ] reload page periodically to update tags
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
-- [ ] testing! mark done when I feel like it
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
 - [ ] pretty up the resume list page
   - [ ] show tags for each
-  - [ ] show description with ... if it gets too long
-    - [ ] add desc to resume schema
-    - [ ] display desc at top of resume page
+  - [x] show description with ... if it gets too long
+  - [x] add optional desc to resume schema
+  - [x] display desc at top of resume page
+  - [ ] make desc editable
+- [ ] testing! mark done when I feel like it
 
 down the road...
 - [ ] animations

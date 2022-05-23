@@ -23,7 +23,9 @@ class NewResume extends React.Component {
               <label htmlFor="typebox">Are you a student?</label>
               <input type="checkbox" name="type" id="typebox" />
               <input type="text" name="name" required placeholder="New Resume Name" />
+              <input type="text" name="desc" placeholder="Add a description?" />
               <input type="hidden" name="operation" value="create" />
+              <input type="submit" />
             </form>
           </div>
         </div>

@@ -11,10 +11,10 @@ VALUES ('jag', 'H.V. Jagadish', 'jag@umich.edu', '73ab33bd357c3fd42292487b825880
 INSERT INTO users(username, fullname, email, filename, password)
 VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', 'tdokaspic.png', 'password');
 -- add a resume to tdokas
-INSERT INTO resumes(owner, name, typename)
-VALUES ('tdokas', 'resume 1', 1);
-INSERT INTO resumes(owner, name, typename)
-VALUES ('tdokas', 'resume 2', 0);
+INSERT INTO resumes(owner, name, typename, description)
+VALUES ('tdokas', 'resume 1', 1, 'my first student resume.');
+INSERT INTO resumes(owner, name, typename, description)
+VALUES ('tdokas', 'resume 2', 0, '..........................................................end....this should only be viewable on the resume page.');
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 3', 1);
 -- add some entries for the resume
