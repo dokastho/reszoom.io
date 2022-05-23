@@ -46,7 +46,7 @@ class ResumeBuilder extends React.Component {
 
     ReactDOM.render(
       <a href="/resume/">Go back to resumes</a>,
-      sidebar.querySelector('.render'),
+      sidebar,
     );
 
     // Call REST API to get the user's past entries
