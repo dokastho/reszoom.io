@@ -15,4 +15,4 @@ def current_user():
 
     logname, _ = rest_api_auth_user()
     
-    return flask.jsonify({logname}), 201
+    return flask.jsonify({'logname': logname}), 201
