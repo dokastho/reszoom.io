@@ -17,7 +17,7 @@ class ResumeList extends React.Component {
     return (
       <div>
         <div className="resume-name">
-          Your Resumes
+          <h1>Your Resumes</h1>
         </div>
         <div>
           {
