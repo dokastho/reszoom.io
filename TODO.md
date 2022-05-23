@@ -50,6 +50,7 @@
   - [ ] make desc editable
 - [ ] show up/down buttons on entry hover
 - [ ] show profile picture in sidebar
+- [ ] make sidebar not move from resume list to resume page change
 - [ ] home page
 - [ ] account settings page
 - [ ] login page
