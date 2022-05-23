@@ -90,4 +90,3 @@ def load_resumes():
         else:
             flask.abort(403)
         return flask.jsonify(res), 201
-
