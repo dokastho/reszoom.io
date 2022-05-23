@@ -10,7 +10,7 @@ class ResumePage extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
-
+      logname: '',
     };
   }
 
@@ -18,12 +18,23 @@ class ResumePage extends React.Component {
     const post = document.getElementById('resume-content');
     const sidebar = document.getElementById('floating-sidebar');
 
-    const logname = Cookies.get('');
+    // get the logname
+    fetch('/api/v1/user/', {
+      credentials: 'same-origin',
+      method: 'GET',
+    }).then((data) => {
+      this.setState({ logname: data.logname });
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+    })
+      .catch((error) => console.log(error));
+
+    const { logname } = this.state;
 
     ReactDOM.render(
       // render the floating sidebar
-      <Sidebar pagename="Your Resumes" logname={} />,
-      sidebar.querySelector('.render'),
+      <Sidebar pagename="Your Resumes" logname={logname} />,
+      sidebar,
     );
     // Call REST API to get the resume information for the user
     fetch('/api/v1/resume/load/?fetch=list', { credentials: 'same-origin' })

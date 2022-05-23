@@ -1,15 +1,40 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 // import '../static/css/styles.css';
-// import PropTypes from 'prop-types';
+import Sidebar from './sidebar';
 
 class NewResume extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       // state attributes go here
+      logname: '',
     };
+  }
+
+  componentDidMount() {
+    const sidebar = document.getElementById('floating-sidebar');
+
+    // get the logname
+    fetch('/api/v1/user/', {
+      credentials: 'same-origin',
+      method: 'GET',
+    }).then((data) => {
+      this.setState({ logname: data.logname });
+    }).then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+    })
+      .catch((error) => console.log(error));
+
+    const { logname } = this.state;
+
+    // render sidebar
+    ReactDOM.render(
+      // render the floating sidebar
+      <Sidebar pagename="New Resume" logname={logname} />,
+      sidebar,
+    );
   }
 
   render() {
@@ -40,5 +65,4 @@ render(
 );
 
 // NewResume.propTypes = {
-//   entries: PropTypes.instanceOf(Map).isRequired,
 // };
