@@ -84,7 +84,8 @@ def load_resumes():
                 'fullname': userinfo['fullname'],
                 'email': userinfo['email'],
                 'resumename': resumeinfo['name'],
-                'resumetype': resumeinfo['typename']
+                'resumetype': resumeinfo['typename'],
+                'desc': resumeinfo['description'],
             }
         else:
             flask.abort(403)

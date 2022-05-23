@@ -17,7 +17,14 @@ class ResumeList extends React.Component {
       <div>
         {
           resumes.map((r) => (
-            <p key={r.resumeid}><a href={`/resume/${r.resumeid}`}>{r.name}</a></p>
+            <div className="resume-link" key={r.resumeid}>
+              <p>
+                <a href={`/resume/${r.resumeid}`}>
+                  {r.description}
+                  {r.name}
+                </a>
+              </p>
+            </div>
           ))
         }
       </div>
