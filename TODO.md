@@ -48,6 +48,10 @@
   - [x] add optional desc to resume schema
   - [x] display desc at top of resume page
   - [ ] make desc editable
+- [ ] move all content to sidebar
+  - [ ] add rest api route that sends back logname
+  - [ ] remove stuff from templates
+  - [ ] then remove stuff from flask views
 - [ ] show up/down buttons on entry hover
 - [ ] show profile picture in sidebar
 - [ ] make sidebar not move from resume list to resume page change

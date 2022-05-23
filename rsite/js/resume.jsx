@@ -16,12 +16,13 @@ class ResumePage extends React.Component {
 
   componentDidMount() {
     const post = document.getElementById('resume-content');
-
     const sidebar = document.getElementById('floating-sidebar');
+
+    const logname = Cookies.get('');
 
     ReactDOM.render(
       // render the floating sidebar
-      <Sidebar />,
+      <Sidebar pagename="Your Resumes" logname={} />,
       sidebar.querySelector('.render'),
     );
     // Call REST API to get the resume information for the user

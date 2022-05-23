@@ -13,8 +13,6 @@ class NewResume extends React.Component {
   }
 
   render() {
-    // TODO: get resumeid from rest api
-    // TODO: check in real time if resume name available for user
     return (
       <div id="resume-content" className="list">
         <div className="create-form">

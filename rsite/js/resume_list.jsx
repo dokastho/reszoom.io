@@ -16,28 +16,23 @@ class ResumeList extends React.Component {
     const { resumes } = this.state;
     return (
       <div>
-        <div className="resume-name">
-          <h1>Your Resumes</h1>
-        </div>
-        <div>
-          {
-            resumes.length === 0
-              ? (
-                <h3><a href="/resume/new">Create your first resume!</a></h3>
-              ) : (
-                resumes.map((r) => (
-                  <div className="resume-link" key={r.resumeid}>
-                    <p>
-                      <a href={`/resume/${r.resumeid}`}>
-                        {r.name}
-                        {r.description === null ? null
-                          : <EllipsisText text={r.description} length={64} />}
-                      </a>
-                    </p>
-                  </div>
-                )))
-          }
-        </div>
+        {
+          resumes.length === 0
+            ? (
+              <h3><a href="/resume/new">Create your first resume!</a></h3>
+            ) : (
+              resumes.map((r) => (
+                <div className="resume-link" key={r.resumeid}>
+                  <p>
+                    <a href={`/resume/${r.resumeid}`}>
+                      {r.name}
+                      {r.description === null ? null
+                        : <EllipsisText text={r.description} length={64} />}
+                    </a>
+                  </p>
+                </div>
+              )))
+        }
       </div>
     );
   }
