@@ -96,16 +96,6 @@ input.new-resume {
     display: flex;
 }
 
-/* resume view */
-.resume-header {
-    display: flex;
-    align-items: center;
-}
-
-.slash {
-    margin: auto;
-}
-
 .resume-content {
     background-color: white;
     width: 816px;

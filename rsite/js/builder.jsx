@@ -75,11 +75,29 @@ class ResumeBuilder extends React.Component {
           resumeid,
           username,
           resumename,
+          resumetype,
+          desc,
         } = this.state;
+
+        // construct the custom sidebar content
+        const sidebarContent = [];
+        sidebarContent.push({
+          text: resumename,
+        });
+        if (resumetype) {
+          sidebarContent.push({
+            text: 'Student Resume',
+          });
+        } else {
+          sidebarContent.push({
+            text: 'Employee Resume',
+          });
+        }
+        sidebarContent.push({ text: desc });
 
         ReactDOM.render(
           // render the floating sidebar
-          <Sidebar pagename={resumename} logname={username} />,
+          <Sidebar pagename={resumename} logname={username} content={sidebarContent} />,
           sidebar,
         );
 
@@ -153,20 +171,12 @@ class ResumeBuilder extends React.Component {
   render() {
     const {
       resumeid,
-      resumename,
       resumetype,
       fullname,
       email,
-      desc,
     } = this.state;
     return (
       <div>
-        <div className="resume-header">
-          <div className="resume-name"><h1>{resumename}</h1></div>
-          <div className="slash" />
-          <div className="resume-type"><h1>{resumetype ? ' Student Resume' : ' Employee Resume'}</h1></div>
-        </div>
-        <p>{desc}</p>
         <div className="resume-content">
           <div className="about-me">
             <div className="name"><h1>{fullname}</h1></div>
