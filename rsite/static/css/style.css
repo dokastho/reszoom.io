@@ -50,6 +50,10 @@ input[type=text] {
     border-radius: 5px;
 }
 
+.site {
+    display: block;
+}
+
 /* input[type=text]:focus {
     
 } */

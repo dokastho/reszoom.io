@@ -35,7 +35,7 @@ class Sidebar extends React.Component {
           // render extra content
           content.map((c) => (
             <div key={c.text}>
-              {c.link === null ? <p>{c.text}</p> : <a href={c.link}>{c.text}</a>}
+              {'link' in c ? <a href={c.link}>{c.text}</a> : <p>{c.text}</p> }
             </div>
           ))
         }
