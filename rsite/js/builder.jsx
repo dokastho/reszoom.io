@@ -30,6 +30,7 @@ class ResumeBuilder extends React.Component {
       resumeid: '',
       resumename: '',
       resumetype: false,
+      desc: '',
 
       // user-specific attributes
       username: '',
@@ -64,6 +65,7 @@ class ResumeBuilder extends React.Component {
           username: data.username,
           email: data.email,
           fullname: data.fullname,
+          desc: data.description,
         });
 
         const {
@@ -147,6 +149,7 @@ class ResumeBuilder extends React.Component {
       resumetype,
       fullname,
       email,
+      desc,
     } = this.state;
     return (
       <div>
@@ -155,6 +158,7 @@ class ResumeBuilder extends React.Component {
           <div className="slash" />
           <div className="resume-type"><h1>{resumetype ? ' Student Resume' : ' Employee Resume'}</h1></div>
         </div>
+        <p>{desc}</p>
         <div className="resume-content">
           <div className="about-me">
             <div className="name"><h1>{fullname}</h1></div>
