@@ -11,18 +11,19 @@ class Sidebar extends React.Component {
       // state attributes go here
       pagename: props.pagename,
       logname: props.logname,
+      content: props.content,
     };
     // this.createNew = this.createNew.bind(this);
   }
 
   componentDidMount() {
-    const { pagename, logname } = this.props;
+    const { pagename, logname, content } = this.props;
 
-    this.setState({ pagename, logname });
+    this.setState({ pagename, logname, content });
   }
 
   render() {
-    const { pagename, logname } = this.state;
+    const { pagename, logname, content } = this.state;
     return (
       <div>
         <h1><a href="/">home</a></h1>
@@ -30,6 +31,12 @@ class Sidebar extends React.Component {
           <a href={`/users/${logname}/`}>{logname}</a>
         </h2>
         <h1>{pagename}</h1>
+        {
+          // render extra content
+          content.map((c) => (
+            'link' in c ? <p>{c.text}</p> : <a href={c.link}>{c.text}</a>
+          ))
+        }
         <form action="/resume/new">
           <input className="new-resume" type="submit" value="Create a new resume" />
         </form>
@@ -38,9 +45,14 @@ class Sidebar extends React.Component {
   }
 }
 
+Sidebar.defaultProps = {
+  content: [],
+};
+
 Sidebar.propTypes = {
   pagename: PropTypes.string.isRequired,
   logname: PropTypes.string.isRequired,
+  content: PropTypes.instanceOf(Array),
 };
 
 export default Sidebar;

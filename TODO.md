@@ -49,9 +49,10 @@
   - [x] display desc at top of resume page
   - [ ] make desc editable
 - [ ] move all content to sidebar
-  - [ ] add rest api route that sends back logname
-  - [ ] remove stuff from templates
-  - [ ] then remove stuff from flask views
+  - [x] add rest api route that sends back logname
+  - [x] remove stuff from templates
+  - [x] then remove stuff from flask views
+- [ ] add sidebar to server side dynamic pages? or something
 - [ ] show up/down buttons on entry hover
 - [ ] show profile picture in sidebar
 - [ ] make sidebar not move from resume list to resume page change
