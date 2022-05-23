@@ -33,7 +33,12 @@ class ResumePage extends React.Component {
 
     ReactDOM.render(
       // render the floating sidebar
-      <Sidebar pagename="Your Resumes" logname={logname} />,
+      <div>
+        <Sidebar pagename="Your Resumes" logname={logname} />
+        <form action="/resume/new">
+          <input className="new-resume" type="submit" value="Create a new resume" />
+        </form>
+      </div>,
       sidebar,
     );
     // Call REST API to get the resume information for the user
