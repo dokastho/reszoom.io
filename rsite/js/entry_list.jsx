@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -557,7 +558,7 @@ class Entries extends React.Component {
                     {
                       isEntries ? (
                         // ENTRY TYPE
-                        <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
+                        <div role="button" tabIndex={0} className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
                           {/* render content */}
                           <div>{'\t• '.concat(entries[e.entryid].content)}</div>
                           {/* render tags */}
@@ -572,7 +573,7 @@ class Entries extends React.Component {
                       ) : (
                         // INFO TYPE
                         <span key={e.entryid}>
-                          <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
+                          <div role="button" tabIndex={0} className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
                             {/* render name of institution */}
                             <span className="content">
                               {entries[e.entryid].content}
