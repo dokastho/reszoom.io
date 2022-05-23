@@ -44,10 +44,10 @@ class ResumeBuilder extends React.Component {
 
     const sidebar = document.getElementById('floating-sidebar');
 
-    ReactDOM.render(
-      <a href="/resume/">Go back to resumes</a>,
-      sidebar.querySelector('.render'),
-    );
+    // ReactDOM.render(
+    //   <a href="/resume/">Go back to resumes</a>,
+    //   sidebar,
+    // );
 
     // Call REST API to get the user's past entries
     fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${rid}`, { credentials: 'same-origin' })
