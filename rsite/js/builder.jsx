@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
@@ -149,8 +150,15 @@ class ResumeBuilder extends React.Component {
     } = this.state;
     return (
       <div>
-        <div className="name">{resumename}</div>
-        <div className="type">{resumetype ? 'Student Resume' : 'Employee Resume'}</div>
+        <div className="resume-header">
+          <div className="resume-name">
+            <h1>
+              {resumename}
+              //
+            </h1>
+          </div>
+          <div className="resume-type"><h1>{resumetype ? ' Student Resume' : ' Employee Resume'}</h1></div>
+        </div>
         <div className="resume-content">
           <div className="about-me">
             <div className="name"><h1>{fullname}</h1></div>
@@ -201,8 +209,6 @@ class ResumeBuilder extends React.Component {
               <input type="submit" value="Delete Resume" />
             </form>
           </div>
-
-          <p>resume content 😊</p>
         </div>
       </div>
     );
