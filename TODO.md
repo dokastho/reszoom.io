@@ -48,6 +48,11 @@
   - [x] add optional desc to resume schema
   - [x] display desc at top of resume page
   - [ ] make desc editable
+- [ ] show up/down buttons on entry hover
+- [ ] show profile picture in sidebar
+- [ ] home page
+- [ ] account settings page
+- [ ] login page
 - [ ] testing! mark done when I feel like it
 
 down the road...
