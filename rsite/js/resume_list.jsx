@@ -21,8 +21,10 @@ class ResumeList extends React.Component {
         </div>
         <div>
           {
-            resumes.length === 0 ? 'you have no resumes, create one'
-              : (
+            resumes.length === 0
+              ? (
+                <a href="/resume/new"><h3>Create your first resume!</h3></a>
+              ) : (
                 resumes.map((r) => (
                   <div className="resume-link" key={r.resumeid}>
                     <p>
