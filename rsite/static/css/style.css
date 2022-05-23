@@ -21,17 +21,10 @@ a:hover {
     padding: 4px;
 }
 
-#floating-sidebar {
-    background-color: white;
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 1%;
-    width: 200px;
-    height: fit-content;
-    position: sticky;
-    top: 0;
-    top: 10%;
-    margin: 20px;
+h4 {
+    font-size: large;
+    font-weight: bold;
+    color: darkslategray;
 }
 
 /* forms */
@@ -87,6 +80,19 @@ input.new-resume {
     color: white;
 }
 
+#floating-sidebar {
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 1%;
+    width: 200px;
+    height: fit-content;
+    position: sticky;
+    top: 0;
+    top: 10%;
+    margin: 20px;
+}
+
 /* resume view */
 
 .resume-content {
@@ -97,6 +103,12 @@ input.new-resume {
     border-radius: 8px;
     padding: 48px;
     margin: auto;
+}
+
+.resume-name {
+    font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 .about-me {
