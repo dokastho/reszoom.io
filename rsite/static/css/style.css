@@ -87,8 +87,12 @@ input.new-resume {
     margin: 20px;
 }
 
-/* resume view */
+/* resume list */
+.resume-link {
+    display: flex;
+}
 
+/* resume view */
 .resume-header {
     display: flex;
     align-items: center;
