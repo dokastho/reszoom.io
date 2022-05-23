@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import Cookies from 'js-cookie';
 import Entries from './entry_list';
+import Sidebar from './sidebar';
 
 function getEntriesByHeaderType(entries, eids, header, type) {
   // iterate over eids and add entry, eid to return data if they match the header
@@ -44,10 +45,10 @@ class ResumeBuilder extends React.Component {
 
     const sidebar = document.getElementById('floating-sidebar');
 
-    ReactDOM.render(
-      <a href="/resume/">Go back to resumes</a>,
-      sidebar.querySelector('.render'),
-    );
+    // ReactDOM.render(
+    //   <a href="/resume/">Go back to resumes</a>,
+    //   sidebar,
+    // );
 
     // Call REST API to get the user's past entries
     fetch(`/api/v1/resume/load/?fetch=userinfo&resumeid=${rid}`, { credentials: 'same-origin' })
@@ -73,7 +74,14 @@ class ResumeBuilder extends React.Component {
           eids,
           resumeid,
           username,
+          resumename,
         } = this.state;
+
+        ReactDOM.render(
+          // render the floating sidebar
+          <Sidebar pagename={resumename} logname={username} />,
+          sidebar,
+        );
 
         // render entries
 
