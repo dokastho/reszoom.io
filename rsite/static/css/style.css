@@ -32,7 +32,7 @@ button {
     background-image: none;
     padding: 0.5833em 0.833em;
     color: rgba(0, 0, 0, .6);
-    text-transform: none;
+    /* text-transform: none; */
     font-weight: 700;
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
