@@ -94,6 +94,10 @@ class ResumeBuilder extends React.Component {
           });
         }
         sidebarContent.push({ text: desc });
+        sidebarContent.push({
+          text: 'Go back to resumes',
+          link: '/resume/',
+        });
 
         ReactDOM.render(
           // render the floating sidebar
