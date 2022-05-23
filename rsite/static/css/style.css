@@ -74,6 +74,19 @@ input.new-resume {
     color: white;
 }
 
+#floating-sidebar {
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 1%;
+    width: 200px;
+    height: fit-content;
+    position: sticky;
+    top: 0;
+    /* top: 10%; */
+    margin: 20px;
+}
+
 #make-resume {
     width: min-content;
 }
