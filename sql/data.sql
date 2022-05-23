@@ -14,7 +14,7 @@ VALUES ('tdokas', 'Thomas Dokas', 'dokastho@umich.edu', 'tdokaspic.png', 'passwo
 INSERT INTO resumes(owner, name, typename, description)
 VALUES ('tdokas', 'resume 1', 1, 'my first student resume.');
 INSERT INTO resumes(owner, name, typename, description)
-VALUES ('tdokas', 'resume 2', 0, '..........................................................end....this should only be viewable on the resume page.');
+VALUES ('tdokas', 'resume 2', 0, '..........................................................end....this should only be viewable on the resume page.....................................................................................................................');
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 3', 1);
 -- add some entries for the resume

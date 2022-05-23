@@ -87,6 +87,10 @@ input.new-resume {
     margin: 20px;
 }
 
+#make-resume {
+    width: min-content;
+}
+
 /* resume list */
 .resume-link {
     display: flex;
