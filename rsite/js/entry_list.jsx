@@ -557,7 +557,7 @@ class Entries extends React.Component {
                     {
                       isEntries ? (
                         // ENTRY TYPE
-                        <div className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
+                        <div role="button" onKeyDown={console.log('foo')} tabIndex={0} className="entry-wrapper" onClick={() => this.editEntry(e.entryid)}>
                           {/* render content */}
                           <div>{'\t• '.concat(entries[e.entryid].content)}</div>
                           {/* render tags */}

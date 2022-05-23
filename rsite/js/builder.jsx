@@ -81,9 +81,6 @@ class ResumeBuilder extends React.Component {
 
         // construct the custom sidebar content
         const sidebarContent = [];
-        sidebarContent.push({
-          text: resumename,
-        });
         if (resumetype) {
           sidebarContent.push({
             text: 'Student Resume',
@@ -94,6 +91,10 @@ class ResumeBuilder extends React.Component {
           });
         }
         sidebarContent.push({ text: desc });
+        sidebarContent.push({
+          text: 'Go back to resumes',
+          link: '/resume/',
+        });
 
         ReactDOM.render(
           // render the floating sidebar
