@@ -77,6 +77,7 @@ def post_resumes():
         # get name and type of resume
         rname = flask.request.form.get('name')
         rtype = flask.request.form.get('type')
+        desc = flask.request.form.get('desc')
         
         if len(rname) == 0:
             flask.abort(400)
@@ -85,9 +86,9 @@ def post_resumes():
         
         cur = database.execute(
             "INSERT INTO resumes "
-            "(owner, name, typename) "
-            "VALUES (?, ?, ?)",
-            (logname, rname, rtype, )
+            "(owner, name, typename, description) "
+            "VALUES (?, ?, ?, ?)",
+            (logname, rname, rtype, desc, )
         )
         cur.fetchone()
 

@@ -1,6 +1,7 @@
 // view to contain list of resumes
 import React from 'react';
 import PropTypes from 'prop-types';
+import EllipsisText from 'react-ellipsis-text';
 
 class ResumeList extends React.Component {
   constructor(props) {
@@ -17,7 +18,15 @@ class ResumeList extends React.Component {
       <div>
         {
           resumes.map((r) => (
-            <p key={r.resumeid}><a href={`/resume/${r.resumeid}`}>{r.name}</a></p>
+            <div className="resume-link" key={r.resumeid}>
+              <p>
+                <a href={`/resume/${r.resumeid}`}>
+                  {r.name}
+                  {r.description === null ? null
+                    : <EllipsisText text={r.description} length={64} />}
+                </a>
+              </p>
+            </div>
           ))
         }
       </div>
