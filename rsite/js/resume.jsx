@@ -15,7 +15,7 @@ class ResumePage extends React.Component {
   }
 
   componentDidMount() {
-    const post = document.getElementById('resume-content');
+    const post = document.querySelector('.resume-content');
     const sidebar = document.getElementById('floating-sidebar');
 
     // get the logname
@@ -64,7 +64,7 @@ class ResumePage extends React.Component {
           <ResumeList
             resumes={resumes}
           />,
-          post.querySelector('.resume-list'),
+          post,
         );
       })
       .catch((error) => console.log(error));
@@ -73,9 +73,7 @@ class ResumePage extends React.Component {
   render() {
     // Render number of post image and post owner
     return (
-      <div id="resume-content" className="list">
-        <div className="resume-list" />
-      </div>
+      <div className="resume-content" />
     );
   }
 }
