@@ -9,7 +9,6 @@ class NewResume extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
-      logname: '',
     };
   }
 
@@ -17,24 +16,21 @@ class NewResume extends React.Component {
     const sidebar = document.getElementById('floating-sidebar');
 
     // get the logname
-    fetch('/api/v1/user/', {
-      credentials: 'same-origin',
-      method: 'GET',
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-    }).then((data) => {
-      this.setState({ logname: data.logname });
-    })
+    fetch('/api/v1/user/', { credentials: 'same-origin', method: 'GET' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        const { logname } = data;
+        // render sidebar
+        ReactDOM.render(
+          // render the floating sidebar
+          <Sidebar pagename="New Resume" logname={logname} />,
+          sidebar,
+        );
+      })
       .catch((error) => console.log(error));
-
-    const { logname } = this.state;
-
-    // render sidebar
-    ReactDOM.render(
-      // render the floating sidebar
-      <Sidebar pagename="New Resume" logname={logname} />,
-      sidebar,
-    );
   }
 
   render() {
