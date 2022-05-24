@@ -35,7 +35,7 @@ class NewResume extends React.Component {
 
   render() {
     return (
-      <div id="resume-content" className="list">
+      <div className="resume-content">
         <div className="create-form">
           <div>
             <form action="/resume/commit/" method="post" encType="multipart/form-data">
