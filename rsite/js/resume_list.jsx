@@ -22,16 +22,18 @@ class ResumeList extends React.Component {
               <h3><a href="/resume/new">Create your first resume!</a></h3>
             ) : (
               resumes.map((r) => (
-                <div className="resume-link" key={r.resumeid} href={`/resume/${r.resumeid}`}>
-                  <div>
-                    {r.name}
-                  </div>
-                  <div className="spacer" />
-                  <div>
-                    {r.description === null ? null
-                      : <EllipsisText text={r.description} length={64} />}
-                  </div>
-                </div>
+                <form action={`/resume/${r.resumeid}`}>
+                  <button type="submit" className="resume-link" key={r.resumeid}>
+                    <div>
+                      {r.name}
+                    </div>
+                    <div className="spacer" />
+                    <div>
+                      {r.description === null ? null
+                        : <EllipsisText text={r.description} length={64} />}
+                    </div>
+                  </button>
+                </form>
               )))
         }
       </div>
