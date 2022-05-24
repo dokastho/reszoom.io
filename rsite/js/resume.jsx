@@ -15,32 +15,9 @@ class ResumePage extends React.Component {
   }
 
   componentDidMount() {
-    const post = document.querySelector('.resume-content');
+    const post = document.querySelector('.resume-list');
     const sidebar = document.getElementById('floating-sidebar');
 
-    // get the logname
-    fetch('/api/v1/user/', {
-      credentials: 'same-origin',
-      method: 'GET',
-    }).then((data) => {
-      this.setState({ logname: data.logname });
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-    })
-      .catch((error) => console.log(error));
-
-    const { logname } = this.state;
-
-    ReactDOM.render(
-      // render the floating sidebar
-      <div>
-        <Sidebar pagename="Your Resumes" logname={logname} />
-        <form action="/resume/new">
-          <input className="new-resume" type="submit" value="Create a new resume" />
-        </form>
-      </div>,
-      sidebar,
-    );
     // Call REST API to get the resume information for the user
     fetch('/api/v1/resume/load/?fetch=list', { credentials: 'same-origin' })
       .then((response) => {
@@ -51,11 +28,13 @@ class ResumePage extends React.Component {
         console.log(data);
         this.setState({
           resumes: data.resumes,
+          logname: data.logname,
         });
 
         // Get resume list object
         const {
           resumes,
+          logname,
         } = this.state;
         // check
 
@@ -66,14 +45,25 @@ class ResumePage extends React.Component {
           />,
           post,
         );
+        // render the floating sidebar
+        ReactDOM.render(
+          <div>
+            <Sidebar pagename="Your Resumes" logname={logname} />
+            <form action="/resume/new">
+              <input className="new-resume" type="submit" value="Create a new resume" />
+            </form>
+          </div>,
+          sidebar,
+        );
       })
       .catch((error) => console.log(error));
+
   }
 
   render() {
     // Render number of post image and post owner
     return (
-      <div className="resume-content" />
+      <div className="resume-list" />
     );
   }
 }

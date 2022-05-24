@@ -26,7 +26,10 @@ def load_resumes():
                 (logname, )
             )
             resumes = cur.fetchall()
-            res = {'resumes': resumes}
+            res = {
+                'resumes': resumes,
+                'logname': logname
+            }
         elif op == "userinfo":
             rid = flask.request.args.get("resumeid", default=0, type=int)
 
