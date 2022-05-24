@@ -9,7 +9,7 @@
                 "tag_server"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${cwd}/rsite/api/"
             },
             "problemMatcher": [
                 "$gcc"
@@ -29,7 +29,7 @@
                 "8888"
             ],
             "options": {
-                "cwd": "${fileDirname}"
+                "cwd": "${cwd}/rsite/api/"
             },
             "dependsOn":[
                 "Make binaries"
@@ -96,6 +96,31 @@
                 "close": true
             },
             "detail": "Reset the sqlite database"
+        },
+        {
+            "type": "shell",
+            "label": "flask",
+            "command": ["pkill", "flask"],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            },
+            "detail": "stop flask"
+        },
+        {
+            "type": "shell",
+            "label": "Stop server",
+            "command": ["pkill", "tag_server"],
+            "dependsOn": "flask",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            },
+            "detail": "Stop the two server processes."
         },
     ],
     "version": "2.0.0"
