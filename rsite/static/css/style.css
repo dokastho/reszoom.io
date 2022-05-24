@@ -99,6 +99,8 @@ input.new-resume {
 .resume-link {
     display: flex;
     padding: 16px;
+    background-color: white;
+    width: -webkit-fill-available;
 }
 
 .resume-list {
