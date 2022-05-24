@@ -2,7 +2,6 @@
 
 import flask
 import rsite
-from rsite.model import delete_helper, get_db, rest_api_auth_user, print_log
 
 @rsite.app.route('/api/v1/ford/', methods=['POST'])
 def echo():

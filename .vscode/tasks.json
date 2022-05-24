@@ -111,7 +111,7 @@
         },
         {
             "type": "shell",
-            "label": "Stop server",
+            "label": "Resume Site Stop",
             "command": ["pkill", "tag_server"],
             "dependsOn": "flask",
             "group": "build",
