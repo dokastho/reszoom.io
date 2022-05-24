@@ -35,14 +35,32 @@ class NewResume extends React.Component {
 
   render() {
     return (
-      <div id="resume-content" className="list">
+      <div className="resume-content">
         <div className="create-form">
           <div>
             <form action="/resume/commit/" method="post" encType="multipart/form-data">
-              <label htmlFor="typebox">Are you a student?</label>
-              <input type="checkbox" name="type" id="typebox" />
-              <input type="text" name="name" required placeholder="New Resume Name" />
-              <input type="text" name="desc" placeholder="Add a description?" />
+              <div>
+                <b>New Resume Name</b>
+                <br />
+                <textarea name="name" required rows={1} cols={50} />
+              </div>
+              <br />
+              <br />
+              <div>
+                <span>
+                  <label htmlFor="typebox"><b>Are you a student?</b></label>
+                  <input type="checkbox" name="type" id="typebox" />
+                </span>
+                <p htmlFor="typebox">This will prioritize your education over experience.</p>
+              </div>
+              <br />
+              <div>
+                <label htmlFor="typebox">
+                  <b>Description </b>
+                  (Optional)
+                </label>
+                <textarea name="desc" required rows={4} cols={64} />
+              </div>
               <input type="hidden" name="operation" value="create" />
               <input type="submit" />
             </form>
