@@ -17,14 +17,14 @@ class NewResume extends React.Component {
     const sidebar = document.getElementById('floating-sidebar');
 
     // get the logname
-    fetch('/api/v1/user/', {
-      credentials: 'same-origin',
-      method: 'GET',
-    }).then((response) => {
-      if (!response.ok) throw Error(response.statusText);
-    }).then((data) => {
-      this.setState({ logname: data.logname });
-    })
+    fetch('/api/v1/user/', { credentials: 'same-origin', method: 'GET' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ logname: data.logname });
+      })
       .catch((error) => console.log(error));
 
     const { logname } = this.state;
