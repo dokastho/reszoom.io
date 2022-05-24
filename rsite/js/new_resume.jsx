@@ -20,10 +20,10 @@ class NewResume extends React.Component {
     fetch('/api/v1/user/', {
       credentials: 'same-origin',
       method: 'GET',
-    }).then((data) => {
-      this.setState({ logname: data.logname });
     }).then((response) => {
       if (!response.ok) throw Error(response.statusText);
+    }).then((data) => {
+      this.setState({ logname: data.logname });
     })
       .catch((error) => console.log(error));
 
