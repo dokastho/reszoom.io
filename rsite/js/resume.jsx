@@ -47,13 +47,14 @@ class ResumePage extends React.Component {
         );
         // render the floating sidebar
         ReactDOM.render(
-          <div>
-            <Sidebar pagename="Your Resumes" logname={logname} />
-            <form action="/resume/new">
-              <input className="new-resume" type="submit" value="Create a new resume" />
-            </form>
-          </div>,
+          <Sidebar pagename="Your Resumes" logname={logname} />,
           sidebar,
+        );
+        ReactDOM.render(
+          <form action="/resume/new">
+            <input className="new-resume" type="submit" value="Create a new resume" />
+          </form>,
+          sidebar.querySelector('new'),
         );
       })
       .catch((error) => console.log(error));
