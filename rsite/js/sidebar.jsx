@@ -26,19 +26,21 @@ class Sidebar extends React.Component {
     const { pagename, logname, content } = this.state;
     return (
       <div>
-        <h1><a href="/">home</a></h1>
-        <h2>
-          <a href={`/users/${logname}/`}>{logname}</a>
-        </h2>
-        <div className="resume-name"><h1>{pagename}</h1></div>
-        {
-          // render extra content
-          content.map((c) => (
-            <div key={c.text}>
-              {'link' in c ? <a href={c.link}>{c.text}</a> : <p>{c.text}</p> }
-            </div>
-          ))
-        }
+        <div className="sidebar">
+          <h1><a href="/">home</a></h1>
+          <div className="resume-name"><h1>{pagename}</h1></div>
+          {
+            // render extra content
+            content.map((c) => (
+              <div key={c.text}>
+                {'link' in c ? <a href={c.link}>{c.text}</a> : <p>{c.text}</p>}
+              </div>
+            ))
+          }
+        </div>
+        <div className="sidebar">
+          <h2><a href={`/users/${logname}/`}>{logname}</a></h2>
+        </div>
       </div>
     );
   }

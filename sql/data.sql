@@ -17,6 +17,8 @@ INSERT INTO resumes(owner, name, typename, description)
 VALUES ('tdokas', 'resume 2', 0, '..........................................................end....this should only be viewable on the resume page.....................................................................................................................');
 INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 3', 1);
+INSERT INTO resumes(owner, name, typename)
+VALUES ('awdeorio', 'resume', 0);
 -- add some entries for the resume
 
 -- experience
