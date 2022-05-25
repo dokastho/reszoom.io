@@ -22,11 +22,11 @@ class NewResume extends React.Component {
         return response.json();
       })
       .then((data) => {
-        const { logname } = data;
+        const { logname, filename } = data;
         // render sidebar
         ReactDOM.render(
           // render the floating sidebar
-          <Sidebar pagename="New Resume" logname={logname} />,
+          <Sidebar pagename="New Resume" logname={logname} img={filename} />,
           sidebar,
         );
       })

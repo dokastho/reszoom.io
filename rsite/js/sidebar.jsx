@@ -11,6 +11,7 @@ class Sidebar extends React.Component {
       // state attributes go here
       pagename: props.pagename,
       logname: props.logname,
+      img: props.img,
       content: props.content,
     };
     // this.createNew = this.createNew.bind(this);
@@ -23,7 +24,12 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { pagename, logname, content } = this.state;
+    const {
+      pagename,
+      logname,
+      content,
+      img,
+    } = this.state;
     return (
       <div>
         <div className="sidebar">
@@ -37,8 +43,10 @@ class Sidebar extends React.Component {
               </div>
             ))
           }
+          <div className="new" />
         </div>
         <div className="sidebar">
+          <img className="profile" src={img} alt="" />
           <h2><a href={`/users/${logname}/`}>{logname}</a></h2>
         </div>
       </div>
@@ -53,6 +61,7 @@ Sidebar.defaultProps = {
 Sidebar.propTypes = {
   pagename: PropTypes.string.isRequired,
   logname: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
   content: PropTypes.instanceOf(Array),
 };
 
