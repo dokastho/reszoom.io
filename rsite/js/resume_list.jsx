@@ -19,7 +19,7 @@ class ResumeList extends React.Component {
         {
           resumes.length === 0
             ? (
-              <h3><a href="/resume/new">Create your first resume!</a></h3>
+              <div className="resume-link"><h3><a href="/resume/new">Create your first resume!</a></h3></div>
             ) : (
               resumes.map((r) => (
                 <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
