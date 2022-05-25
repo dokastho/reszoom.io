@@ -78,6 +78,8 @@ input.new-resume {
     color: white;
 }
 
+/* sidebar content */
+
 .sidebar {
     background-color: white;
     border: 1px solid gray;
@@ -89,6 +91,14 @@ input.new-resume {
     top: 0;
     /* top: 10%; */
     margin: 20px;
+}
+
+img.profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 #make-resume {
