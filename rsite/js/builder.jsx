@@ -37,6 +37,7 @@ class ResumeBuilder extends React.Component {
       username: '',
       email: '',
       fullname: '',
+      filename: '',
     };
   }
 
@@ -67,6 +68,7 @@ class ResumeBuilder extends React.Component {
           email: data.email,
           fullname: data.fullname,
           desc: data.description,
+          filename: data.filename,
         });
 
         const {
@@ -77,6 +79,7 @@ class ResumeBuilder extends React.Component {
           resumename,
           resumetype,
           desc,
+          filename,
         } = this.state;
 
         // construct the custom sidebar content
@@ -98,7 +101,12 @@ class ResumeBuilder extends React.Component {
 
         ReactDOM.render(
           // render the floating sidebar
-          <Sidebar pagename={resumename} logname={username} content={sidebarContent} />,
+          <Sidebar
+            pagename={resumename}
+            logname={username}
+            content={sidebarContent}
+            img={filename}
+          />,
           sidebar,
         );
 

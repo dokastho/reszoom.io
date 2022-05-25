@@ -85,6 +85,7 @@ def load_resumes():
                 'entries': entries,
                 'username': userinfo['username'],
                 'fullname': userinfo['fullname'],
+                'filename': userinfo['filename'],
                 'email': userinfo['email'],
                 'resumename': resumeinfo['name'],
                 'resumetype': resumeinfo['typename'],
