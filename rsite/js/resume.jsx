@@ -10,7 +10,6 @@ class ResumePage extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
-      logname: '',
     };
   }
 
@@ -28,13 +27,11 @@ class ResumePage extends React.Component {
         console.log(data);
         this.setState({
           resumes: data.resumes,
-          logname: data.logname,
         });
 
         // Get resume list object
         const {
           resumes,
-          logname,
         } = this.state;
         // check
 
@@ -45,15 +42,26 @@ class ResumePage extends React.Component {
           />,
           post,
         );
+      })
+      .catch((error) => console.log(error));
+    // get the logname
+    fetch('/api/v1/user/', { credentials: 'same-origin', method: 'GET' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        const { username, filename } = data;
         // render the floating sidebar
         ReactDOM.render(
-          <div>
-            <Sidebar pagename="Your Resumes" logname={logname} />
-            <form action="/resume/new">
-              <input className="new-resume" type="submit" value="Create a new resume" />
-            </form>
-          </div>,
+          <Sidebar pagename="Your Resumes" logname={username} img={filename} />,
           sidebar,
+        );
+        ReactDOM.render(
+          <form action="/resume/new">
+            <input className="new-resume" type="submit" value="Create a new resume" />
+          </form>,
+          sidebar.querySelector('.new'),
         );
       })
       .catch((error) => console.log(error));
@@ -74,5 +82,5 @@ class ResumePage extends React.Component {
 
 render(
   <ResumePage />,
-  document.getElementById('resume-start'),
+  document.getElementById('make-resume'),
 );

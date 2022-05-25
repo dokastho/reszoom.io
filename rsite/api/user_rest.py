@@ -13,8 +13,18 @@ from rsite.model import rest_api_auth_user
 def current_user():
     """Return the logname of the current user."""
 
-    logname, _ = rest_api_auth_user()
+    logname, database = rest_api_auth_user()
     
-    data = {'logname': logname}
+    cur = database.execute(
+        "SELECT * "
+        "FROM users "
+        'WHERE username == ?',
+        (logname, )
+    )
+    
+    data = cur.fetchone()
+
+    if data is None:
+        flask.abort(500)
     
     return flask.jsonify(data), 201
