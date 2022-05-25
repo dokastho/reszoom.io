@@ -16,6 +16,8 @@ def show_resume():
     """Render react content for main resume page"""
     with rsite.app.app_context():
         context = show_username()
+        if context['logname'] == "Sign In":
+            return flask.redirect("/accounts/login")
         return flask.render_template('resume.html', **context)
 
 
