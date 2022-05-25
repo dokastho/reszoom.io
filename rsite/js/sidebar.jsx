@@ -37,6 +37,7 @@ class Sidebar extends React.Component {
               </div>
             ))
           }
+          <div className="new" />
         </div>
         <div className="sidebar">
           <h2><a href={`/users/${logname}/`}>{logname}</a></h2>
