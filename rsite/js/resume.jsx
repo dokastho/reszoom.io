@@ -11,6 +11,7 @@ class ResumePage extends React.Component {
     this.state = {
       // state attributes go here
       logname: '',
+      filename: '',
     };
   }
 
@@ -29,12 +30,14 @@ class ResumePage extends React.Component {
         this.setState({
           resumes: data.resumes,
           logname: data.logname,
+          filename: data.filename,
         });
 
         // Get resume list object
         const {
           resumes,
           logname,
+          filename,
         } = this.state;
         // check
 
@@ -47,13 +50,14 @@ class ResumePage extends React.Component {
         );
         // render the floating sidebar
         ReactDOM.render(
-          <div>
-            <Sidebar pagename="Your Resumes" logname={logname} />
-            <form action="/resume/new">
-              <input className="new-resume" type="submit" value="Create a new resume" />
-            </form>
-          </div>,
+          <Sidebar pagename="Your Resumes" logname={logname} img={filename} />,
           sidebar,
+        );
+        ReactDOM.render(
+          <form action="/resume/new">
+            <input className="new-resume" type="submit" value="Create a new resume" />
+          </form>,
+          sidebar.querySelector('.new'),
         );
       })
       .catch((error) => console.log(error));
@@ -74,5 +78,5 @@ class ResumePage extends React.Component {
 
 render(
   <ResumePage />,
-  document.getElementById('resume-start'),
+  document.getElementById('make-resume'),
 );
