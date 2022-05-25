@@ -30,9 +30,9 @@
 - [ ] resume thumbnails
 - [ ] prevent duplicate entries
 - [ ] offer custom headings, optional headings (leadership experience)
-  - [ ] redesign builder.jsx render() method
-- [ ] tags for entries
-  - [ ] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
+  - [x] redesign builder.jsx render() method
+- [x] tags for entries
+  - [x] **use another system to run NLP and return tags. (sockets!! 😁) doing so with rest api would not conform with rest standards**
   - [x] create adds to entries_to_tags
   - [x] recommend based on matching tags, offer from all
   - [x] adding an entry will update tags based on the posts
@@ -48,14 +48,14 @@
   - [x] add optional desc to resume schema
   - [x] display desc at top of resume page
   - [ ] make desc editable
-- [ ] move all content to sidebar
+- [x] move all content to sidebar
   - [x] add rest api route that sends back logname
   - [x] remove stuff from templates
   - [x] then remove stuff from flask views
 - [ ] add sidebar to server side dynamic pages? or something
 - [ ] show up/down buttons on entry hover
 - [ ] show profile picture in sidebar
-- [ ] make sidebar not move from resume list to resume page change
+- [x] make sidebar not move from resume list to resume page change
 - [ ] home page
 - [ ] account settings page
 - [ ] login page
