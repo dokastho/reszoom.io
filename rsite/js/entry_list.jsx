@@ -517,7 +517,7 @@ class Entries extends React.Component {
                       isEntries ? (
                         // ENTRY TYPE
                         <form onSubmit={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} encType="multipart/form-data">
-                          <input type="text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
+                          <input type="text" className="long-text" onChange={(event) => this.handleEntryChange(event, e.entryid, 'content')} value={stagedEntries[e.entryid].content} />
                           {/* OG buttons */}
                           {idx === 0 ? null
                             : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
@@ -525,8 +525,10 @@ class Entries extends React.Component {
                           {/* render down button for all entries not on last line */}
                           {idx === max ? null
                             : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
+                          <br />
                           <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
                           <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          <br />
                           <input type="submit" />
                         </form>
                       ) : (
@@ -565,13 +567,15 @@ class Entries extends React.Component {
                           <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 0)} value="Submit edit for this resume" />
                           {entries[e.entryid].frequency > 1 ? <input type="button" onClick={(event) => this.updateEntry(event, e.entryid, idx, isEntries, 1)} value="Submit edit for all resumes" /> : null}
                           {/* OG buttons */}
+                          <br />
+                          <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
+                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
+                          <br />
                           {idx === 0 ? null
                             : <button type="button" onClick={this.moveEntry.bind(this, idx, idx - 1)}>Up</button>}
                           {/* render down button for all entries not on last line */}
                           {idx === max ? null
                             : <button type="button" onClick={this.moveEntry.bind(this, idx, idx + 1)}>Down</button>}
-                          <button type="button" onClick={this.deleteEntry.bind(this, e.entryid)}>Delete</button>
-                          <button type="button" onClick={this.cancelEdit.bind(this, e.entryid)}>Cancel</button>
                         </form>
                       )
                     }
@@ -660,9 +664,9 @@ class Entries extends React.Component {
               // ENTRY TYPE
               stagedEntries[0].add
                 ? (
-                  <span>
+                  <div className="edit-wrapper">
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
-                      <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
+                      <input type="text" className="long-text" required placeholder="Text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
@@ -671,7 +675,7 @@ class Entries extends React.Component {
                         <button key={e.entryid} type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
                       ))
                     }
-                  </span>
+                  </div>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
                 )
@@ -680,7 +684,7 @@ class Entries extends React.Component {
               // INFO TYPE
               stagedEntries[0].add
                 ? (
-                  <span>
+                  <div className="edit-wrapper">
                     <form onSubmit={(e) => this.createEntry(e, 0)}>
                       <input type="text" required onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} maxLength="256" placeholder="Institution" />
                       <br />
@@ -707,7 +711,7 @@ class Entries extends React.Component {
                         <button key={e.entryid} type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
                       ))
                     }
-                  </span>
+                  </div>
                 )
                 : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>
