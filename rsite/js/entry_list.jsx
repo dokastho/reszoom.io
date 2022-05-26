@@ -376,6 +376,7 @@ class Entries extends React.Component {
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
       stagedEntries = this.setStagedEntriesEmpty(entryid);
+      this.setState({ stagedEntries });
       return;
     }
 
