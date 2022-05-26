@@ -10,6 +10,7 @@ body {
 
 a {
     text-decoration: none;
+    font-weight: bold;
     color: black;
 }
 
@@ -36,6 +37,7 @@ button {
     font-weight: 700;
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
+    cursor: pointer;
 }
 
 button:hover {
@@ -71,6 +73,7 @@ input[type=submit] {
     font-weight: 700;
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
+    cursor: pointer;
 }
 
 input.new-resume {
@@ -129,6 +132,13 @@ img.profile {
     border-width: 2px;
     background-color: #b6e3ff;
     color: black;
+}
+
+.list-header {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
 }
 
 .spacer {
