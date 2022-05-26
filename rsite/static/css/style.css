@@ -55,11 +55,17 @@ button:hover {
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
 }
 
-input[type=text] {
+input[type=text],
+input[type=number],
+input[type=month] {
     padding: 5px;
-    border: 2px solid #ccc;
+    border: none;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+}
+
+input[type="text"]:focus {
+    border: none;
 }
 
 .site {

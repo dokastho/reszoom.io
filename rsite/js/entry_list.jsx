@@ -660,9 +660,9 @@ class Entries extends React.Component {
               // ENTRY TYPE
               stagedEntries[0].add
                 ? (
-                  <span>
+                  <div className="edit-wrapper">
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
-                      <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
+                      <input type="text" required placeholder="Text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>
@@ -671,7 +671,7 @@ class Entries extends React.Component {
                         <button key={e.entryid} type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
                       ))
                     }
-                  </span>
+                  </div>
                 ) : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>Add entry</button>
                 )
@@ -680,7 +680,7 @@ class Entries extends React.Component {
               // INFO TYPE
               stagedEntries[0].add
                 ? (
-                  <span>
+                  <div className="edit-wrapper">
                     <form onSubmit={(e) => this.createEntry(e, 0)}>
                       <input type="text" required onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} maxLength="256" placeholder="Institution" />
                       <br />
@@ -707,7 +707,7 @@ class Entries extends React.Component {
                         <button key={e.entryid} type="button" onClick={(event) => this.createEntry(event, e.entryid)}>{e.content}</button>
                       ))
                     }
-                  </span>
+                  </div>
                 )
                 : (
                   <button type="button" onClick={this.setAddTrue.bind(this, 0)}>
