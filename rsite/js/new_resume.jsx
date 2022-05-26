@@ -60,7 +60,7 @@ class NewResume extends React.Component {
                   (Optional)
                 </label>
                 <br />
-                <textarea name="desc" required rows={4} cols={64} />
+                <textarea name="desc" rows={4} cols={64} />
               </div>
               <input type="hidden" name="operation" value="create" />
               <input type="submit" />
