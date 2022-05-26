@@ -94,7 +94,8 @@ input.new-resume {
 
 /* sidebar content */
 
-.sidebar {
+.sidebar,
+.sidebar-profile {
     background-color: white;
     border: 1px solid gray;
     border-radius: 5px;
@@ -105,6 +106,10 @@ input.new-resume {
     top: 0;
     /* top: 10%; */
     margin: 20px;
+}
+
+.sidebar-profile {
+    display: flex;
 }
 
 img.profile {
