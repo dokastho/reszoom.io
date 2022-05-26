@@ -662,7 +662,7 @@ class Entries extends React.Component {
                 ? (
                   <span>
                     <form onSubmit={(event) => this.createEntry(event, 0)}>
-                      <input type="text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
+                      <input type="text" required placeholder="Text" onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} />
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
                       <input type="submit" />
                     </form>

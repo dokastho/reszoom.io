@@ -57,9 +57,14 @@ button:hover {
 
 input[type=text] {
     padding: 5px;
-    border: 2px solid #ccc;
+    border: none;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    text-decoration: underline;
+}
+
+input[type="text"]:focus {
+    border: none;
 }
 
 .site {
