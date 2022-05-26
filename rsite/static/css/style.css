@@ -10,6 +10,7 @@ body {
 
 a {
     text-decoration: none;
+    font-weight: bold;
     color: black;
 }
 
@@ -19,6 +20,17 @@ a:hover {
     text-decoration: underline;
     transition: all .2s ease-out;
     padding: 4px;
+}
+
+a.bare {
+    text-decoration: none;
+}
+
+a.bare:hover {
+    background-color: white;
+    border-radius: 0px;
+    text-decoration: none;
+    padding: 0px;
 }
 
 /* forms */
@@ -36,11 +48,11 @@ button {
     font-weight: 700;
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
+    cursor: pointer;
 }
 
 button:hover {
-    transition: all .2s ease-out;
-    font-weight: bold;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
 }
 
 input[type=text] {
@@ -71,6 +83,11 @@ input[type=submit] {
     font-weight: 700;
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
 }
 
 input.new-resume {
@@ -129,6 +146,14 @@ img.profile {
     border-width: 2px;
     background-color: #b6e3ff;
     color: black;
+    background-image: none;
+}
+
+.list-header {
+    display: flex;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
 }
 
 .spacer {
