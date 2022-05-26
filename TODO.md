@@ -42,7 +42,7 @@
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
-- [ ] pretty up the resume list page
+- [x] pretty up the resume list page
   - [ ] show tags for each
   - [x] show description with ... if it gets too long
   - [x] add optional desc to resume schema
@@ -52,10 +52,11 @@
   - [x] add rest api route that sends back logname
   - [x] remove stuff from templates
   - [x] then remove stuff from flask views
-- [ ] add sidebar to server side dynamic pages? or something
-- [ ] show up/down buttons on entry hover
-- [ ] show profile picture in sidebar
+- [x] ~~add sidebar to server side dynamic pages? or something~~ *note: not using a sidebar for these pages*
+- [x] ~~show up/down buttons on entry hover~~
+- [x] show profile picture in sidebar
 - [x] make sidebar not move from resume list to resume page change
+
 - [ ] home page
 - [ ] account settings page
 - [ ] login page
