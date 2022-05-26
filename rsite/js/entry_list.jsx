@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -376,6 +377,7 @@ class Entries extends React.Component {
     if (!(stagedEntries[entryid].isChanged)) {
       // clear staged entry
       stagedEntries = this.setStagedEntriesEmpty(entryid);
+      this.setState({ stagedEntries });
       return;
     }
 
@@ -657,12 +659,25 @@ class Entries extends React.Component {
                 ? (
                   <span>
                     <form onSubmit={(e) => this.createEntry(e, 0)}>
-                      <input type="text" placeholder={isEducation ? 'Institution' : 'Company'} onChange={(e) => this.handleEntryChange(e, 0, 'content')} />
-                      <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'begin')} />
-                      <input type="month" onChange={(e) => this.handleEntryChange(e, 0, 'end')} />
-                      {isEducation ? <input type="number" step="0.01" placeholder="GPA" onChange={(e) => this.handleEntryChange(e, 0, 'gpa')} /> : null}
-                      <input type="submit" />
+                      <input type="text" required onChange={(event) => this.handleEntryChange(event, 0, 'content')} value={stagedEntries[0].content} maxLength="256" placeholder="Institution" />
+                      <br />
+                      <label htmlFor="typebox">From</label>
+                      <input type="month" required onChange={(event) => this.handleEntryChange(event, 0, 'begin')} value={stagedEntries[0].begin} />
+                      <label htmlFor="typebox">To</label>
+                      <input type="month" required onChange={(event) => this.handleEntryChange(event, 0, 'end')} value={stagedEntries[0].end} />
+                      <br />
+                      <input type="text" required onChange={(event) => this.handleEntryChange(event, 0, 'location')} value={stagedEntries[0].location} maxLength="64" placeholder="Location" />
+                      <br />
+                      <input type="text" required onChange={(event) => this.handleEntryChange(event, 0, 'title')} value={stagedEntries[0].title} maxLength="64" placeholder={isEducation ? 'Degree' : 'Title'} />
+                      <br />
+                      {isEducation ? (
+                        <div>
+                          <input type="number" required step="0.01" onChange={(event) => this.handleEntryChange(event, 0, 'gpa')} value={stagedEntries[0].gpa} min="0.0" max="4.0" placeholder="GPA" />
+                          <br />
+                        </div>
+                      ) : null}
                       <button type="button" onClick={this.setAddFalse.bind(this, 0)}>Cancel</button>
+                      <input type="submit" />
                     </form>
                     {
                       this.displayTop(3).map((e) => (
