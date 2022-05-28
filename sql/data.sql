@@ -25,10 +25,6 @@ INSERT INTO tags(tagname)
 VALUES ('web');
 INSERT INTO tags(tagname)
 VALUES ('backend');
-INSERT INTO resume_to_tag(resumeid, tagid)
-VALUES (3, 1);
-INSERT INTO resume_to_tag(resumeid, tagid)
-VALUES (3, 2);
 
 -- add some entries for the resumes
 
@@ -73,6 +69,11 @@ INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 6, 'tdokas');
 INSERT INTO resume_to_entry(resumeid, entryid, owner)
 VALUES (2, 7, 'tdokas');
+
+INSERT INTO entry_to_tag(entryid, resumeid, tagid)
+VALUES (6, 3, 1);
+INSERT INTO entry_to_tag(entryid, resumeid, tagid)
+VALUES (6, 3, 2);
 
 -- another education & experience to test recommending for resume 1
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa, location, title)
