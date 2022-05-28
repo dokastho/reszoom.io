@@ -13,6 +13,7 @@ class Sidebar extends React.Component {
       logname: props.logname,
       img: props.img,
       content: props.content,
+      tags: props.tags,
     };
     // this.createNew = this.createNew.bind(this);
   }
@@ -28,6 +29,7 @@ class Sidebar extends React.Component {
       pagename,
       logname,
       content,
+      tags,
       img,
     } = this.state;
     return (
@@ -43,6 +45,14 @@ class Sidebar extends React.Component {
               </div>
             ))
           }
+          <div className="header">
+            {
+              // render tags
+              tags.map((t) => (
+                <div className="tag" key={t}>{t}</div>
+              ))
+            }
+          </div>
           <div className="new" />
           <br />
           <hr />
@@ -62,6 +72,7 @@ class Sidebar extends React.Component {
 
 Sidebar.defaultProps = {
   content: [],
+  tags: [],
 };
 
 Sidebar.propTypes = {
@@ -69,6 +80,7 @@ Sidebar.propTypes = {
   logname: PropTypes.string.isRequired,
   img: PropTypes.string.isRequired,
   content: PropTypes.instanceOf(Array),
+  tags: PropTypes.instanceOf(Array),
 };
 
 // function collapse() {

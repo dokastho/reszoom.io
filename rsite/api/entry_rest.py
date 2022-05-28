@@ -9,9 +9,9 @@ URLs include:
 
 import flask
 import rsite
-from rsite.model import delete_helper, get_db, rest_api_auth_user, print_log
+from rsite.model import delete_helper, rest_api_auth_user
+from rsite.api.tag_rest import set_tags
 from threading import Thread
-import socket
 
 ###############################################################################
 ##### ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES # ENTRIES #####
@@ -267,6 +267,7 @@ def do_create(body):
     freq = 1
 
     entryid = body['entryid']
+    resumeid = body['resumeid']
 
     # entryid not supplied, so entry is new
     if entryid == 0:
@@ -298,7 +299,7 @@ def do_create(body):
                 "INSERT INTO resume_to_entry "
                 "(resumeid, entryid, owner) "
                 "VALUES (?, ?, ?)",
-                (body['resumeid'], newEntryid, logname, )
+                (resumeid, newEntryid, logname, )
             )
             cur.fetchone()
 
@@ -317,7 +318,7 @@ def do_create(body):
         # set tags
         # only necessary for new tags that are type entry
         if body['type']:
-            t = Thread(target=set_tags, args=(entryid, body['content'],))
+            t = Thread(target=set_tags, args=(resumeid, entryid, body['content'],))
             t.start()
 
     else:
@@ -337,7 +338,7 @@ def do_create(body):
             "INSERT INTO resume_to_entry "
             "(resumeid, entryid, owner) "
             "VALUES (?, ?, ?)",
-            (body['resumeid'], entryid, logname, )
+            (resumeid, entryid, logname, )
         )
         cur.fetchone()
 
@@ -356,7 +357,7 @@ def do_create(body):
         "WHERE resumeid == ? "
         "AND entryid == ? "
         "AND owner == ? ",
-        (body['resumeid'], entryid, logname, )
+        (resumeid, entryid, logname, )
     )
     eid = cur.fetchone()
 
@@ -386,6 +387,7 @@ def do_update(body: dict):
     logname, database = rest_api_auth_user()
 
     entryid = body['entryid']
+    resumeid = body['resumeid']
 
     # get the entry
     cur = database.execute(
@@ -414,7 +416,7 @@ def do_update(body: dict):
         
         if body['type']:
             # set new tags
-            t = Thread(target=set_tags, args=(entryid, body['content'],))
+            t = Thread(target=set_tags, args=(resumeid, entryid, body['content'],))
             t.start()
         
         cur = database.execute(
@@ -438,7 +440,7 @@ def do_update(body: dict):
             "WHERE resumeid == ? "
             "AND entryid == ? "
             "AND owner == ? ",
-            (body['resumeid'], entryid, logname, )
+            (resumeid, entryid, logname, )
         )
         eid = cur.fetchone()
         data = {
@@ -512,109 +514,3 @@ def load_body():
         body['parent'] = None
 
     return body
-
-
-def set_tags(entryid, content: str):
-    """target function of a thread to send data to tags server & set db entries on reply."""
-    host = "localhost"
-    port = 0
-
-    server_host = "localhost"
-    server_port = 8888
-
-    MSG_SIZE = 264
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listen_sock:
-        # bind worker socket to its server
-        listen_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-        listen_sock.bind((host, port))
-        port = listen_sock.getsockname()[1]
-        
-        msg = "@@@" + str(port) + content + '\0'*(MSG_SIZE - len(content))
-
-        listen_sock.listen()
-        # send msg
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as send_sock:
-
-            # attempt to establish connection with tag server
-            try:
-                send_sock.connect((server_host, server_port))
-            except:
-                print_log("Failed to connect to tag server", "ERROR")
-                return
-
-            # register with manager
-            send_sock.sendall(msg.encode('utf-8'),)
-
-        while True:
-            try:
-                clientsocket, address = listen_sock.accept()
-            except socket.timeout:
-                continue
-            # debug info
-            print_log("Connection from " + address[0], "OK")
-            with clientsocket:
-                message_chunks = []
-                while True:
-                    try:
-                        data = clientsocket.recv(4096)
-                    except socket.timeout:
-                        continue
-                    if not data:
-                        break
-                    message_chunks.append(data)
-            # Decode list-of-byte-strings to UTF8 and parse JSON data
-            message_bytes = b''.join(message_chunks)
-            message_decode = message_bytes.decode("utf-8")
-            
-            # remove trailing empty portion of message
-            message_str = message_decode.replace("\x00", "")
-
-            msg_tags = message_str.split()
-            break
-    with rsite.app.app_context():
-        # handle tags
-        database = get_db()
-        cur = database.execute(
-            "SELECT * "
-            "FROM tags "
-        )
-        db_tags = cur.fetchall()
-
-        # construct db tags dict
-        db_tags_dict = {}
-        for tag in db_tags:
-            db_tags_dict[tag['tagname']] = tag['tagid']
-
-        # insert tags if necessary
-        for tag in msg_tags:
-            if tag not in db_tags_dict.keys():
-                # insert tag into db
-                cur = database.execute(
-                    "INSERT INTO tags "
-                    "(tagname) "
-                    "VALUES(?)",
-                    (tag, )
-                )
-                cur.fetchone()
-                cur = database.execute(
-                    "SELECT MAX(tagid) "
-                    "AS id "
-                    "FROM tags"
-                )
-                data = cur.fetchone()
-                tagid = int(data['id'])
-
-            else:
-                tagid = int(db_tags_dict[tag])
-
-            # insert tagid
-            cur = database.execute(
-                "INSERT INTO entry_to_tag "
-                "(entryid, tagid) "
-                "VALUES(?, ?)",
-                (entryid, tagid, )
-            )
-            cur.fetchone()
-            print_log(f'{entryid}: added tag "{tag}"', "OK")
