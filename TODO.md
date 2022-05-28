@@ -67,7 +67,7 @@
 - [ ] search resume list
   - [ ] search by tag
 - [ ] tag clickable, shows list of resumes matching that tag
-- [ ] fix resume tag remove using entry delete (iterate through entry tags to update list of resume tags)
+- [x] fix resume tag remove using entry delete (iterate through entry tags to update list of resume tags)
 - [ ] "are you sure?" prompt when deleting info header with childern
 - [ ] bug: editing info header without changes makes children disappear until reload
 
