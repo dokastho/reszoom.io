@@ -9,22 +9,15 @@
             <h1><a href="/">&lt; home</a></h1>
             <!-- remember to render "account already exists from view return" -->
             <div class="resume-name"><h1>Create Account</h1></div>
-            {% if baduser %}
-            <div style="color:red;">Username is taken. Please try again</div>
-            <br />
-            {% endif %}
             <form action="/accounts/?target=/" class="create" method="post" enctype="multipart/form-data">
                 <div class="in-line">Profile picture  <input type="file" name="file" required/></div>
                 <div class="in-line">Full name  <input type="text" name="fullname" required/></div>
                 <div class="in-line">Username  <input type="text" name="username" required/></div>
                 <div class="in-line">Email address  <input type="text" name="email" required/></div>
                 <div class="in-line"><input type="hidden" name="operation" value="create"/></div>
-                <div class="in-line">
-                    Password  
-                    <div id="password">
-                        <!-- Load JavaScript -->
-                        <script type="text/javascript" src="{{ url_for('static', filename='js/password.bundle.js') }}"></script>
-                    </div>
+                <div id="password">
+                    <!-- Load JavaScript -->
+                    <script type="text/javascript" src="{{ url_for('static', filename='js/password.bundle.js') }}"></script>
                 </div>
             </form>
         </div>
