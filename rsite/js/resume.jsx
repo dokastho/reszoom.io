@@ -82,5 +82,5 @@ class ResumePage extends React.Component {
 
 render(
   <ResumePage />,
-  document.getElementById('make-resume'),
+  document.getElementById('view-resumes'),
 );

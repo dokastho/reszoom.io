@@ -34,6 +34,8 @@ class ResumeList extends React.Component {
                   <div>Desc</div>
                   <div className="spacer" />
                   <div>Tags</div>
+                  <div className="spacer" />
+                  <div>Date</div>
                 </div>
                 <hr />
                 {resumes.map((r) => (
@@ -47,6 +49,7 @@ class ResumeList extends React.Component {
                         {r.description === null ? null
                           : <EllipsisText text={r.description} length={32} />}
                       </div>
+                      <div className="spacer" />
                       <div className="spacer" />
                     </button>
                   </form>
