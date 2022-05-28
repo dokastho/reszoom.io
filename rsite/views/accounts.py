@@ -27,7 +27,7 @@ def accounts():
 
             # set session cookie
             if not do_login(uname, pword):
-                abort(500)      # server didn't abort
+                return redirect("/accounts/login/?badlogin=1")
             session['logname'] = uname
 
         # create an account
@@ -84,7 +84,7 @@ def do_login(uname, pword):
     """Login user with username and password."""
     logname = rsite.model.check_authorization(uname, pword)
     if not logname:
-        abort(403)
+        return False
 
     return True
 
@@ -261,7 +261,11 @@ def login():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
-            return render_template("login.html")
+            badlogin = request.args.get("badlogin", type=bool, default=False)
+            context = {
+                "badlogin": badlogin,
+            }
+            return render_template("login.html", **context)
 
         # if there doesn't exist a session cookie,
         # redirect to /accounts/?target=/login/ to create one

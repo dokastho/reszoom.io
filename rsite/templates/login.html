@@ -9,6 +9,10 @@
             <h1><a href="/">< home</a></h1>
             <div class="resume-name"><h1>Login</h1></div>
             <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+                {% if badlogin %}
+                <div style="color:red;">Incorrect username/password. Please try again</div>
+                <br />
+                {% endif %}
                 <input type="text" name="username" required/>
                 <input type="password" name="password" required/>
                 <input type="submit" value="login"/>

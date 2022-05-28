@@ -57,7 +57,7 @@
 - [x] show profile picture in sidebar
 - [x] make sidebar not move from resume list to resume page change
 - [ ] reset tokens
-- [ ] "try again" function for login and add entry attempt
+- [x] "try again" function for login and add entry attempt
 - [x] make passwords strict
 - [x] password page should be client-dynamic
 - [ ] collapsible sidebar
