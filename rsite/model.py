@@ -187,7 +187,7 @@ def delete_helper(entryid, freq):
             (entryid,)
         )
         cur.fetchone()
-        
+
         # delete teids associated with this entry
         cur = database.execute(
             "DELETE FROM entry_to_tag "
@@ -208,7 +208,7 @@ def delete_helper(entryid, freq):
             (freq, freq, entryid,)
         )
         cur.fetchone()
-        
+
         # delete the entry in table resume_to_entry
         cur = database.execute(
             "DELETE FROM resume_to_entry "
@@ -218,6 +218,15 @@ def delete_helper(entryid, freq):
         )
         cur.fetchone()
 
+    # # delete tags
+    # cur = database.execute(
+    #     "DELETE FROM resume_to_tag "
+    #     "WHERE resumeid == ? ",
+    #     (rid, )
+    # )
+    # cur.fetchall()
+
+
 def rest_api_auth_user():
     """Standard user auth in rest api, returns logname and database connection."""
     logname = get_logname()
@@ -226,6 +235,7 @@ def rest_api_auth_user():
 
     database = get_db()
     return logname, database
+
 
 def print_log(msg: str, code: None) -> str:
     now = datetime.utcnow()

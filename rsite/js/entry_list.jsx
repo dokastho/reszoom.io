@@ -591,13 +591,15 @@ class Entries extends React.Component {
                           {/* render content */}
                           <div>{'\t• '.concat(entries[e.entryid].content)}</div>
                           {/* render tags */}
-                          {
-                            e.entryid in tags ? (
-                              tags[e.entryid].map((t) => (
-                                <span key={t.tagid}>{`${t.tagname} `}</span>
-                              ))
-                            ) : null
-                          }
+                          <div className="header">
+                            {
+                              e.entryid in tags ? (
+                                tags[e.entryid].map((t) => (
+                                  <div className="tag" key={t.tagid}>{`${t.tagname} `}</div>
+                                ))
+                              ) : null
+                            }
+                          </div>
                         </div>
                       ) : (
                         // INFO TYPE
