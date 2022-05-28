@@ -41,11 +41,11 @@ a:hover {
     padding: 4px;
 }
 
-a.bare {
+a.plain {
     text-decoration: none;
 }
 
-a.bare:hover {
+a.plain:hover {
     background-color: white;
     border-radius: 0px;
     text-decoration: none;
@@ -110,16 +110,23 @@ input[type=submit] {
     cursor: pointer;
 }
 
+input[type=text].plain {
+    border: 1px solid gray;
+    width: 300px;
+}
+
 button:hover,
 input[type=button]:hover,
 input[type=submit]:hover,
 input[type=text]:hover,
+input[type=password]:hover,
 input[type=number]:hover,
 input[type=month]:hover {
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
 }
 
 input[type=text],
+input[type=password],
 input[type=number],
 input[type=month] {
     padding: 5px;
@@ -130,6 +137,7 @@ input[type=month] {
 }
 
 input[type=text]:focus,
+input[type=password]:focus,
 input[type=number]:focus,
 input[type=month]:focus {
     border: none;
@@ -157,8 +165,7 @@ input.new-resume {
 
 /* #floating-sidebar {} */
 
-.sidebar,
-.sidebar-profile {
+.sidebar {
     background-color: white;
     border: 1px solid gray;
     border-radius: 5px;
