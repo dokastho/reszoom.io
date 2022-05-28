@@ -68,9 +68,9 @@ def accounts():
 
             info = {
                 "username": session['logname'],
-                "old": request.form.get('password'),
-                "new": request.form.get("new_password1"),
-                "verify_new": request.form.get("new_password2"),
+                "old": request.form.get('old_password'),
+                "new": request.form.get("password"),
+                "verify_new": request.form.get("check_password"),
             }
             do_update_password(connection, info)
 
