@@ -110,6 +110,10 @@ input[type=submit] {
     cursor: pointer;
 }
 
+input[type=text].plain {
+    border: 1px solid black;
+}
+
 button:hover,
 input[type=button]:hover,
 input[type=submit]:hover,
