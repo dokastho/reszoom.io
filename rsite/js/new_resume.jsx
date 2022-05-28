@@ -42,7 +42,7 @@ class NewResume extends React.Component {
               <div>
                 <b>New Resume Name</b>
                 <br />
-                <textarea name="name" required rows={1} cols={50} />
+                <input type="text" name="name" required style="width: 48px; border: 1px solid black;" />
               </div>
               <br />
               <br />
