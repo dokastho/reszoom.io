@@ -41,11 +41,11 @@ a:hover {
     padding: 4px;
 }
 
-a.bare {
+a.plain {
     text-decoration: none;
 }
 
-a.bare:hover {
+a.plain:hover {
     background-color: white;
     border-radius: 0px;
     text-decoration: none;
@@ -108,6 +108,11 @@ input[type=submit] {
     border: 0 solid transparent;
     border-radius: 0.28571429rem;
     cursor: pointer;
+}
+
+input[type=text].plain {
+    border: 1px solid gray;
+    width: 300px;
 }
 
 button:hover,
