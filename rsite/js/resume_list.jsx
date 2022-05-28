@@ -34,6 +34,8 @@ class ResumeList extends React.Component {
                   <div>Desc</div>
                   <div className="spacer" />
                   <div>Tags</div>
+                  <div className="spacer" />
+                  <div>Date</div>
                 </div>
                 <hr />
                 {resumes.map((r) => (
