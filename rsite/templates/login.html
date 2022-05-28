@@ -10,7 +10,10 @@
             <div class="resume-name"><h1>Login</h1></div>
             <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
                 <input type="text" name="username" required/>
-                <input type="password" name="password" required/>
+                <div id="password">
+                    <!-- Load JavaScript -->
+                    <script type="text/javascript" src="{{ url_for('static', filename='js/password.bundle.js') }}"></script>
+                </div>
                 <input type="submit" value="login"/>
                 <input type="hidden" name="operation" value="login"/>
             </form>
