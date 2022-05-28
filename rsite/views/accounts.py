@@ -40,7 +40,8 @@ def accounts():
                 "password": request.form.get("password")
             }
             if not do_create(connection, info):
-                abort(500)      # server didn't abort correctly
+                # username is taken
+                return redirect("/accounts/create/?baduser=1")
 
             session['logname'] = info['username']
 
@@ -109,7 +110,7 @@ def do_create(connection, info):
     )
     user = cur.fetchall()
     if len(user) != 0:
-        abort(409)
+        return False
 
     # save image
     path = rsite.app.config["UPLOAD_FOLDER"]/pp_str
@@ -279,8 +280,12 @@ def create():
     """Render create page if not logged in."""
     if 'logname' in session:
         return redirect('/')
+    baduser = request.args.get("baduser", type=bool, default=False)
+    context = {
+        "baduser": baduser,
+    }
 
-    return render_template('create.html')
+    return render_template('create.html', **context)
 
 
 @rsite.app.route('/accounts/delete/')
