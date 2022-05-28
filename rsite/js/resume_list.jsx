@@ -51,7 +51,12 @@ class ResumeList extends React.Component {
                           : <EllipsisText text={r.description} length={32} />}
                       </div>
                       <div className="spacer" />
-                      {/* <div className="header"></div> */}
+                      {
+                        // RENDER TAGS
+                        r.tags.map((t) => (
+                          <div className="tag">{t}</div>
+                        ))
+                      }
                       <div className="spacer" />
                       <div className="header">
                         {Moment(r.created).format('d MMM yy')}
