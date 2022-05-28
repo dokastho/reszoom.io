@@ -9,6 +9,7 @@ class NewResume extends React.Component {
     super(props);
     this.state = {
       // state attributes go here
+      tags: [],
     };
   }
 
@@ -16,24 +17,27 @@ class NewResume extends React.Component {
     const sidebar = document.getElementById('floating-sidebar');
 
     // get the logname
-    fetch('/api/v1/user/', { credentials: 'same-origin', method: 'GET' })
+    fetch('/api/v1/create/', { credentials: 'same-origin', method: 'GET' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        const { username, filename } = data;
+        const { tags, username, filename } = data;
         // render sidebar
         ReactDOM.render(
           // render the floating sidebar
           <Sidebar pagename="New Resume" logname={username} img={filename} />,
           sidebar,
         );
+
+        this.setState({ tags });
       })
       .catch((error) => console.log(error));
   }
 
   render() {
+    const { tags } = this.state;
     return (
       <div className="resume-content">
         <div className="create-form">
@@ -62,6 +66,18 @@ class NewResume extends React.Component {
                 <br />
                 <textarea name="desc" rows={4} cols={64} />
               </div>
+              {
+                // RENDER TAG TOGGLES
+                tags.length === 0 ? 'Tags will be generated from your resume content & will appear here'
+                  : (
+                    tags.map((t) => (
+                      <div>
+                        <label htmlFor="typebox">{t}</label>
+                        <input type="checkbox" name={`tag_${t}`} id="typebox" key={t} />
+                      </div>
+                    ))
+                  )
+              }
               <input type="hidden" name="operation" value="create" />
               <input type="submit" />
               <a className="plain" href="/resume/"><button type="button">Cancel</button></a>
@@ -73,12 +89,7 @@ class NewResume extends React.Component {
   }
 }
 
-NewResume.propTypes = {};
-
 render(
   <NewResume />,
   document.getElementById('make-resume'),
 );
-
-// NewResume.propTypes = {
-// };

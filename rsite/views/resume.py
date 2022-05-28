@@ -8,7 +8,7 @@ URLs include:
 """
 import flask
 import rsite
-from rsite.model import show_username, delete_helper
+from rsite.model import show_username, delete_helper, get_db, get_logname, get_target
 
 
 @rsite.app.route('/resume/', methods=['GET'])
@@ -41,7 +41,7 @@ def show_saved(resumeid):
         if logname == "Sign In":
             flask.abort(403)
 
-        database = rsite.model.get_db()
+        database = get_db()
         cur = database.execute(
             "SELECT * "
             "FROM resumes "
@@ -66,13 +66,14 @@ def show_saved(resumeid):
 @rsite.app.route('/resume/commit/', methods=['POST'])
 def post_resumes():
     """Resolve post requests for the resume."""
-    database = rsite.model.get_db()
+    database = get_db()
 
-    logname = rsite.model.get_logname()
+    logname = get_logname()
     if not logname:
         flask.abort(403)
 
     op = flask.request.form.get("operation", default=None, type=str)
+    
 
     if op is None:
         flask.abort(404)
@@ -82,6 +83,12 @@ def post_resumes():
         rname = flask.request.form.get('name')
         rtype = flask.request.form.get('type')
         desc = flask.request.form.get('desc')
+        # get tags from form
+        tags = []
+        for item in flask.request.form:
+            tagflag = "tag_"
+            if item.startswith(tagflag):
+                tags.append(item.lstrip(tagflag))
 
         if len(rname) == 0:
             flask.abort(400)
@@ -136,12 +143,6 @@ def post_resumes():
             # execute the update/delete for this entry
             cur.fetchone()
 
-        # delete tags
-        cur = database.execute(
-            "DELETE FROM resume_to_tag "
-            "WHERE resumeid == ?",
-            (rid, )
-        )
         # then delete the resume
         cur = database.execute(
             "DELETE FROM resumes "
@@ -150,7 +151,7 @@ def post_resumes():
             (rid, logname, )
         )
         cur.fetchone()
-        target = rsite.model.get_target()
+        target = get_target()
 
     elif op == "save":
         pass
