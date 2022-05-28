@@ -243,6 +243,11 @@ img.profile-large {
     /* margin: auto; */
 }
 
+#view-resumes {
+    width: 60%;
+    /* margin: auto; */
+}
+
 /* resume list */
 .resume-link {
     display: flex;
@@ -264,12 +269,16 @@ img.profile-large {
 .resume-list,
 .resume-content {
     background-color: white;
-    max-width: 816px;
     width: -webkit-fill-available;
     display: inline-block;
     border: 1px solid gray;
     border-radius: 8px;
     margin: auto;
+}
+
+.resume-content {
+    padding: 48px;
+    max-width: 816px;
 }
 
 .list-header {
@@ -279,12 +288,12 @@ img.profile-large {
     padding-top: 8px;
 }
 
-.spacer {
-    margin: auto;
+.header {
+    text-align: center;
 }
 
-.resume-content {
-    padding: 48px;
+.spacer {
+    margin: auto;
 }
 
 .resume-name {
