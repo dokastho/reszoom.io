@@ -289,7 +289,7 @@ img.profile-large {
 }
 
 .header {
-    text-align: center;
+    display: flex;
 }
 
 .spacer {
@@ -362,4 +362,13 @@ span.location {
 span.date {
     text-align: right;
     float: right;
+}
+
+.tag {
+    background-color: #b6e3ff;
+    color:#0969da;
+    border-radius: 4px;
+    padding: 4px;
+    margin: 2px;
+    font-weight: normal;
 }

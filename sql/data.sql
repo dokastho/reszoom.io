@@ -21,8 +21,14 @@ INSERT INTO resumes(owner, name, typename)
 VALUES ('awdeorio', 'resume', 0);
 
 -- add tags to resume 3
+INSERT INTO tags(tagname)
+VALUES ('web');
+INSERT INTO tags(tagname)
+VALUES ('backend');
 INSERT INTO resume_to_tag(resumeid, tagid)
-VALUES (2, 9, 'tdokas');
+VALUES (3, 1);
+INSERT INTO resume_to_tag(resumeid, tagid)
+VALUES (3, 2);
 
 -- add some entries for the resumes
 
