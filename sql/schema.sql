@@ -17,6 +17,7 @@ CREATE TABLE resumes(
   typename BOOLEAN NOT NULL,
   -- snapshot VARCHAR(64) NOT NULL, todo add snapshot later
   description VARCHAR(256),
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE entries(
   title VARCHAR(64),
   location VARCHAR(64),
   content VARCHAR(256),
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
   -- FOREIGN KEY(subheader) REFERENCES entries(entryid)
 );
@@ -46,6 +48,7 @@ CREATE TABLE tags(
 CREATE TABLE entry_to_tag(
   entryid INTEGER NOT NULL,
   tagid INTEGER NOT NULL,
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(entryid, tagid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
@@ -57,6 +60,7 @@ CREATE TABLE resume_to_entry(
   pos INTEGER PRIMARY KEY AUTOINCREMENT,
   entryid INTEGER NOT NULL,
   owner VARCHAR(20) NOT NULL,
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE

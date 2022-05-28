@@ -34,20 +34,27 @@ class ResumeList extends React.Component {
                   <div>Desc</div>
                   <div className="spacer" />
                   <div>Tags</div>
+                  <div className="spacer" />
+                  <div>Date</div>
                 </div>
                 <hr />
                 {resumes.map((r) => (
                   <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
                     <button type="submit" className="resume-link" background-color="white">
-                      <div>
+                      <div className="header">
                         {r.name}
                       </div>
                       <div className="spacer" />
-                      <div>
+                      <div className="header">
                         {r.description === null ? null
                           : <EllipsisText text={r.description} length={32} />}
                       </div>
                       <div className="spacer" />
+                      {/* <div className="header"></div> */}
+                      <div className="spacer" />
+                      <div className="header">
+                        {r.created}
+                      </div>
                     </button>
                   </form>
                 ))}
