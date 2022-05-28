@@ -58,9 +58,10 @@
 - [x] make sidebar not move from resume list to resume page change
 - [ ] reset tokens
 - [ ] "try again" function for login and add entry attempt
-- [ ] make passwords strict
-- [ ] password page should be client-dynamic
+- [x] make passwords strict
+- [x] password page should be client-dynamic
 - [ ] collapsible sidebar
+- [ ] fix change password view
 
 - [ ] home page
 - [x] account settings page
