@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import PropTypes from 'prop-types';
 // import '../static/css/styles.css';
 
 class Password extends React.Component {
@@ -10,18 +11,44 @@ class Password extends React.Component {
       pword: '',
       valid: false,
       output: [],
+      edit: props.edit,
+      verify: '',
+      equalsString: '',
     };
     this.handleChange = this.handleChange.bind(this);
+    this.checkSame = this.checkSame.bind(this);
     this.validatePass = this.validatePass.bind(this);
   }
 
   componentDidMount() {
+    const { edit } = this.props;
     this.validatePass('');
+    this.setState({ edit });
   }
 
   handleChange(event) {
     const pword = event.target.value;
     this.validatePass(pword);
+  }
+
+  checkSame(event) {
+    const newPword = event.target.value;
+    const { pword, valid } = this.state;
+
+    let str = 'passwords must match ';
+
+    let match = false;
+
+    if (pword === newPword) {
+      str = str.concat(' ✅');
+      match = true;
+    } else {
+      str = str.concat(' ❌');
+    }
+
+    const isValid = valid && match;
+
+    this.setState({ verify: newPword, equalsString: str, valid: isValid });
   }
 
   validatePass(pword) {
@@ -67,7 +94,14 @@ class Password extends React.Component {
   }
 
   render() {
-    const { pword, valid, output } = this.state;
+    const {
+      pword,
+      valid,
+      output,
+      edit,
+      verify,
+      equalsString,
+    } = this.state;
     return (
       <div className="pwordcheck">
         <input type="password" name="password" required onChange={(e) => this.handleChange(e)} value={pword} />
@@ -77,13 +111,22 @@ class Password extends React.Component {
             <div key={item}>{item}</div>
           ))
         }
-        {valid ? <div className="in-line"><input type="submit" name="signup" value="sign up" /></div> : null}
+        {edit
+          ? (
+            <div>
+              <input type="password" name="check_password" required onChange={(e) => this.checkSame(e)} value={verify} />
+              <div>{equalsString}</div>
+            </div>
+          ) : null}
+        {valid ? <div className="in-line"><input type="submit" name="signup" /></div> : null}
       </div>
     );
   }
 }
 
-Password.propTypes = {};
+Password.propTypes = {
+  edit: PropTypes.bool.isRequired,
+};
 
 render(
   <div>
