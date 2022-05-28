@@ -8,6 +8,7 @@ URLs include:
 import flask
 import rsite
 from rsite.model import rest_api_auth_user
+from rsite.api.tag_rest import fetch_resume_tags
 
 
 @rsite.app.route('/api/v1/resume/load/', methods=['GET'])
@@ -26,6 +27,10 @@ def load_resumes():
                 (logname, )
             )
             resumes = cur.fetchall()
+            
+            # get the tags for each resume
+            for resume in resumes:
+                resume["tags"] = fetch_resume_tags(resume["resumeid"])
             res = {
                 'resumes': resumes
             }
@@ -90,6 +95,7 @@ def load_resumes():
                 'resumetype': resumeinfo['typename'],
                 'description': resumeinfo['description'],
                 'created': resumeinfo['created'],
+                'tags': fetch_resume_tags(rid),
             }
         else:
             flask.abort(403)

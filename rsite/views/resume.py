@@ -56,10 +56,12 @@ def show_saved(resumeid):
         if resume['owner'] != logname:
             flask.abort(403)
 
-        resp = flask.make_response(flask.render_template('view_edit.html', **context))
+        resp = flask.make_response(
+            flask.render_template('view_edit.html', **context))
         resp.set_cookie('resumeid', f'{resumeid}')
 
         return resp
+
 
 @rsite.app.route('/resume/commit/', methods=['POST'])
 def post_resumes():
@@ -80,12 +82,12 @@ def post_resumes():
         rname = flask.request.form.get('name')
         rtype = flask.request.form.get('type')
         desc = flask.request.form.get('desc')
-        
+
         if len(rname) == 0:
             flask.abort(400)
-        
+
         rtype = 1 if rtype == 'on' else 0
-        
+
         cur = database.execute(
             "INSERT INTO resumes "
             "(owner, name, typename, description) "
@@ -127,12 +129,19 @@ def post_resumes():
 
             if logname != entry['owner']:
                 flask.abort(403)
-            
+
+            # delete resume
             delete_helper(entry['entryid'], entry['frequency'])
-            
+
             # execute the update/delete for this entry
             cur.fetchone()
 
+        # delete tags
+        cur = database.execute(
+            "DELETE FROM resume_to_tag "
+            "WHERE resumeid == ?",
+            (rid, )
+        )
         # then delete the resume
         cur = database.execute(
             "DELETE FROM resumes "
@@ -145,6 +154,5 @@ def post_resumes():
 
     elif op == "save":
         pass
-
 
     return flask.redirect(target)
