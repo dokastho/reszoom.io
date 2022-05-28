@@ -44,12 +44,16 @@ class Sidebar extends React.Component {
             ))
           }
           <div className="new" />
-        </div>
-        <div className="sidebar-profile">
-          <a className="bare" href={`/users/${logname}/`}>
-            <img className="profile" src={`/uploads/${img}`} alt="" />
-          </a>
-          <h2><a href={`/users/${logname}/`}>{logname}</a></h2>
+          <br />
+          <hr />
+          <br />
+          <div className="sidebar-profile">
+            <a className="plain" href={`/users/${logname}/`}>
+              <img className="profile" src={`/uploads/${img}`} alt="" />
+            </a>
+            <h2><a href={`/users/${logname}/`}>{logname}</a></h2>
+          </div>
+          <br />
         </div>
       </div>
     );
