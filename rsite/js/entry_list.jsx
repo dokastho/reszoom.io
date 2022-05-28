@@ -594,7 +594,7 @@ class Entries extends React.Component {
                           {
                             e.entryid in tags ? (
                               tags[e.entryid].map((t) => (
-                                <span key={t.tagid}>{`${t.tagname} `}</span>
+                                <div className="tag" key={t.tagid}>{`${t.tagname} `}</div>
                               ))
                             ) : null
                           }
