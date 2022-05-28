@@ -54,6 +54,15 @@ CREATE TABLE entry_to_tag(
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
 );
 
+CREATE TABLE resume_to_tag(
+  resumeid INTEGER NOT NULL,
+  tagid INTEGER NOT NULL,
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(resumeid, tagid),
+  FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
+  FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
+);
+
 -- reserve pos 1 for swaps
 CREATE TABLE resume_to_entry(
   resumeid INTEGER NOT NULL,

@@ -19,7 +19,12 @@ INSERT INTO resumes(owner, name, typename)
 VALUES ('tdokas', 'resume 3', 1);
 INSERT INTO resumes(owner, name, typename)
 VALUES ('awdeorio', 'resume', 0);
--- add some entries for the resume
+
+-- add tags to resume 3
+INSERT INTO resume_to_tag(resumeid, tagid)
+VALUES (2, 9, 'tdokas');
+
+-- add some entries for the resumes
 
 -- experience
 INSERT INTO entries(frequency, priority, owner, header, content, type, begin, end, gpa, location, title)

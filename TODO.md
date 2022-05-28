@@ -61,7 +61,8 @@
 - [x] make passwords strict
 - [x] password page should be client-dynamic
 - [ ] collapsible sidebar
-- [ ] fix change password view
+- [x] fix change password view
+- [x] add date created to resume
 
 - [ ] home page
 - [x] account settings page
