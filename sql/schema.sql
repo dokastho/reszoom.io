@@ -47,18 +47,11 @@ CREATE TABLE tags(
 
 CREATE TABLE entry_to_tag(
   entryid INTEGER NOT NULL,
+  resumeid INTEGER NOT NULL,
   tagid INTEGER NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY(entryid, tagid),
   FOREIGN KEY(entryid) REFERENCES entries(entryid) ON DELETE CASCADE,
-  FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
-);
-
-CREATE TABLE resume_to_tag(
-  resumeid INTEGER NOT NULL,
-  tagid INTEGER NOT NULL,
-  created DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(resumeid, tagid),
   FOREIGN KEY(resumeid) REFERENCES resumes(resumeid) ON DELETE CASCADE,
   FOREIGN KEY(tagid) REFERENCES tags(tagid) ON DELETE CASCADE
 );

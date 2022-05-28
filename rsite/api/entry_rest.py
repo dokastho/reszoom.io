@@ -403,9 +403,10 @@ def do_update(body: dict):
     # entry must be valid
     if oldentry is None:
         flask.abort(400)
-
-    # if freq is 1, just change content, or if we want to update the entry across all entries
-    if freq == 1 or body['all']:
+    
+    # delete existing tags
+    # new ones are set below when freq is 1, and in do_create when it's >1
+    if body["type"]:
         # delete all tags with this entryid
         cur = database.execute(
             "DELETE FROM entry_to_tag "
@@ -413,6 +414,9 @@ def do_update(body: dict):
             (entryid, )
         )
         cur.fetchone()
+
+    # if freq is 1, just change content, or if we want to update the entry across all entries
+    if freq == 1 or body['all']:
         
         if body['type']:
             # set new tags

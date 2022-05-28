@@ -160,32 +160,19 @@ def set_tags(resumeid, entryid, content: str):
             else:
                 tagid = int(db_tags_dict[tag])
 
-            # insert tag into resume db
-            if tag not in fetch_resume_tags(resumeid):
-                cur = database.execute(
-                    "INSERT INTO resume_to_tag "
-                    "(resumeid, tagid) "
-                    "VALUES(?, ?)",
-                    (resumeid, tagid, )
-                )
-                cur.fetchone()
-
-            else:
-                pass
-
             # insert tagid
             cur = database.execute(
                 "INSERT INTO entry_to_tag "
-                "(entryid, tagid) "
-                "VALUES(?, ?)",
-                (entryid, tagid, )
+                "(entryid, resumeid, tagid) "
+                "VALUES(?, ?, ?)",
+                (entryid, resumeid, tagid, )
             )
             cur.fetchone()
 
             print_log(f'{entryid}: added tag "{tag}"', "OK")
 
 
-def fetch_resume_tags(resumeid):
+def fetch_resume_tags(resumeid) -> list:
     """Return a list of tags that this resume has."""
 
     database = get_db()
@@ -193,13 +180,13 @@ def fetch_resume_tags(resumeid):
     # fetch the tag ids this resume has
     cur = database.execute(
         "SELECT tagid "
-        "FROM resume_to_tag "
+        "FROM entry_to_tag "
         "WHERE resumeid == ?",
         (resumeid,)
     )
     tagids = cur.fetchall()
 
-    tagnames = []
+    tagnames = set()
 
     # construct list of tagnames
     for tagid in tagids:
@@ -211,6 +198,6 @@ def fetch_resume_tags(resumeid):
             "WHERE tagid == ?",
             (tagid,)
         )
-        tagnames.append(cur.fetchone()['tagname'])
+        tagnames.add(cur.fetchone()['tagname'])
 
-    return tagnames
+    return list(tagnames)
