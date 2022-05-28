@@ -41,11 +41,11 @@ a:hover {
     padding: 4px;
 }
 
-a.bare {
+a.plain {
     text-decoration: none;
 }
 
-a.bare:hover {
+a.plain:hover {
     background-color: white;
     border-radius: 0px;
     text-decoration: none;
@@ -110,6 +110,11 @@ input[type=submit] {
     cursor: pointer;
 }
 
+input[type=text].plain {
+    border: 1px solid gray;
+    width: 300px;
+}
+
 button:hover,
 input[type=button]:hover,
 input[type=submit]:hover,
@@ -157,8 +162,7 @@ input.new-resume {
 
 /* #floating-sidebar {} */
 
-.sidebar,
-.sidebar-profile {
+.sidebar {
     background-color: white;
     border: 1px solid gray;
     border-radius: 5px;
