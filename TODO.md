@@ -43,11 +43,11 @@
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
 - [x] pretty up the resume list page
-  - [ ] show tags for each
+  - [ ] **show tags for each**
   - [x] show description with ... if it gets too long
   - [x] add optional desc to resume schema
   - [x] display desc at top of resume page
-  - [ ] make desc editable
+  - [ ] **make desc editable**
 - [x] move all content to sidebar
   - [x] add rest api route that sends back logname
   - [x] remove stuff from templates

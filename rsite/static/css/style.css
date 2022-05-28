@@ -27,6 +27,12 @@ body {
     display: flex;
 }
 
+.in-line {
+    display: flex;
+    padding: 4px;
+    align-items: baseline;
+}
+
 a {
     text-decoration: none;
     font-weight: bold;
@@ -61,6 +67,11 @@ a.plain:hover {
     background-color: #ccc;
 }
 
+.pwordcheck {
+    text-decoration: wavy;
+    color: slategray;
+}
+
 /* profile page */
 
 .user {
@@ -92,9 +103,17 @@ a.plain:hover {
 
 /* forms */
 
+form.create {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 button,
 input[type=button],
-input[type=submit] {
+input[type=submit],
+input[type=submit].danger {
     display: inline-block;
     line-height: 1;
     vertical-align: baseline;
@@ -113,7 +132,19 @@ input[type=submit] {
 input[type=text].plain {
     border: 1px solid gray;
     width: 300px;
+    background-color: white;
 }
+
+input[type=submit].danger {
+    border: 1px solid gray;
+    color: red;
+}
+
+input[type=submit].danger:hover {
+    color: white;
+    background-color: #cf222e;
+}
+
 
 button:hover,
 input[type=button]:hover,
@@ -134,6 +165,7 @@ input[type=month] {
     border: none;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    background-color: #E8F0FE;
 }
 
 input[type=text]:focus,
