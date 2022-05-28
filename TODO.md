@@ -56,24 +56,27 @@
 - [x] ~~show up/down buttons on entry hover~~
 - [x] show profile picture in sidebar
 - [x] make sidebar not move from resume list to resume page change
-
-- [ ] home page
-- [ ] account settings page
-- [ ] login page
-- [ ] testing! mark done when I feel like it
-
-down the road...
-- [ ] animations
-
-random ideas
-- [ ] cache entries so that if you delete the last entry but want to undo before saving
+- [ ] reset tokens
 - [ ] "try again" function for login and add entry attempt
 - [ ] make passwords strict
+- [ ] password page should be client-dynamic
+- [ ] collapsible sidebar
+
+- [ ] home page
+- [x] account settings page
+- [x] login page
+- [x] testing! mark done when I feel like it
+
+down the road...
+- [x] animations
+
+random ideas
+- [x] ~~cache entries so that if you delete the last entry but want to undo before saving~~
 - [ ] make resumes/entries/education/etc visible in the user profile
-- [ ] gpa display must be decimal format
+- [x] gpa display must be decimal format
 - [ ] use await instead of subFetched
 - [ ] callback entries in similar manner to recommended
-- [ ] put links to all resumes in sidebar 
+- [x] ~~put links to all resumes in sidebar ~~
 
 tag server
 - [ ] sanitize & validate inputs

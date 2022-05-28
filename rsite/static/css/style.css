@@ -11,12 +11,17 @@
 body {
     background-color: #eaeef2;
     font-family: sans-serif;
-    padding: 10px;
+    margin: 0px;
     animation: fadeInAnimation ease .2s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
+.wrapper,
+.center-panel {
+    margin: 16px;
+    justify-content: center;
+}
 
 .wrapper {
     display: flex;
@@ -46,6 +51,17 @@ a.bare:hover {
     text-decoration: none;
     padding: 0px;
 }
+
+.bottom-info {
+    position: absolute;
+    bottom: 0px;
+    height: auto;
+    width: 100%;
+    border-top: 2px solid darkgrey;
+    background-color: #ccc;
+}
+
+/* profile page */
 
 .user {
     display: flex;
@@ -139,18 +155,20 @@ input.new-resume {
 
 /* sidebar content */
 
+/* #floating-sidebar {} */
+
 .sidebar,
 .sidebar-profile {
     background-color: white;
     border: 1px solid gray;
     border-radius: 5px;
-    padding: 4%;
+    padding: 24px;
     width: 300px;
     height: fit-content;
     position: sticky;
     top: 0;
     /* top: 10%; */
-    margin: 20px;
+    margin: 24px;
 }
 
 .sidebar-profile {
@@ -165,6 +183,7 @@ img.profile-large {
     object-fit: cover;
     overflow: hidden;
 }
+
 img.profile {
     width: 100px;
     height: 100px;
@@ -181,8 +200,8 @@ img.profile-large {
 }
 
 #make-resume {
-    width: min-content;
-    margin-left: 2%;
+    width: 912px;
+    /* margin: auto; */
 }
 
 /* resume list */
@@ -203,9 +222,11 @@ img.profile-large {
     cursor: pointer;
 }
 
-.resume-list {
+.resume-list,
+.resume-content {
     background-color: white;
-    width: 816px;
+    max-width: 816px;
+    width: -webkit-fill-available;
     display: inline-block;
     border: 1px solid gray;
     border-radius: 8px;
@@ -224,13 +245,7 @@ img.profile-large {
 }
 
 .resume-content {
-    background-color: white;
-    width: 816px;
-    display: inline-block;
-    border: 1px solid gray;
-    border-radius: 8px;
     padding: 48px;
-    margin: auto;
 }
 
 .resume-name {

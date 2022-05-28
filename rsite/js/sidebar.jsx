@@ -67,4 +67,14 @@ Sidebar.propTypes = {
   content: PropTypes.instanceOf(Array),
 };
 
+// function collapse() {
+//   document.getElementById('floating-sidebar').style.width = '250px';
+//   document.getElementById('make-resume').style.marginLeft = '250px';
+// }
+
+// function expand() {
+//   document.getElementById('floating-sidebar').style.width = '0px';
+//   document.getElementById('make-resume').style.marginLeft = '0px';
+// }
+
 export default Sidebar;
