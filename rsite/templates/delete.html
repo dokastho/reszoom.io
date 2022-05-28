@@ -5,14 +5,13 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <div class="wrapper">
-            <div id="floating-sidebar"></div>
-            <div class="site">
-                <form action="/accounts/?target=/accounts/create/" method="post" enctype="multipart/form-data">
-                    <input type="submit" name="delete" value="confirm delete account"/>
-                    <input type="hidden" name="operation" value="delete"/>
-                </form>
-            </div>
+        <div class="center-panel">
+            <form action="/accounts/?target=/accounts/create/" method="post" enctype="multipart/form-data">
+                <input type="submit" name="delete" value="confirm delete account"/>
+                <input type="hidden" name="operation" value="delete"/>
+            </form>
+            <br />
+            <a href="/users/{{logname}}">Back to account</a>
         </div>
     </body>
 </html>

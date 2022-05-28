@@ -5,18 +5,16 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <div class="wrapper">
-            <div id="floating-sidebar"></div>
-            <div class="site">
-                <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
-                    <input type="text" name="username" required/>
-                    <input type="password" name="password" required/>
-                    <input type="submit" value="login"/>
-                    <input type="hidden" name="operation" value="login"/>
-                </form>
-                <p>don't have an account?</p>
-                <a href="/accounts/create/">create one!</a>
-            </div>
+        <div class="center-panel">
+            <div class="resume-name"><h1>Login</h1></div>
+            <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+                <input type="text" name="username" required/>
+                <input type="password" name="password" required/>
+                <input type="submit" value="login"/>
+                <input type="hidden" name="operation" value="login"/>
+            </form>
+            <p>don't have an account?</p>
+            <a href="/accounts/create/">create one!</a>
         </div>
     </body>
 </html>

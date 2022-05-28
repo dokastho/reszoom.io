@@ -5,25 +5,31 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <div class="stuff">
+        <div>
             <h1><a href="/">home</a></h1>
-            <div class="site">
-                <div class="post">
-                    <h1>{{username}}</h1>
-                    <p>{{fullname}}</p>
-                    <img src="/uploads/{{profilepic}}" />
-                    {% if username == logname %}
-                    <div id="account-actions" class="create-post">
-                        <a href="/accounts/password/"><b>Change password</b></a>
-                        <a href="/accounts/edit/"><b>Edit profile</b></a>
-                        <a href="/accounts/delete/"><b>Delete account</b></a>
-                        <form action="/accounts/logout/" method="post">
-                            <input type="hidden" name="logout" value="{{logname}}"/>
-                            <button name="logout">logout</button>
-                        </form>
-                    </div>
-                    {% endif %}
+            <div class="center-panel">
+                <div class="resume-name"><h1>Account Info</h1></div>
+                <img class="profile-large" src="/uploads/{{profilepic}}" />
+                <br />
+                <div class="user">
+                    <div class="fullname">{{fullname}}</div>
+                    <div class="username">@{{username}}</div>
                 </div>
+                <hr />
+                <br />
+                {% if username == logname %}
+                <div id="account-actions" class="create-post">
+                    <a href="/accounts/password/"><b>Change password</b></a>
+                    <a href="/accounts/edit/"><b>Edit profile</b></a>
+                    <a href="/accounts/delete/"><b>Delete account</b></a>
+                    <br />
+                    <br />
+                    <form action="/accounts/logout/" method="post">
+                        <input type="hidden" name="logout" value="{{logname}}"/>
+                        <button name="logout">logout</button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
         </div>
     </body>

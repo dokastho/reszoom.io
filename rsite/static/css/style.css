@@ -1,8 +1,22 @@
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 body {
     background-color: #eaeef2;
     font-family: sans-serif;
     padding: 10px;
+    animation: fadeInAnimation ease .2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
+
 
 .wrapper {
     display: flex;
@@ -33,6 +47,33 @@ a.bare:hover {
     padding: 0px;
 }
 
+.user {
+    display: flex;
+    font-size: 24pt;
+}
+
+.username {
+    color: #0969da;
+}
+
+.fullname {
+    font-weight: bold;
+}
+
+.center-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 4%;
+    transition: all .4s ease-out;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* forms */
 
 button,
@@ -55,7 +96,10 @@ input[type=submit] {
 
 button:hover,
 input[type=button]:hover,
-input[type=submit]:hover {
+input[type=submit]:hover,
+input[type=text]:hover,
+input[type=number]:hover,
+input[type=month]:hover {
     background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
 }
 
@@ -76,7 +120,8 @@ input[type=month]:focus {
 }
 
 .long-text {
-    width: 98.5%;;
+    width: 98.5%;
+    ;
 }
 
 .site {
@@ -114,12 +159,25 @@ input.new-resume {
     justify-content: space-evenly;
 }
 
+img.profile,
+img.profile-large {
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+}
 img.profile {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
     overflow: hidden;
+}
+
+img.profile-large {
+    width: auto;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
 }
 
 #make-resume {
