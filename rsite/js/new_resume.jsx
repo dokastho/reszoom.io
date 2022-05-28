@@ -42,7 +42,7 @@ class NewResume extends React.Component {
               <div>
                 <b>New Resume Name</b>
                 <br />
-                <textarea name="name" required rows={1} cols={50} />
+                <input type="text" className="plain" name="name" required />
               </div>
               <br />
               <br />
@@ -64,6 +64,7 @@ class NewResume extends React.Component {
               </div>
               <input type="hidden" name="operation" value="create" />
               <input type="submit" />
+              <a href="/resume/"><button type="button">Cancel</button></a>
             </form>
           </div>
         </div>
