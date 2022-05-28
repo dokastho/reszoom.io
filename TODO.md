@@ -66,6 +66,7 @@
 - [ ] search resume list
   - [ ] search by tag
 - [ ] tag clickable, shows list of resumes matching that tag
+- [ ] fix resume tag remove using entry delete (iterate through entry tags to update list of resume tags)
 
 - [ ] home page
 - [x] account settings page

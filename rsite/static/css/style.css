@@ -367,8 +367,11 @@ span.date {
 .tag {
     background-color: #b6e3ff;
     color:#0969da;
-    border-radius: 4px;
-    padding: 4px;
+    border-radius: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
     margin: 2px;
     width: fit-content;
     font-weight: normal;
