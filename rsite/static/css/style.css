@@ -264,12 +264,20 @@ img.profile-large {
 .resume-list,
 .resume-content {
     background-color: white;
-    max-width: 816px;
     width: -webkit-fill-available;
     display: inline-block;
     border: 1px solid gray;
     border-radius: 8px;
     margin: auto;
+}
+
+.resume-list {
+    width: 60%;
+}
+
+.resume-content {
+    padding: 48px;
+    max-width: 816px;
 }
 
 .list-header {
@@ -281,10 +289,6 @@ img.profile-large {
 
 .spacer {
     margin: auto;
-}
-
-.resume-content {
-    padding: 48px;
 }
 
 .resume-name {
