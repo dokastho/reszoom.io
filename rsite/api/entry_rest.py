@@ -265,6 +265,17 @@ def do_create(body):
         body['pos'] = 0
 
     freq = 1
+    # body:
+    #   entryid
+    #   resumeid
+    #   content
+    #   header
+    #   type
+    #   begin
+    #   end
+    #   gpa
+    #   title
+    #   location
 
     entryid = body['entryid']
     resumeid = body['resumeid']

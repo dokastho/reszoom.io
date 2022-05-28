@@ -86,6 +86,7 @@ random ideas
 - [ ] use await instead of subFetched
 - [ ] callback entries in similar manner to recommended
 - [x] ~~put links to all resumes in sidebar ~~
+- [ ] Tag class in rest api with __init__ function that parses json
 
 tag server
 - [ ] sanitize & validate inputs

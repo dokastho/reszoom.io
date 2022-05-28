@@ -9,6 +9,8 @@ URLs include:
 import flask
 import rsite
 from rsite.model import show_username, delete_helper, get_db, get_logname, get_target
+from rsite.api.tag_rest import get_most_popular_entry
+from rsite.api.entry_rest import do_create
 
 
 @rsite.app.route('/resume/', methods=['GET'])
@@ -73,7 +75,6 @@ def post_resumes():
         flask.abort(403)
 
     op = flask.request.form.get("operation", default=None, type=str)
-    
 
     if op is None:
         flask.abort(404)
@@ -109,9 +110,35 @@ def post_resumes():
             "AS rid "
             "FROM resumes "
         )
-        data = cur.fetchone()
-        target = "/resume/" + str(data['rid']) + "/"
+        rid = cur.fetchone()['rid']
+        
+        target = "/resume/" + str(rid) + "/"
 
+        entryids = []
+        # add popular entries to resume according to selected tags
+        for tag in tags:
+            entry = get_most_popular_entry(tag)
+            # ensure that you don't double post a popular entry with >1 tags
+            if entry["entryid"] not in entryids:
+                # does entry have a parent?
+                if entry["parent"] is not None:
+                    parentid = entry["parent"]
+                    entryids.append(parentid)
+                    # fetch parent
+                    cur = database.execute(
+                        "SELECT * "
+                        "FROM entries "
+                        "WHERE entryid == ?",
+                        (parentid,)
+                    )
+                    parent = cur.fetchone()
+                    parent["resumeid"] = rid
+                    do_create(parent)
+                    
+                entryids.append(entry["entryid"])
+                entry["resumeid"] = rid
+                do_create(entry)
+            
     elif op == "delete":
         rid = flask.request.form.get("id", default=0, type=int)
         if rid == 0:

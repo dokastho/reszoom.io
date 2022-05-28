@@ -19,9 +19,19 @@ class Sidebar extends React.Component {
   }
 
   componentDidMount() {
-    const { pagename, logname, content } = this.props;
+    const {
+      pagename,
+      logname,
+      content,
+      tags,
+    } = this.props;
 
-    this.setState({ pagename, logname, content });
+    this.setState({
+      pagename,
+      logname,
+      content,
+      tags,
+    });
   }
 
   render() {
