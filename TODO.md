@@ -43,7 +43,7 @@
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
 - [x] pretty up the resume list page
-  - [ ] **show tags for each**
+  - [x] **show tags for each**
   - [x] show description with ... if it gets too long
   - [x] add optional desc to resume schema
   - [x] display desc at top of resume page
@@ -63,6 +63,9 @@
 - [ ] collapsible sidebar
 - [x] fix change password view
 - [x] add date created to resume
+- [ ] search resume list
+  - [ ] search by tag
+- [ ] tag clickable, shows list of resumes matching that tag
 
 - [ ] home page
 - [x] account settings page
