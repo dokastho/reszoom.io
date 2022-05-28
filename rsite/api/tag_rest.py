@@ -63,6 +63,41 @@ def get_resume_tags(resumeid):
     return flask.jsonify(data), 201
 
 
+def get_most_popular_entry(tag) -> dict:
+    # get tagid
+    database = get_db()
+    cur = database.execute(
+        "SELECT tagid "
+        "FROM tags "
+        "WHERE tagname == ?",
+        (tag,)
+    )
+    tagid = cur.fetchone()["tagid"]
+
+    # get entries matching tagname
+    cur = database.execute(
+        "SELECT entryid "
+        "FROM entry_to_tag "
+        "WHERE tagid == ?",
+        (tagid,)
+    )
+    entryids = cur.fetchall()
+    
+    the_max = {'frequency': 0}
+    for entryid in entryids:
+        entryid = entryid['entryid']
+        cur = database.execute(
+            "SELECT * "
+            "FROM entries "
+            "WHERE entryid == ?",
+            (entryid,)
+        )
+        entry = cur.fetchone()
+        if entry["frequency"] > the_max["frequency"]:
+            the_max = entry
+    return the_max
+
+
 def set_tags(resumeid, entryid, content: str):
     """target function of a thread to send data to tags server & set db entries on reply."""
     host = "localhost"

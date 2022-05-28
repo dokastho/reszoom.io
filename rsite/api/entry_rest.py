@@ -265,6 +265,17 @@ def do_create(body):
         body['pos'] = 0
 
     freq = 1
+    # body:
+    #   entryid
+    #   resumeid
+    #   content
+    #   header
+    #   type
+    #   begin
+    #   end
+    #   gpa
+    #   title
+    #   location
 
     entryid = body['entryid']
     resumeid = body['resumeid']
@@ -341,6 +352,25 @@ def do_create(body):
             (resumeid, entryid, logname, )
         )
         cur.fetchone()
+        
+        # insert resume/id into entry_to_tag
+        cur = database.execute(
+            "SELECT tagid "
+            "FROM entry_to_tag "
+            "WHERE entryid == ?",
+            (entryid, )
+        )
+        tagids = cur.fetchall()
+        
+        for tagid in tagids:
+            tagid = tagid['tagid']
+            cur = database.execute(
+                "INSERT INTO entry_to_tag "
+                "(entryid, resumeid, tagid) "
+                "VALUES (?, ?, ?)",
+                (entryid, resumeid, tagid, )
+            )
+            cur.fetchone()
 
         cur = database.execute(
             "UPDATE entries "
