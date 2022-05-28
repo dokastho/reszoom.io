@@ -27,7 +27,7 @@ def accounts():
 
             # set session cookie
             if not do_login(uname, pword):
-                return redirect("/accounts/login/?badlogin=1")
+                abort(500)      # server didn't abort
             session['logname'] = uname
 
         # create an account
@@ -40,8 +40,7 @@ def accounts():
                 "password": request.form.get("password")
             }
             if not do_create(connection, info):
-                # username is taken
-                return redirect("/accounts/create/?baduser=1")
+                abort(500)      # server didn't abort correctly
 
             session['logname'] = info['username']
 
@@ -110,7 +109,7 @@ def do_create(connection, info):
     )
     user = cur.fetchall()
     if len(user) != 0:
-        return False
+        abort(409)
 
     # save image
     path = rsite.app.config["UPLOAD_FOLDER"]/pp_str
@@ -261,11 +260,7 @@ def login():
 
         # redirect if a session cookie exists
         if 'logname' not in session:
-            badlogin = request.args.get("badlogin", type=bool, default=False)
-            context = {
-                "badlogin": badlogin,
-            }
-            return render_template("login.html", **context)
+            return render_template("login.html")
 
         # if there doesn't exist a session cookie,
         # redirect to /accounts/?target=/login/ to create one
@@ -284,12 +279,8 @@ def create():
     """Render create page if not logged in."""
     if 'logname' in session:
         return redirect('/')
-    baduser = request.args.get("baduser", type=bool, default=False)
-    context = {
-        "baduser": baduser,
-    }
-
-    return render_template('create.html', **context)
+    
+    return render_template('create.html')
 
 
 @rsite.app.route('/accounts/delete/')
