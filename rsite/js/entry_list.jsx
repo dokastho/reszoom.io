@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'moment';
 
 class Entries extends React.Component {
   constructor(props) {
@@ -630,9 +631,9 @@ class Entries extends React.Component {
                             </span>
                             {/* render date */}
                             <span className="date">
-                              {entries[e.entryid].begin}
+                              {Moment(entries[e.entryid].begin).format('MMM yy')}
                               -
-                              {entries[e.entryid].end}
+                              {Moment(entries[e.entryid].end).format('MMM yy')}
                             </span>
                           </div>
                           {/* render subentries */}
