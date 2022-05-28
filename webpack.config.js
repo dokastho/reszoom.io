@@ -6,6 +6,7 @@ module.exports = {
     main: './rsite/js/resume.jsx',
     new: './rsite/js/new_resume.jsx',
     edit: './rsite/js/builder.jsx',
+    password: './rsite/js/password.jsx',
   },
   output: {
     path: path.join(__dirname, '/rsite/static/js/'),
