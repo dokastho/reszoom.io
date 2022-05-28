@@ -69,15 +69,20 @@ class Password extends React.Component {
   render() {
     const { pword, valid, output } = this.state;
     return (
-      <div className="pwordcheck">
-        <input type="password" name="password" required onChange={(e) => this.handleChange(e)} value={pword} />
-        {
-          // RENDER CHECKS
-          output.map((item) => (
-            <div key={item}>{item}</div>
-          ))
-        }
-        {valid ? <div className="in-line"><input type="submit" name="signup" value="submit" /></div> : null}
+      <div>
+        <div className="in-line">
+          New password
+          <input type="password" name="password" required onChange={(e) => this.handleChange(e)} value={pword} />
+        </div>
+        <div className="pwordcheck">
+          {
+            // RENDER CHECKS
+            output.map((item) => (
+              <div key={item}>{item}</div>
+            ))
+          }
+        </div>
+        {valid ? <div className="in-line"><input type="submit" /></div> : null}
       </div>
     );
   }
