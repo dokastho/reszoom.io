@@ -32,6 +32,7 @@ class ResumeBuilder extends React.Component {
       resumename: '',
       resumetype: false,
       desc: '',
+      tags: [],
 
       // user-specific attributes
       username: '',
@@ -69,6 +70,7 @@ class ResumeBuilder extends React.Component {
           fullname: data.fullname,
           desc: data.description,
           filename: data.filename,
+          tags: data.tags,
         });
 
         const {
@@ -80,6 +82,7 @@ class ResumeBuilder extends React.Component {
           resumetype,
           desc,
           filename,
+          tags,
         } = this.state;
 
         // construct the custom sidebar content
@@ -105,6 +108,7 @@ class ResumeBuilder extends React.Component {
             pagename={resumename}
             logname={username}
             content={sidebarContent}
+            tags={tags}
             img={filename}
           />,
           sidebar,
