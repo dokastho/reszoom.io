@@ -201,7 +201,8 @@ class Entries extends React.Component {
 
   fetchTags(entryid) {
     // fetch tags for entry
-    fetch(`/api/v1/${entryid}/tags`, { credentials: 'same-origin' })
+    const { resumeid } = this.state; 
+    fetch(`/api/v1/tags/${resumeid}/${entryid}`, { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
