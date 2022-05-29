@@ -218,13 +218,14 @@ def delete_helper(entryid, freq):
         )
         cur.fetchone()
 
-    # # delete tags
-    # cur = database.execute(
-    #     "DELETE FROM resume_to_tag "
-    #     "WHERE resumeid == ? ",
-    #     (rid, )
-    # )
-    # cur.fetchall()
+    # delete tags
+    cur = database.execute(
+        "DELETE FROM entry_to_tag "
+        "WHERE resumeid == ? "
+        "AND entryid == ?",
+        (rid, entryid, )
+    )
+    cur.fetchall()
 
 
 def rest_api_auth_user():
