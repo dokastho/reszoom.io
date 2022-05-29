@@ -12,8 +12,8 @@ import socket
 from rsite.model import rest_api_auth_user, get_db, print_log
 
 
-@rsite.app.route("/api/v1/<int:entryid>/tags/", methods=['GET'])
-def get_entry_tags(entryid):
+@rsite.app.route("/api/v1/tags/<int:resumeid>/<int:entryid>/", methods=['GET'])
+def get_entry_tags(resumeid, entryid):
     """Get the other entries owned by this user for a given header."""
     """Send: array of recommended entries"""
 
@@ -26,8 +26,9 @@ def get_entry_tags(entryid):
     cur = database.execute(
         "SELECT * "
         "FROM entry_to_tag "
-        "WHERE entryid == ? ",
-        (entryid,)
+        "WHERE entryid == ? "
+        "AND resumeid == ?",
+        (entryid, resumeid,)
     )
     tags = cur.fetchall()
 
@@ -82,7 +83,7 @@ def get_most_popular_entry(tag) -> dict:
         (tagid,)
     )
     entryids = cur.fetchall()
-    
+
     the_max = {'frequency': 0}
     for entryid in entryids:
         entryid = entryid['entryid']
