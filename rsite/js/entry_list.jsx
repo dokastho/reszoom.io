@@ -521,6 +521,7 @@ class Entries extends React.Component {
       subEids,
       subFetched,
       tags,
+      renderSidebar,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -668,6 +669,7 @@ class Entries extends React.Component {
                                   username={username}
                                   isEntries={1}
                                   parent={e.entryid}
+                                  renderSidebar={renderSidebar}
                                 />
                               ) : null
                           }
