@@ -40,13 +40,12 @@ class ResumeBuilder extends React.Component {
       fullname: '',
       filename: '',
     };
+
+    this.renderSidebar = this.renderSidebar.bind(this);
   }
 
   componentDidMount() {
     const rid = Number(Cookies.get('resumeid'));
-
-    const sidebar = document.getElementById('floating-sidebar');
-
     // ReactDOM.render(
     //   <a href="/resume/">Go back to resumes</a>,
     //   sidebar,
@@ -78,41 +77,11 @@ class ResumeBuilder extends React.Component {
           eids,
           resumeid,
           username,
-          resumename,
-          resumetype,
-          desc,
-          filename,
           tags,
         } = this.state;
 
-        // construct the custom sidebar content
-        const sidebarContent = [];
-        if (resumetype) {
-          sidebarContent.push({
-            text: 'Student Resume',
-          });
-        } else {
-          sidebarContent.push({
-            text: 'Employee Resume',
-          });
-        }
-        sidebarContent.push({ text: desc });
-        sidebarContent.push({
-          text: 'Go back to resumes',
-          link: '/resume/',
-        });
-
-        ReactDOM.render(
-          // render the floating sidebar
-          <Sidebar
-            pagename={resumename}
-            logname={username}
-            content={sidebarContent}
-            tags={tags}
-            img={filename}
-          />,
-          sidebar,
-        );
+        // render sidebar
+        this.renderSidebar(tags);
 
         // render entries
 
@@ -136,6 +105,7 @@ class ResumeBuilder extends React.Component {
                 header={f}
                 username={username}
                 isEntries={isEntries}
+                renderSidebar={this.renderSidebar}
               />
               {/* {
                 // render the divs for each entry
@@ -179,6 +149,46 @@ class ResumeBuilder extends React.Component {
         });
       })
       .catch((error) => console.log(error));
+  }
+
+  renderSidebar(tags) {
+    const {
+      resumetype,
+      resumename,
+      desc,
+      username,
+      filename,
+    } = this.state;
+    const sidebar = document.getElementById('floating-sidebar');
+
+    // construct the custom sidebar content
+    const sidebarContent = [];
+    if (resumetype) {
+      sidebarContent.push({
+        text: 'Student Resume',
+      });
+    } else {
+      sidebarContent.push({
+        text: 'Employee Resume',
+      });
+    }
+    sidebarContent.push({ text: desc });
+    sidebarContent.push({
+      text: 'Go back to resumes',
+      link: '/resume/',
+    });
+
+    ReactDOM.render(
+      // render the floating sidebar
+      <Sidebar
+        pagename={resumename}
+        logname={username}
+        content={sidebarContent}
+        tags={tags}
+        img={filename}
+      />,
+      sidebar,
+    );
   }
 
   render() {

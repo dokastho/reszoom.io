@@ -45,6 +45,8 @@ class Entries extends React.Component {
       // tags for entries
       // key: entryid value: array of tag names
       tags: {},
+      // function to update sidebar in parent component
+      renderSidebar: props.renderSidebar,
     };
     this.createEntry = this.createEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
@@ -70,6 +72,7 @@ class Entries extends React.Component {
       resumeid,
       isEntries,
       parent,
+      renderSidebar,
     } = this.props;
 
     if (!isEntries && eids.length > 0) {
@@ -116,6 +119,7 @@ class Entries extends React.Component {
       resumeid,
       isEntries,
       parent,
+      renderSidebar,
     });
 
     console.log('mount');
@@ -301,6 +305,11 @@ class Entries extends React.Component {
         // fetch tags
         this.fetchTags(entryid);
       })
+      .then(() => {
+        // update tags
+        const { tags, renderSidebar } = this.state;
+        renderSidebar(tags);
+      })
       .catch((error) => console.log(error));
     console.log(username);
   }
@@ -332,6 +341,11 @@ class Entries extends React.Component {
       // update recommended
       this.fetchRecommended();
     })
+      .then(() => {
+        // update tags
+        const { tags, renderSidebar } = this.state;
+        renderSidebar(tags);
+      })
       .catch((error) => console.log(error));
   }
 
@@ -430,6 +444,11 @@ class Entries extends React.Component {
       .then(() => {
         // fetch tags
         this.fetchTags(entryid);
+      })
+      .then(() => {
+        // update tags
+        const { tags, renderSidebar } = this.state;
+        renderSidebar(tags);
       })
       .catch((error) => console.log(error));
   }
@@ -745,6 +764,7 @@ Entries.propTypes = {
   username: PropTypes.string.isRequired,
   isEntries: PropTypes.number.isRequired,
   parent: PropTypes.number,
+  renderSidebar: PropTypes.func.isRequired,
 };
 
 export default Entries;

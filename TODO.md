@@ -36,9 +36,8 @@
   - [x] create adds to entries_to_tags
   - [x] recommend based on matching tags, offer from all
   - [x] adding an entry will update tags based on the posts
-  - [ ] select tags on create
+  - [x] select tags on create
   - [x] edit updates tags
-  - [ ] reload page periodically to update tags
 - [ ] *maybe* move all entry-related variables into the one entries fetch in the entry-list react code
 - [x] make buttons appear on div click
 - [x] **fix:** elements of div are squashed by the div click (buttons, subentries)
@@ -69,7 +68,9 @@
 - [ ] tag clickable, shows list of resumes matching that tag
 - [x] fix resume tag remove using entry delete (iterate through entry tags to update list of resume tags)
 - [ ] "are you sure?" prompt when deleting info header with childern
-- [ ] bug: editing info header without changes makes children disappear until reload
+- [x] bug: editing info header without changes makes children disappear until reload
+- [ ] reload page periodically to update tags
+- [ ] update tags in sidebar without refresh
 
 - [ ] home page
 - [x] account settings page
