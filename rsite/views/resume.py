@@ -165,7 +165,7 @@ def post_resumes():
                 flask.abort(403)
 
             # delete resume
-            delete_helper(entry['entryid'], entry['frequency'])
+            delete_helper(rid, entry['entryid'], entry['frequency'])
 
             # execute the update/delete for this entry
             cur.fetchone()

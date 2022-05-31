@@ -100,8 +100,8 @@ def get_subentries(parent_entryid):
     return flask.jsonify(data), 201
 
 
-@ rsite.app.route("/api/v1/entry/<int:entryid>/", methods=['DELETE'])
-def delete_entry(entryid):
+@ rsite.app.route("/api/v1/entry/<int:resumeid>/<int:entryid>/", methods=['DELETE'])
+def delete_entry(resumeid, entryid):
     """Delete an entry."""
     if entryid == 0:
         flask.abort(404)
@@ -119,7 +119,7 @@ def delete_entry(entryid):
     if logname != entry['owner']:
         flask.abort(403)
 
-    delete_helper(entry['entryid'], entry['frequency'])
+    delete_helper(resumeid, entry['entryid'], entry['frequency'])
 
     # delete any subentries
     cur = database.execute(
@@ -134,7 +134,7 @@ def delete_entry(entryid):
         if logname != entry['owner']:
             flask.abort(403)
 
-        delete_helper(entry['entryid'], entry['frequency'])
+        delete_helper(resumeid, entry['entryid'], entry['frequency'])
 
     return flask.Response(status=204)
 
