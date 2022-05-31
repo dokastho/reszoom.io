@@ -4,6 +4,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 
+function uniqueTags(tags) {
+  const tagSet = [];
+  Object.keys(tags).forEach((entryid) => {
+    const entrytags = tags[entryid];
+    entrytags.forEach((tag) => {
+      if (!(tag in tagSet)) {
+        tagSet.push(tag);
+      }
+    });
+  });
+  return tagSet;
+}
+
 class Entries extends React.Component {
   constructor(props) {
     super(props);
@@ -308,7 +321,8 @@ class Entries extends React.Component {
       .then(() => {
         // update tags
         const { tags, renderSidebar } = this.state;
-        renderSidebar(tags);
+        const tagSet = uniqueTags(tags);
+        renderSidebar(tagSet);
       })
       .catch((error) => console.log(error));
     console.log(username);
@@ -344,7 +358,8 @@ class Entries extends React.Component {
       .then(() => {
         // update tags
         const { tags, renderSidebar } = this.state;
-        renderSidebar(tags);
+        const tagSet = uniqueTags(tags);
+        renderSidebar(tagSet);
       })
       .catch((error) => console.log(error));
   }
@@ -448,7 +463,8 @@ class Entries extends React.Component {
       .then(() => {
         // update tags
         const { tags, renderSidebar } = this.state;
-        renderSidebar(tags);
+        const tagSet = uniqueTags(tags);
+        renderSidebar(tagSet);
       })
       .catch((error) => console.log(error));
   }
@@ -521,6 +537,7 @@ class Entries extends React.Component {
       subEids,
       subFetched,
       tags,
+      renderSidebar,
     } = this.state;
     const isEducation = header === 'education';
     const max = Object.keys(eids).length - 1;
@@ -668,6 +685,7 @@ class Entries extends React.Component {
                                   username={username}
                                   isEntries={1}
                                   parent={e.entryid}
+                                  renderSidebar={renderSidebar}
                                 />
                               ) : null
                           }
