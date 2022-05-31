@@ -34,6 +34,13 @@ class Sidebar extends React.Component {
     });
   }
 
+  componentDidUpdate(prevState) {
+    const { tags } = this.state;
+    if (prevState.tags !== tags) {
+      this.render();
+    }
+  }
+
   render() {
     const {
       pagename,
