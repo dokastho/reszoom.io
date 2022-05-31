@@ -140,6 +140,7 @@ class ResumeBuilder extends React.Component {
                 header={f}
                 username={username}
                 isEntries={isEntries}
+                renderSidebar={this.renderSidebar}
               />,
               post.querySelector('.entries'),
             );
@@ -189,6 +190,7 @@ class ResumeBuilder extends React.Component {
       />,
       sidebar,
     );
+    this.setState({ tags });
   }
 
   render() {
