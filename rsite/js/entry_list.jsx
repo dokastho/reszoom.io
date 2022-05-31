@@ -329,7 +329,7 @@ class Entries extends React.Component {
   deleteEntry(entryid) {
     const { resumeid } = this.state;
 
-    fetch(`/api/v1/entry/${entryid}/?resumeid=${resumeid}`, {
+    fetch(`/api/v1/entry/${resumeid}/${entryid}`, {
       credentials: 'same-origin',
       method: 'DELETE',
     }).then((response) => {
