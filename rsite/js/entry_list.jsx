@@ -4,19 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 
-function uniqueTags(tags) {
-  const tagSet = [];
-  Object.keys(tags).forEach((entryid) => {
-    const entrytags = tags[entryid];
-    entrytags.forEach((tag) => {
-      if (!(tag in tagSet)) {
-        tagSet.push(tag.tagname);
-      }
-    });
-  });
-  return tagSet;
-}
-
 class Entries extends React.Component {
   constructor(props) {
     super(props);
@@ -55,9 +42,9 @@ class Entries extends React.Component {
       // key: entryid val: CONTENTS & PRIORITY of entry
       // note that on submit we create an eid
       recommended: [],
-      // tags for entries
-      // key: entryid value: array of tag names
-      tags: {},
+
+      // maintain a list of unique tags for the resume
+      tags: [],
       // function to update sidebar in parent component
       renderSidebar: props.renderSidebar,
     };
@@ -73,7 +60,7 @@ class Entries extends React.Component {
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
     this.fetchRecommended = this.fetchRecommended.bind(this);
-    this.fetchTags = this.fetchTags.bind(this);
+    this.uniqueTags = this.uniqueTags.bind(this);
   }
 
   componentDidMount() {
@@ -116,12 +103,6 @@ class Entries extends React.Component {
 
     // fetch recommended entries
     this.fetchRecommended();
-
-    // fetch tags for each entry
-    const entryidList = Object.keys(entries);
-    entryidList.forEach((entryid) => {
-      this.fetchTags(entryid);
-    });
 
     // set state
     this.setState({
@@ -216,25 +197,6 @@ class Entries extends React.Component {
     });
   }
 
-  fetchTags(entryid) {
-    // fetch tags for entry
-    const { resumeid } = this.state;
-    fetch(`/api/v1/tags/${resumeid}/${entryid}/`, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        const { tags, renderSidebar } = this.state;
-        tags[entryid] = data.tags;
-        this.setState({ tags });
-
-        const tagSet = uniqueTags(tags);
-        renderSidebar(tagSet);
-      })
-      .catch((error) => console.log(error));
-  }
-
   // create an entry
   createEntry(event, entryid) {
     event.preventDefault();
@@ -249,6 +211,8 @@ class Entries extends React.Component {
       subEids,
       subFetched,
       isEntries,
+      tags,
+      renderSidebar,
     } = this.state;
     let { stagedEntries } = this.state;
 
@@ -305,21 +269,25 @@ class Entries extends React.Component {
         stagedEntries = this.setStagedEntriesEmpty(entryid);
         // also clear stagedEntries[0] to fix form render
         stagedEntries = this.setStagedEntriesEmpty(0);
+        // update tags
+        const newTags = data.entry.tags;
+        newTags.forEach((t) => {
+          if (!(t in tags)) {
+            tags.push(t);
+          }
+        });
+        renderSidebar(tags);
         this.setState((prevState) => ({
           eids: prevState.eids.concat(data.eid),
           entries,
           subEntries,
           subEids,
           subFetched,
+          tags,
         }));
-      })
-      .then(() => {
+      }).then(() => {
         // update recommended
         this.fetchRecommended();
-      })
-      .then(() => {
-        // fetch tags
-        this.fetchTags(entryid);
       })
       .catch((error) => console.log(error));
     console.log(username);
@@ -337,23 +305,23 @@ class Entries extends React.Component {
       this.setState((prevState) => {
         // TODO: delete staged entry?
         const newEntries = prevState.entries;
-        const { tags } = prevState;
         delete newEntries[entryid];
-        delete tags[entryid];
         const neweids = prevState.eids.filter((eid) => eid.entryid !== entryid);
 
         return {
           entries: newEntries,
           eids: neweids,
-          tags,
         };
       });
     }).then(() => {
+      // remove tags if necessary
+      const tags = this.uniqueTags();
+      const { renderSidebar } = this.state;
+      renderSidebar(tags);
+      this.setState({ tags });
+    }).then(() => {
       // update recommended
       this.fetchRecommended();
-    }).then(() => {
-      // fetch tags
-      this.fetchTags(entryid);
     })
       .catch((error) => console.log(error));
   }
@@ -451,8 +419,11 @@ class Entries extends React.Component {
         this.fetchRecommended();
       })
       .then(() => {
-        // fetch tags
-        this.fetchTags(entryid);
+        // remove tags if necessary & render sidebar
+        const tags = this.uniqueTags();
+        const { renderSidebar } = this.state;
+        renderSidebar(tags);
+        this.setState({ tags });
       })
       .catch((error) => console.log(error));
   }
@@ -483,6 +454,20 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
     })
       .catch((error) => console.log(error));
+  }
+
+  uniqueTags() {
+    const { entries, tags } = this.state;
+    const tagSet = [];
+    Object.keys(entries).forEach((entryid) => {
+      const entrytags = entries[entryid].tags;
+      entrytags.forEach((tag) => {
+        if (!(tag in tags)) {
+          tagSet.push(tag.tagname);
+        }
+      });
+    });
+    return tagSet;
   }
 
   // display the top n recommended entries
@@ -524,7 +509,6 @@ class Entries extends React.Component {
       subEntries,
       subEids,
       subFetched,
-      tags,
       renderSidebar,
     } = this.state;
     const isEducation = header === 'education';
@@ -619,11 +603,9 @@ class Entries extends React.Component {
                           {/* render tags */}
                           <div className="header">
                             {
-                              e.entryid in tags ? (
-                                tags[e.entryid].map((t) => (
-                                  <div className="tag" key={t.tagid}>{`${t.tagname} `}</div>
-                                ))
-                              ) : null
+                              e.tags.map((t) => (
+                                <div className="tag" key={t.tagid}>{`${t.tagname} `}</div>
+                              ))
                             }
                           </div>
                         </div>
