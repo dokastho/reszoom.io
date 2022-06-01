@@ -19,6 +19,22 @@ function getEntriesByHeaderType(entries, eids, header, type) {
   return { sectionEntries, sectionEids };
 }
 
+function uniqueTags(entries) {
+  const tagSet = [];
+  Object.keys(entries).forEach((entryid) => {
+    const entrytags = entries[entryid].tags;
+    if ('tags' in entries[entryid]) {
+      // tags only in the entry type
+      entrytags.forEach((tag) => {
+        if (!(tag in tagSet)) {
+          tagSet.push(tag);
+        }
+      });
+    }
+  });
+  return tagSet;
+}
+
 class ResumeBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -152,7 +168,7 @@ class ResumeBuilder extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  renderSidebar(tags) {
+  renderSidebar(entries) {
     const {
       resumetype,
       resumename,
@@ -160,6 +176,8 @@ class ResumeBuilder extends React.Component {
       username,
       filename,
     } = this.state;
+
+    const tags = uniqueTags(entries);
     const sidebar = document.getElementById('floating-sidebar');
 
     // construct the custom sidebar content
