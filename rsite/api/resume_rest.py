@@ -36,6 +36,8 @@ def load_resumes():
             }
         elif op == "userinfo":
             rid = flask.request.args.get("resumeid", default=0, type=int)
+            if rid == 0:
+                flask.abort(404)
 
             # load all entries for a specific user
             cur = database.execute(
@@ -55,8 +57,6 @@ def load_resumes():
                 entries[entryid] = entry
 
             # get eids for the resume id
-            if rid == 0:
-                flask.abort(404)
             cur = database.execute(
                 "SELECT * "
                 "FROM resume_to_entry "
