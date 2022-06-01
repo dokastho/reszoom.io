@@ -104,6 +104,8 @@ class Entries extends React.Component {
     // fetch recommended entries
     this.fetchRecommended();
 
+    const { tags } = this.uniqueTags();
+
     // set state
     this.setState({
       eids,
@@ -113,6 +115,7 @@ class Entries extends React.Component {
       resumeid,
       isEntries,
       parent,
+      tags,
       renderSidebar,
     });
 
@@ -461,11 +464,14 @@ class Entries extends React.Component {
     const tagSet = [];
     Object.keys(entries).forEach((entryid) => {
       const entrytags = entries[entryid].tags;
-      entrytags.forEach((tag) => {
-        if (!(tag in tags)) {
-          tagSet.push(tag.tagname);
-        }
-      });
+      if ('tags' in entries[entryid]) {
+        // tags only in the entry type
+        entrytags.forEach((tag) => {
+          if (!(tag in tags)) {
+            tagSet.push(tag.tagname);
+          }
+        });
+      }
     });
     return tagSet;
   }
