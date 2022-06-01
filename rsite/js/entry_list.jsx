@@ -60,7 +60,6 @@ class Entries extends React.Component {
     this.handleEntryChange = this.handleEntryChange.bind(this);
     this.displayTop = this.displayTop.bind(this);
     this.fetchRecommended = this.fetchRecommended.bind(this);
-    this.uniqueTags = this.uniqueTags.bind(this);
   }
 
   componentDidMount() {
@@ -105,16 +104,19 @@ class Entries extends React.Component {
     this.fetchRecommended();
 
     // set state
-    this.setState({
-      eids,
-      entries,
-      header,
-      username,
-      resumeid,
-      isEntries,
-      parent,
-      renderSidebar,
-    });
+    this.setState(
+      {
+        eids,
+        entries,
+        header,
+        username,
+        resumeid,
+        isEntries,
+        parent,
+        renderSidebar,
+      },
+      renderSidebar(),
+    );
 
     console.log('mount');
     console.log(this);
@@ -269,14 +271,6 @@ class Entries extends React.Component {
         stagedEntries = this.setStagedEntriesEmpty(entryid);
         // also clear stagedEntries[0] to fix form render
         stagedEntries = this.setStagedEntriesEmpty(0);
-        // update tags
-        const newTags = data.entry.tags;
-        newTags.forEach((t) => {
-          if (!(t in tags)) {
-            tags.push(t);
-          }
-        });
-        renderSidebar(tags);
         this.setState((prevState) => ({
           eids: prevState.eids.concat(data.eid),
           entries,
@@ -289,13 +283,16 @@ class Entries extends React.Component {
         // update recommended
         this.fetchRecommended();
       })
+      .then(() => {
+        renderSidebar();
+      })
       .catch((error) => console.log(error));
     console.log(username);
   }
 
   // delete an entry
   deleteEntry(entryid) {
-    const { resumeid } = this.state;
+    const { resumeid, renderSidebar } = this.state;
 
     fetch(`/api/v1/entry/${resumeid}/${entryid}/`, {
       credentials: 'same-origin',
@@ -315,10 +312,7 @@ class Entries extends React.Component {
       });
     }).then(() => {
       // remove tags if necessary
-      const tags = this.uniqueTags();
-      const { renderSidebar } = this.state;
-      renderSidebar(tags);
-      this.setState({ tags });
+      renderSidebar();
     }).then(() => {
       // update recommended
       this.fetchRecommended();
@@ -420,10 +414,8 @@ class Entries extends React.Component {
       })
       .then(() => {
         // remove tags if necessary & render sidebar
-        const tags = this.uniqueTags();
         const { renderSidebar } = this.state;
-        renderSidebar(tags);
-        this.setState({ tags });
+        renderSidebar();
       })
       .catch((error) => console.log(error));
   }
@@ -454,20 +446,6 @@ class Entries extends React.Component {
       if (!response.ok) throw Error(response.statusText);
     })
       .catch((error) => console.log(error));
-  }
-
-  uniqueTags() {
-    const { entries, tags } = this.state;
-    const tagSet = [];
-    Object.keys(entries).forEach((entryid) => {
-      const entrytags = entries[entryid].tags;
-      entrytags.forEach((tag) => {
-        if (!(tag in tags)) {
-          tagSet.push(tag.tagname);
-        }
-      });
-    });
-    return tagSet;
   }
 
   // display the top n recommended entries
