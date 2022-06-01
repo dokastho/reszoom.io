@@ -104,6 +104,8 @@ class Entries extends React.Component {
     // fetch recommended entries
     this.fetchRecommended();
 
+    const { tags } = this.uniqueTags();
+
     // set state
     this.setState({
       eids,
@@ -113,6 +115,7 @@ class Entries extends React.Component {
       resumeid,
       isEntries,
       parent,
+      tags,
       renderSidebar,
     });
 
