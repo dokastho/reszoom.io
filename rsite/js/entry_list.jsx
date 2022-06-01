@@ -114,6 +114,10 @@ class Entries extends React.Component {
       isEntries,
       parent,
       renderSidebar,
+    }).then(() => {
+      const { tags } = this.uniqueTags();
+      renderSidebar(tags);
+      this.setState({ tags });
     });
 
     console.log('mount');
@@ -461,11 +465,14 @@ class Entries extends React.Component {
     const tagSet = [];
     Object.keys(entries).forEach((entryid) => {
       const entrytags = entries[entryid].tags;
-      entrytags.forEach((tag) => {
-        if (!(tag in tags)) {
-          tagSet.push(tag.tagname);
-        }
-      });
+      if ('tags' in entries[entryid]) {
+        // tags only in the entry type
+        entrytags.forEach((tag) => {
+          if (!(tag in tags)) {
+            tagSet.push(tag.tagname);
+          }
+        });
+      }
     });
     return tagSet;
   }
