@@ -10,7 +10,7 @@ URLs include:
 import flask
 import rsite
 from rsite.model import delete_helper, rest_api_auth_user
-from rsite.api.tag_rest import set_tags
+from rsite.api.tag_rest import set_tags, fetch_entry_tags
 from threading import Thread
 
 ###############################################################################
@@ -325,11 +325,12 @@ def do_create(body):
             cur.fetchone()
 
         entryid = newEntryid
-        
+
         # set tags
         # only necessary for new tags that are type entry
         if body['type']:
-            t = Thread(target=set_tags, args=(resumeid, entryid, body['content'],))
+            t = Thread(target=set_tags, args=(
+                resumeid, entryid, body['content'],))
             t.start()
 
     else:
@@ -352,7 +353,7 @@ def do_create(body):
             (resumeid, entryid, logname, )
         )
         cur.fetchone()
-        
+
         # insert resume/id into entry_to_tag
         cur = database.execute(
             "SELECT tagid "
@@ -365,7 +366,7 @@ def do_create(body):
         tagids = [d['tagid'] for d in tagids]
         # just want unique ones, will be duplicates due to one tag being on >1 resume
         tagids = set(tagids)
-        
+
         for tagid in list(tagids):
             cur = database.execute(
                 "INSERT INTO entry_to_tag "
@@ -409,7 +410,8 @@ def do_create(body):
             "end": body['end'],
             "gpa": body['gpa'],
             "title": body['title'],
-            "location": body['location']
+            "location": body['location'],
+            "tags": fetch_entry_tags(entryid)
         }
     }
 
@@ -436,7 +438,7 @@ def do_update(body: dict):
     # entry must be valid
     if oldentry is None:
         flask.abort(400)
-    
+
     # delete existing tags
     # new ones are set below when freq is 1, and in do_create when it's >1
     if body["type"]:
@@ -450,12 +452,13 @@ def do_update(body: dict):
 
     # if freq is 1, just change content, or if we want to update the entry across all entries
     if freq == 1 or body['all']:
-        
+
         if body['type']:
             # set new tags
-            t = Thread(target=set_tags, args=(resumeid, entryid, body['content'],))
+            t = Thread(target=set_tags, args=(
+                resumeid, entryid, body['content'],))
             t.start()
-        
+
         cur = database.execute(
             "UPDATE entries "
             "SET content = ?, "
@@ -495,7 +498,8 @@ def do_update(body: dict):
                 "parent": body['parent'],
                 "owner": logname,
                 "title": body['title'],
-                "location": body['location']
+                "location": body['location'],
+                "tags": fetch_entry_tags(entryid)
             }
         }
 
