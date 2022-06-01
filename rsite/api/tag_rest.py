@@ -12,44 +12,6 @@ import socket
 from rsite.model import rest_api_auth_user, get_db, print_log
 
 
-@rsite.app.route("/api/v1/tags/<int:resumeid>/<int:entryid>/", methods=['GET'])
-def get_entry_tags(resumeid, entryid):
-    """Get the other entries owned by this user for a given header."""
-    """Send: array of recommended entries"""
-
-    if entryid is None:
-        flask.abort(404)
-
-    _, database = rest_api_auth_user()
-
-    # get tagids
-    cur = database.execute(
-        "SELECT * "
-        "FROM entry_to_tag "
-        "WHERE entryid == ? "
-        "AND resumeid == ?",
-        (entryid, resumeid,)
-    )
-    tags = cur.fetchall()
-
-    # construct response
-    # entryid: array of tag name/id pairs
-    data = {
-        "tags": []
-    }
-    for tag in tags:
-        cur = database.execute(
-            "SELECT * "
-            "FROM tags "
-            "WHERE tagid == ? ",
-            (tag['tagid'],)
-        )
-        t = cur.fetchone()
-        data["tags"].append(t)
-
-    return flask.jsonify(data), 201
-
-
 @rsite.app.route("/api/v1/<int:resumeid>/tags/", methods=['GET'])
 def get_resume_tags(resumeid):
     """Return tags for a resume."""
@@ -237,3 +199,39 @@ def fetch_resume_tags(resumeid) -> list:
         tagnames.add(cur.fetchone()['tagname'])
 
     return list(tagnames)
+
+
+def fetch_entry_tags(resumeid, entryid) -> list:
+    """Get the other entries owned by this user for a given header."""
+    """Send: array of recommended entries"""
+
+    if entryid is None:
+        flask.abort(404)
+
+    _, database = rest_api_auth_user()
+
+    # get tagids
+    cur = database.execute(
+        "SELECT * "
+        "FROM entry_to_tag "
+        "WHERE entryid == ? "
+        "AND resumeid == ?",
+        (entryid, resumeid,)
+    )
+    tagids = cur.fetchall()
+
+    # construct response
+    # entryid: array of tag name/id pairs
+    tags = []
+    for tagid in tagids:
+        tagid = tagid['tagid']
+        cur = database.execute(
+            "SELECT * "
+            "FROM tags "
+            "WHERE tagid == ? ",
+            (tagid,)
+        )
+        t = cur.fetchone()
+        tags.append(t["tagname"])
+
+    return tags
