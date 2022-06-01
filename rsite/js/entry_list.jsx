@@ -105,16 +105,19 @@ class Entries extends React.Component {
     this.fetchRecommended();
 
     // set state
-    this.setState({
-      eids,
-      entries,
-      header,
-      username,
-      resumeid,
-      isEntries,
-      parent,
-      renderSidebar,
-    });
+    this.setState(
+      {
+        eids,
+        entries,
+        header,
+        username,
+        resumeid,
+        isEntries,
+        parent,
+        renderSidebar,
+      },
+      renderSidebar(this.uniqueTags()),
+    );
 
     console.log('mount');
     console.log(this);
@@ -461,11 +464,14 @@ class Entries extends React.Component {
     const tagSet = [];
     Object.keys(entries).forEach((entryid) => {
       const entrytags = entries[entryid].tags;
-      entrytags.forEach((tag) => {
-        if (!(tag in tags)) {
-          tagSet.push(tag.tagname);
-        }
-      });
+      if ('tags' in entries[entryid]) {
+        // tags only in the entry type
+        entrytags.forEach((tag) => {
+          if (!(tag in tags)) {
+            tagSet.push(tag.tagname);
+          }
+        });
+      }
     });
     return tagSet;
   }
