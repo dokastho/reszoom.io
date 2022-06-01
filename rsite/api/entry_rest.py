@@ -360,10 +360,13 @@ def do_create(body):
             "WHERE entryid == ?",
             (entryid, )
         )
+        tagids: dict
         tagids = cur.fetchall()
+        tagids = [d['tagid'] for d in tagids]
+        # just want unique ones, will be duplicates due to one tag being on >1 resume
+        tagids = set(tagids)
         
-        for tagid in tagids:
-            tagid = tagid['tagid']
+        for tagid in list(tagids):
             cur = database.execute(
                 "INSERT INTO entry_to_tag "
                 "(entryid, resumeid, tagid) "
