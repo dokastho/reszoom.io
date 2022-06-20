@@ -180,7 +180,7 @@ class ResumeBuilder extends React.Component {
       tags,
     } = this.state;
 
-    for (let index = 0; index < sectionTags.length; index++) {
+    for (let index = 0; index < sectionTags.length; index+= 1) {
       const tag = sectionTags[index];
       tags.push(tag);
     }
