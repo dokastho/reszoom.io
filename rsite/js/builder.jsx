@@ -177,13 +177,13 @@ class ResumeBuilder extends React.Component {
       desc,
       username,
       filename,
-      tags,
+      // tags,
     } = this.state;
 
-    for (let index = 0; index < sectionTags.length; index++) {
-      const tag = sectionTags[index];
-      tags.push(tag);
-    }
+    // for (let index = 0; index < sectionTags.length; index += 1) {
+    //   const tag = sectionTags[index];
+    //   tags.push(tag);
+    // }
 
     // const tags = this.uniqueTags();
     const sidebar = document.getElementById('floating-sidebar');

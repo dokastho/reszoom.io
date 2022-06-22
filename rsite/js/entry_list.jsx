@@ -348,7 +348,7 @@ class Entries extends React.Component {
       subFetched,
       isEntries,
       renderSidebar,
-      tags,
+      // tags,
     } = this.state;
     let { stagedEntries } = this.state;
 
