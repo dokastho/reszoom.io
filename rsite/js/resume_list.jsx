@@ -28,8 +28,8 @@ class ResumeList extends React.Component {
                 </button>
               </form>
             ) : (
-              <div>
-                <div className="list-header">
+              <table>
+                <th>
                   <div>Name</div>
                   <div className="spacer" />
                   <div>Desc</div>
@@ -37,36 +37,34 @@ class ResumeList extends React.Component {
                   <div>Tags</div>
                   <div className="spacer" />
                   <div>Date</div>
-                </div>
-                <hr />
+                </th>
                 {resumes.map((r) => (
-                  <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
-                    <button type="submit" className="resume-link" background-color="white">
-                      <div className="header">
-                        {r.name}
-                      </div>
-                      <div className="spacer" />
-                      <div className="header">
-                        {r.description === null ? null
-                          : <EllipsisText text={r.description} length={32} />}
-                      </div>
-                      <div className="spacer" />
-                      <div className="header">
-                        {
-                          // RENDER TAGS
-                          r.tags.map((t) => (
-                            <div className="tag" key={t}>{t}</div>
-                          ))
-                        }
-                      </div>
-                      <div className="spacer" />
-                      <div className="header">
-                        {Moment(r.created).format('d MMM yy')}
-                      </div>
-                    </button>
-                  </form>
+                  <tr>
+                    <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
+                      <button type="submit" className="resume-link" background-color="white">
+                        <td className="header">
+                          {r.name}
+                        </td>
+                        <td className="header">
+                          {r.description === null ? null
+                            : <EllipsisText text={r.description} length={32} />}
+                        </td>
+                        <td className="header">
+                          {
+                            // RENDER TAGS
+                            r.tags.map((t) => (
+                              <div className="tag" key={t}>{t}</div>
+                            ))
+                          }
+                        </td>
+                        <td className="header">
+                          {Moment(r.created).format('d MMM yy')}
+                        </td>
+                      </button>
+                    </form>
+                  </tr>
                 ))}
-              </div>
+              </table>
             )
         }
       </div>
