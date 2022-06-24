@@ -71,11 +71,13 @@
 - [x] bug: editing info header without changes makes children disappear until reload
 - [ ] reload page periodically to update tags
 - [x] update tags in sidebar without refresh
-- [ ] issue: tags in sidebar overwritten by later loads
-    * fix: streamline how tags are handled by code. pass them as member to entries
-      * this reduces number of fetches greatly, and makes it easier to update sidebar
-      * will have to pretty comprehensively change up entry_list code
-      * maybe do the same with recommended if it's not like that already
+- [ ] ~~issue: tags in sidebar overwritten by later loads~~
+    * ~~fix: streamline how tags are handled by code. pass them as member to entries~~
+      * ~~this reduces number of fetches greatly, and makes it easier to update sidebar~~
+      * ~~will have to pretty comprehensively change up entry_list code~~
+      * ~~maybe do the same with recommended if it's not like that already~~
+- [ ] add print button for resume
+- [ ] make resume list an hmtl table
 
 - [ ] home page
 - [x] account settings page
