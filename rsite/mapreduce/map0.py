@@ -4,11 +4,12 @@
 import sys
 import csv
 import re
+from variable import HADOOP_ROOT
 
 
 def main():
     """Do mayne func."""
-    stopwords = open("stopwords.txt", 'r')
+    stopwords = open(str(HADOOP_ROOT/"stopwords.txt"), 'r')
     stopwords = stopwords.readlines()
     stopwords = [word.rstrip('\n') for word in stopwords]
 
