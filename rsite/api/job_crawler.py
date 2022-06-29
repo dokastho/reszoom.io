@@ -60,7 +60,7 @@ driver = webdriver.Chrome(
 # list of links
 links = []
 
-captcha = False
+CAPTCHA = False
 
 
 def print_atomic(s: str):
@@ -70,10 +70,12 @@ def print_atomic(s: str):
 
 def hCaptcha_print():
     print_lock.acquire()
-    if captcha:
+    global CAPTCHA
+    if CAPTCHA:
         print('.', end='')
     else:
         print('hCaptcha triggered. Try again later', end='')
+        CAPTCHA = True
     print_lock.release()
     
 
@@ -82,9 +84,13 @@ def scrape_link(job_name, link, i):
     # get desc from each job
     driver_lock.acquire()
     driver.get(link)
-    desc = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
-    driver_lock.release()
+    try:
+        desc = driver.find_element_by_xpath('//div[@id="jobDescriptionText"]').text
+    except:
+        driver_lock.release()
+        return
 
+    driver_lock.release()
     job_pair = f'{job_name},{desc}'
     desc_append.acquire()
     descriptions.append(job_pair)
@@ -136,17 +142,25 @@ def scrape_jobs(job_name):
     
     element_list = job_cards.find_elements_by_tag_name("li")
 
-    for i, job in enumerate(element_list):
+    for job in element_list:
         # get link to each job
-        if i >= 100:
-            break
         links.append(job.find_element_by_xpath('//a[@class="jcs-JobTitle"]  ').get_attribute(name="href"))
     driver_lock.release()
 
     # get each description
     for i, link in enumerate(links):
-        print_atomic("\tScraping link " + link + ", " + f'{i} of {len(links)}')
-        t = Thread(target=scrape_link, args=(job_name, link, i + 1, ))
+        # don't spawn more than k threads
+        if i >= 100:
+            break
+        
+        # ellipsis if link is too long
+        link_str = link
+        if len(link_str) > 70:
+            link_str = link_str[0:70] + "..."
+
+        print_atomic("\tScraping link " + link_str + ", " + f'{i + 1} of {min(len(links), 100)}')
+
+        t = Thread(target=scrape_link, args=(job_name, link, i, ))
         t.start()
         threads.append(t)
 
