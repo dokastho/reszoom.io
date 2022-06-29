@@ -41,6 +41,7 @@ threads = []
 # console.
 options = webdriver.chrome.options.Options()
 options.add_argument("--headless")
+options.add_argument("--disable-blink-features=AutomationControlled")
 
 # chromedriver is not in the PATH, so we need to provide selenium with
 # a full path to the executable.
@@ -91,7 +92,12 @@ def scrape_link(job_name, link, i):
         return
 
     driver_lock.release()
+    
+    # remove commas from the description to prep csv format
+    desc = desc.replace(',', '')
     job_pair = f'{job_name},{desc}'
+    
+    # atomic append to data structure
     desc_append.acquire()
     descriptions.append(job_pair)
     desc_append.release()
@@ -183,6 +189,10 @@ def main():
     for t in threads:
         t.join()
 
+    if CAPTCHA:
+        # print a newline
+        print("")
+
     with open(str(MAPREDUCE_FOLDER/"input.txt"), "w") as fp:
         # write output
         fp.writelines(descriptions)
@@ -190,5 +200,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-'<html lang="en"><head>\n<title>hCaptcha solve page</title>\n<script src="https://www.hcaptcha.com/1/api.js" async="" defer=""></script>\n</head>\n<body>\n<form action="/jobs?q=data%20scientist&amp;l=Ann%20Arbor,%20MI&amp;from=searchOnHP" method="POST">\n<div class="h-captcha" data-sitekey="eb27f525-f936-43b4-91e2-95a426d4a8bd"><iframe src="https://newassets.hcaptcha.com/captcha/v1/51c8a75/static/hcaptcha.html#frame=checkbox&amp;id=06rgfaecencs&amp;host=www.indeed.com&amp;sentry=true&amp;reportapi=https%3A%2F%2Faccounts.hcaptcha.com&amp;recaptchacompat=true&amp;custom=false&amp;hl=en&amp;tplinks=on&amp;sitekey=eb27f525-f936-43b4-91e2-95a426d4a8bd&amp;theme=light" title="widget containing checkbox for hCaptcha security challenge" tabindex="0" frameborder="0" scrolling="no" data-hcaptcha-widget-id="06rgfaecencs" data-hcaptcha-response="" style="width: 303px; height: 78px; overflow: hidden;"></iframe><textarea id="g-recaptcha-response-06rgfaecencs" name="g-recaptcha-response" style="display: none;"></textarea><textarea id="h-captcha-response-06rgfaecencs" name="h-captcha-response" style="display: none;"></textarea></div>\n<br>\n<input type="submit" value="Submit">\n</form>\n\n\n<div aria-hidden="true" style="background-color: rgb(255, 255, 255); border: 1px solid rgb(215, 215, 215); box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 4px; border-radius: 4px; left: -10000px; top: -10000px; z-index: -2147483648; position: absolute; transition: opacity 0.15s ease-out 0s; opacity: 0; visibility: hidden;"><div style="position: relative; z-index: 1;"><iframe src="https://newassets.hcaptcha.com/captcha/v1/51c8a75/static/hcaptcha.html#frame=challenge&amp;id=06rgfaecencs&amp;host=www.indeed.com&amp;sentry=true&amp;reportapi=https%3A%2F%2Faccounts.hcaptcha.com&amp;recaptchacompat=true&amp;custom=false&amp;hl=en&amp;tplinks=on&amp;sitekey=eb27f525-f936-43b4-91e2-95a426d4a8bd&amp;theme=light" title="Main content of the hCaptcha challenge" frameborder="0" scrolling="no" style="border: 0px; z-index: 2000000000; position: relative;"></iframe></div><div style="width: 100%; height: 100%; position: fixed; pointer-events: none; top: 0px; left: 0px; z-index: 0; background-color: rgb(255, 255, 255); opacity: 0.05;"></div><div style="border-width: 11px; position: absolute; pointer-events: none; margin-top: -11px; z-index: 1; right: 100%;"><div style="border-width: 10px; border-style: solid; border-color: transparent rgb(255, 255, 255) transparent transparent; position: relative; top: 10px; z-index: 1;"></div><div style="border-width: 11px; border-style: solid; border-color: transparent rgb(215, 215, 215) transparent transparent; position: relative; top: -11px; z-index: 0;"></div></div></div></body></html>'
