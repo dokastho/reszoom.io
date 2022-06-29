@@ -20,8 +20,8 @@ def main():
 
     for row in reader:
         # clean file data
-        line = row['job_name'] + ' ' + row['job_desc']
-
+        line = row['doc_title'] + ' ' + row['doc_body']
+        
         # tolower, remove numbers
         line = re.sub(r"[^a-zA-Z0-9 ]+", "", line)
 
@@ -36,7 +36,7 @@ def main():
                 cleaned.append(term)
 
         for term in cleaned:
-            output = f'{row["job_name"]}\t{term}'
+            output = f'{term}\t{row["doc_id"]}'
             print(output)
 
 

@@ -124,18 +124,6 @@ def scrape_jobs(job_name):
         hCaptcha_print()
         driver_lock.release()
         return
-        # driver.implicitly_wait(3)
-        # # click captcha
-        # anchor = driver.find_element_by_xpath('//div[@id="anchor"]')
-        # captcha = anchor.find_element_by_xpath('//div[@id="checkbox"]')
-        # captcha.click()
-        
-        # driver.implicitly_wait(3)
-        
-        # # submit
-        # submit_btn = driver.find_element_by_xpath('//input[@type="submit"]')
-        # submit_btn.click()
-        
 
     # get job cards if the search is not empty
     try:

@@ -1,5 +1,5 @@
-#!/bin/python3
-
+#!/usr/bin/env python3
+"""Receive name-word pairs, reduce by frequency of word."""
 import sys
 import itertools
 
@@ -14,9 +14,17 @@ import itertools
 
 def reduce_one_group(key, group):
     """Reduce one group."""
-
-    # pipe output
-    # print()
+    words = {}
+        
+    for word in group:
+        # print label-word for each word in desc
+        if word not in words.keys():
+            words[word] = 0
+        words[word]+=1
+    
+    for word in words.keys():
+        # print word-job title-frequency
+        print(f'{word}\t{key}\t{words[word]}')
 
 
 def keyfunc(line):
@@ -32,3 +40,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
