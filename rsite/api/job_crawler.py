@@ -17,13 +17,16 @@ APPLICATION_ROOT = Path(__file__).resolve().parent.parent.parent
 JOBS = APPLICATION_ROOT/"jobs.txt"
 
 # output folder to save results to
-MAPREDUCE_FOLDER = Path(__file__).resolve().parent/"mapreduce"/"input"
+MAPREDUCE_FOLDER = Path(__file__).resolve().parent.parent/"mapreduce"/"input"
 
 # lock for appending to descriptions
 desc_append = Lock()
 
 # lock for accessing the driver
 driver_lock = Lock()
+
+# lock for printing
+print_lock = Lock()
 
 # list of title-desc pairs
 descriptions = []
@@ -57,6 +60,22 @@ driver = webdriver.Chrome(
 # list of links
 links = []
 
+captcha = False
+
+
+def print_atomic(s: str):
+    print_lock.acquire()
+    print(s)
+    print_lock.release()
+
+def hCaptcha_print():
+    print_lock.acquire()
+    if captcha:
+        print('.', end='')
+    else:
+        print('hCaptcha triggered. Try again later', end='')
+    print_lock.release()
+    
 
 def scrape_link(job_name, link, i):
 
@@ -90,17 +109,20 @@ def scrape_jobs(job_name):
     search_job.submit()
 
     if driver.title == "hCaptcha solve page":
-        driver.implicitly_wait(3)
-        # click captcha
-        anchor = driver.find_element_by_xpath('//div[@id="anchor"]')
-        captcha = anchor.find_element_by_xpath('//div[@id="checkbox"]')
-        captcha.click()
+        hCaptcha_print()
+        driver_lock.release()
+        return
+        # driver.implicitly_wait(3)
+        # # click captcha
+        # anchor = driver.find_element_by_xpath('//div[@id="anchor"]')
+        # captcha = anchor.find_element_by_xpath('//div[@id="checkbox"]')
+        # captcha.click()
         
-        driver.implicitly_wait(3)
+        # driver.implicitly_wait(3)
         
-        # submit
-        submit_btn = driver.find_element_by_xpath('//input[@type="submit"]')
-        submit_btn.click()
+        # # submit
+        # submit_btn = driver.find_element_by_xpath('//input[@type="submit"]')
+        # submit_btn.click()
         
 
     # get job cards if the search is not empty
@@ -108,19 +130,22 @@ def scrape_jobs(job_name):
         job_cards = driver.find_element_by_xpath('//ul[contains(@class,"jobsearch-ResultsList")]')
         
     except:
-        print("No search results for job " + job_name)
+        print_atomic("No search results for job " + job_name)
+        driver_lock.release()
         return
     
     element_list = job_cards.find_elements_by_tag_name("li")
 
-    for job in element_list:
+    for i, job in enumerate(element_list):
         # get link to each job
+        if i >= 100:
+            break
         links.append(job.find_element_by_xpath('//a[@class="jcs-JobTitle"]  ').get_attribute(name="href"))
     driver_lock.release()
 
     # get each description
     for i, link in enumerate(links):
-        print("\tScraping link " + link + ", " + f'{i} of {len(links)}')
+        print_atomic("\tScraping link " + link + ", " + f'{i} of {len(links)}')
         t = Thread(target=scrape_link, args=(job_name, link, i + 1, ))
         t.start()
         threads.append(t)
@@ -134,7 +159,7 @@ def main():
 
     # loop through job titles
     for job_name in job_list:
-        print("Searching for job " + job_name + "...")
+        print_atomic("Searching for job " + job_name + "...")
         
         t = Thread(target=scrape_jobs, args=(job_name, ))
         t.start()
@@ -144,7 +169,7 @@ def main():
     for t in threads:
         t.join()
 
-    with open(MAPREDUCE_FOLDER/"input.txt", "w") as fp:
+    with open(str(MAPREDUCE_FOLDER/"input.txt"), "w") as fp:
         # write output
         fp.writelines(descriptions)
 
