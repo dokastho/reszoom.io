@@ -1,3 +1,5 @@
+Data Scientist
+Backend Engineer
 Video Game Designer
 SQA Engineer
 Cyber Security Engineer
@@ -10,9 +12,7 @@ Software Development Engineer
 Mobile Engineer
 Cloud Engineer
 Mobile Developer
-Data Scientist
 Development Operations Engineer
-Backend Engineer
 Software Engineering Lead
 Application Security Engineer
 Data Engineer
