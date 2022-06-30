@@ -15,10 +15,11 @@ import itertools
 def reduce_one_group(key, group):
     """Reduce one group."""
     
+    # breakpoint()    
     # word, followed by list of labels & frequency
     label_string = '\t'.join(group)
-    line = f'{key}\t{label_string}'
-    print(line)
+    label_string = label_string.strip()
+    print(label_string)
 
 
 def keyfunc(line):
@@ -28,6 +29,11 @@ def keyfunc(line):
 
 def main():
     """Divide sorted lines into groups that share a key."""
+    
+    # lines = sys.stdin.readlines()  # Temporary addition
+    # sys.stdin = open("/dev/tty")  # Temporary addition
+    
+    # for key,group in itertools.groupby(lines, keyfunc):
     for key, group in itertools.groupby(sys.stdin, keyfunc):
         reduce_one_group(key, group)
 

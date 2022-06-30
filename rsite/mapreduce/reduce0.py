@@ -15,13 +15,14 @@ import itertools
 def reduce_one_group(key, group):
     """Reduce one group."""
     words = {}
-        
-    for word in group:
+    
+    for line in group:
+        word = line.split('\t')[1].strip()
         # print label-word for each word in desc
         if word not in words.keys():
             words[word] = 0
         words[word]+=1
-    
+
     for word in words.keys():
         # print word-job title-frequency
         print(f'{word}\t{key}\t{words[word]}')
