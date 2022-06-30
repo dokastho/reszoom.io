@@ -3,4 +3,4 @@ env
 __pycache__
 node_modules
 *.log
-input.txt
+# input.txt
