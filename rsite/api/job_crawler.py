@@ -58,8 +58,6 @@ driver = webdriver.Chrome(
     options=options,
     executable_path=str(chromedriver_path),
 )
-# list of links
-links = []
 
 CAPTCHA = False
 
@@ -127,18 +125,19 @@ def scrape_jobs(job_name):
 
     # get job cards if the search is not empty
     try:
-        job_cards = driver.find_element_by_xpath('//ul[contains(@class,"jobsearch-ResultsList")]')
+        job_cards = driver.find_elements_by_xpath('//a[@class="jcs-JobTitle"]')
         
     except:
         print_atomic("No search results for job " + job_name)
         driver_lock.release()
         return
     
-    element_list = job_cards.find_elements_by_tag_name("li")
+    # list of links
+    links = []
 
-    for job in element_list:
+    for job in job_cards:
         # get link to each job
-        links.append(job.find_element_by_xpath('//a[@class="jcs-JobTitle"]  ').get_attribute(name="href"))
+        links.append(job.get_attribute(name="href"))
     driver_lock.release()
 
     # get each description
@@ -169,9 +168,10 @@ def main():
     for job_name in job_list:
         print_atomic("Searching for job " + job_name + "...")
         
-        t = Thread(target=scrape_jobs, args=(job_name, ))
-        t.start()
-        threads.append(t)
+        # t = Thread(target=scrape_jobs, args=(job_name, ))
+        # t.start()
+        # threads.append(t)
+        scrape_jobs(job_name)
 
     # join threads
     for t in threads:
@@ -183,7 +183,8 @@ def main():
 
     with open(str(MAPREDUCE_FOLDER/"input.txt"), "w") as fp:
         # write output
-        fp.writelines(descriptions)
+        lines = [x.replace('\n', ' ') for x in descriptions]
+        fp.writelines('\n'.join(lines))
 
 
 if __name__ == "__main__":
