@@ -12,10 +12,11 @@ def main():
     stopwords = open(str(HADOOP_ROOT/"stopwords.txt"), 'r')
     stopwords = stopwords.readlines()
     stopwords = [word.rstrip('\n') for word in stopwords]
-
+    
     csv.field_size_limit(sys.maxsize)
 
     lines = sys.stdin.readlines()
+    # sys.stdin = open("/dev/tty")  # Temporary addition
     fields = ['job_name', 'job_desc']
     reader = csv.DictReader(lines, fieldnames=fields)
 
@@ -33,6 +34,9 @@ def main():
 
         cleaned = []
         for term in terms:
+            nums = re.findall('[0-9]+', term)
+            if len(nums) != 0:
+                continue
             if term not in stopwords:
                 cleaned.append(term)
 
