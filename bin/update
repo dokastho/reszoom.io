@@ -1,5 +1,5 @@
 #!/bin/bash
-# allow tag_serer | mapreduce
+# allow tag_server | mapreduce
 set -Eeuo pipefail
 
 usage() {
@@ -14,13 +14,14 @@ fi
 # Parse argument.  $1 is the first argument
 case $1 in
   "tag_server")
-    
+    make -C rsite/tag_server/ tag_server
+    cp rsite/tag_server/tag_server rsite/api/
     ;;
-
   "mapreduce")
-    
-    ;;
-    done
+    cd rsite/mapreduce/
+    ./pipeline.sh
+    cp output/part-00000 ../tag_server/tag_kb/
+    cd ../../
     ;;
   *)
     usage
