@@ -66,7 +66,7 @@ int init()
         // read files
         std::string tagFile = TAG_LISTS[i];
         std::fstream fp;
-        fp.open("files/" + tagFile + ".tags");
+        fp.open("tag_kb/" + tagFile + ".tags");
 
         if (!fp.is_open())
         {

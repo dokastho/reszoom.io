@@ -15,7 +15,6 @@ fi
 case $1 in
   "tag_server")
     make -C rsite/tag_server/ tag_server
-    cp rsite/tag_server/tag_server rsite/api/
     ;;
   "mapreduce")
     cd rsite/mapreduce/

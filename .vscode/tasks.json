@@ -29,11 +29,8 @@
                 "8888"
             ],
             "options": {
-                "cwd": "${cwd}/rsite/api/"
+                "cwd": "${cwd}/rsite/tag_server/"
             },
-            "dependsOn":[
-                "Make binaries"
-            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
