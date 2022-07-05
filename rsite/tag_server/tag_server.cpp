@@ -15,14 +15,7 @@ std::mutex rcv_msg_lock, cout_lock;
 const unsigned int MAX_MESSAGE_SIZE = 256;
 
 // copy of keywords in memory
-std::map<std::string, std::vector<std::string>> tag_words;
-
-const std::vector<std::string> TAG_LISTS = {
-    "backend",
-    "db",
-    "frontend",
-    "lang",
-    "web"};
+std::map<std::string, std::pair<std::string, unsigned int>> tag_words;
 
 // print with the cout_lock
 void lock_print(const char *str)
@@ -77,7 +70,24 @@ int init()
         std::string line;
         while (getline(fp, line))
         {
-            tag_words[tagFile].push_back(line);
+            std::stringstream linestream(line);
+            std::string word, label, f;
+            int freq;
+
+            // line: term label freq label freq ...
+            linestream >> word;
+
+            // read label first
+            while (linestream >> label)
+            {
+                // read freq
+                linestream >> f;
+                freq = stoi(f);
+
+                // add to map
+                tag_words[word] = { label, freq };
+            }
+            
         }
     }
     return 0;
