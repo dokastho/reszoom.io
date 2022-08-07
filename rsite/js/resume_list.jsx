@@ -37,9 +37,9 @@ class ResumeList extends React.Component {
                   <th>Date</th>
                 </tr>
                 {resumes.map((r) => (
-                  <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
-                    <tr onClick="submit">
-                      <button type="submit" className="resume-link" background-color="white">
+                  // <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
+                    <tr>
+                      {/* <div role="button" tabIndex={0} className="entry-wrapper"> */}
                         <td className="header">
                           {r.name}
                         </td>
@@ -58,9 +58,9 @@ class ResumeList extends React.Component {
                         <td className="header">
                           {Moment(r.created).format('d MMM yy')}
                         </td>
-                      </button>
+                      {/* </div> */}
                     </tr>
-                  </form>
+                  // </form>
                 ))}
               </table>
             )
