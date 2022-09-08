@@ -175,6 +175,23 @@ input[type=month]:focus {
     border: none;
 }
 
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 .long-text {
     width: 98.5%;
     ;
@@ -366,7 +383,7 @@ span.date {
 
 .tag {
     background-color: #b6e3ff;
-    color:#0969da;
+    color: #0969da;
     border-radius: 8px;
     padding-top: 4px;
     padding-bottom: 4px;
