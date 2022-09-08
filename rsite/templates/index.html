@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Site</title>
+        <title>reszoom</title>
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
-        <h1><a href="/">home</a></h1>
-        <h2>
-            <a href="/users/{{logname}}/">{{logname}}</a>
-        </h2>
-        <a href="/resume/">Go to resume builder</a>
-        <div class="bottom-info">
-            share
+        <div class="wrapper">
+            <div id="titlecard" class="titlecard">
+
+            </div>
+            <div id="reactEntry" class="site">
+                <!-- Load JavaScript -->
+                <script type="text/javascript" src="{{ url_for('static', filename='js/main.bundle.js') }}"></script>
+            </div>
         </div>
     </body>
 </html>

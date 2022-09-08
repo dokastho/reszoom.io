@@ -153,39 +153,15 @@ class ResumeBuilder extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  // uniqueTags() {
-  //   const { entries } = this.state;
-  //   const tagSet = [];
-  //   Object.keys(entries).forEach((entryid) => {
-  //     const entrytags = entries[entryid].tags;
-  //     if ('tags' in entries[entryid]) {
-  //       // tags only in the entry type
-  //       entrytags.forEach((tag) => {
-  //         if (!(tag in tagSet)) {
-  //           tagSet.push(tag);
-  //         }
-  //       });
-  //     }
-  //   });
-  //   return tagSet;
-  // }
-
-  renderSidebar(sectionTags) {
+  renderSidebar() {
     const {
       resumetype,
       resumename,
       desc,
       username,
       filename,
-      // tags,
     } = this.state;
 
-    // for (let index = 0; index < sectionTags.length; index += 1) {
-    //   const tag = sectionTags[index];
-    //   tags.push(tag);
-    // }
-
-    // const tags = this.uniqueTags();
     const sidebar = document.getElementById('floating-sidebar');
 
     // construct the custom sidebar content
@@ -211,12 +187,10 @@ class ResumeBuilder extends React.Component {
         pagename={resumename}
         logname={username}
         content={sidebarContent}
-        // tags={tags}
         img={filename}
       />,
       sidebar,
     );
-    // this.setState({ tags });
   }
 
   render() {

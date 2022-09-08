@@ -101,6 +101,15 @@ a.plain:hover {
     margin-right: auto;
 }
 
+.titlecard {
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
 /* forms */
 
 form.create {
@@ -173,6 +182,23 @@ input[type=password]:focus,
 input[type=number]:focus,
 input[type=month]:focus {
     border: none;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
 
 .long-text {
@@ -366,7 +392,7 @@ span.date {
 
 .tag {
     background-color: #b6e3ff;
-    color:#0969da;
+    color: #0969da;
     border-radius: 8px;
     padding-top: 4px;
     padding-bottom: 4px;
