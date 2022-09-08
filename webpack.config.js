@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    main: './rsite/js/resume.jsx',
+    main: './rsite/js/main.jsx',
+    resume: './rsite/js/resume.jsx',
     new: './rsite/js/new_resume.jsx',
     edit: './rsite/js/builder.jsx',
     password: './rsite/js/password.jsx',
