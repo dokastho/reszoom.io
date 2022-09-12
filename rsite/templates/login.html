@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <!-- login.html -->
         <title>reszoom</title>
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
         <div class="center-panel">
-            <h1><a href="/">< home</a></h1>
+            <h1><a href="/">&lt; home</a></h1>
             <div class="resume-name"><h1>Login</h1></div>
-            <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+            <form action="/accounts/?target=/resume/" method="post" enctype="multipart/form-data">
                 {% if badlogin %}
                 <div style="color:red;">Incorrect username/password. Please try again</div>
                 <br />
