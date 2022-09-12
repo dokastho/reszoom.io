@@ -31,33 +31,33 @@ class ResumeList extends React.Component {
               // TODO: table is a wip
               <table>
                 <tr>
-                  <thead>Name</thead>
-                  <thead>Desc</thead>
-                  <thead>Tags</thead>
-                  <thead>Date</thead>
+                  <th>Name</th>
+                  <th>Desc</th>
+                  <th>Tags</th>
+                  <th>Date</th>
                 </tr>
                 {resumes.map((r, id) => (
                   // <form action={`/resume/${r.resumeid}`} key={r.resumeid}>
                   <tr key={id}>
                     {/* <div role="button" tabIndex={0} className="entry-wrapper"> */}
-                    <tbody className="header">
+                    <td className="header">
                       {r.name}
-                    </tbody>
-                    <tbody className="header">
+                    </td>
+                    <td className="header">
                       {r.description === null ? null
                         : <EllipsisText text={r.description} length={32} />}
-                    </tbody>
-                    <tbody className="header">
+                    </td>
+                    <td className="header">
                       {
                         // RENDER TAGS
                         r.tags.map((t) => (
                           <div className="tag" key={t}>{t}</div>
                         ))
                       }
-                    </tbody>
-                    <tbody className="header">
+                    </td>
+                    <td className="header">
                       {Moment(r.created).format('d MMM yy')}
-                    </tbody>
+                    </td>
                     {/* </div> */}
                   </tr>
                   // </form>

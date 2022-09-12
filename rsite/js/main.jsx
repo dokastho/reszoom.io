@@ -13,7 +13,7 @@ class TitleCard extends React.Component {
     return (
       <div>
         <h1>reszoom to work</h1>
-        <h2><a href="/">get started &gt;</a></h2>
+        <h2><a href="/resume/">get started &gt;</a></h2>
       </div>
     );
   }
