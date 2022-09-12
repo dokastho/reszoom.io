@@ -1,4 +1,5 @@
-from pydoc import resolve
+#!/bin/python3
+
 import flask
 import rsite
 
