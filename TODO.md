@@ -84,6 +84,9 @@
   - [ ] add decoration
 - [ ] add code for handling when tag server is down
 - [ ] make tag server rpc more polished
+- [ ] clean up the resume page UX
+- [ ] add true test suite
+- [ ] add deployment pipeline
 - [x] account settings page
 - [x] login page
 - [x] testing! mark done when I feel like it
