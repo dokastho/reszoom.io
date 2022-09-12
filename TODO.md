@@ -80,6 +80,10 @@
 - [ ] make resume list an hmtl table
 
 - [ ] home page
+  - [ ] add movement animation
+  - [ ] add decoration
+- [ ] add code for handling when tag server is down
+- [ ] make tag server rpc more polished
 - [x] account settings page
 - [x] login page
 - [x] testing! mark done when I feel like it

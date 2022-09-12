@@ -41,14 +41,14 @@ class ResumeList extends React.Component {
                   // eslint-disable-next-line react/no-array-index-key
                   <tr key={id}>
                     {/* <div role="button" tabIndex={0} className="entry-wrapper"> */}
-                    <td className="header">
-                      {r.name}
+                    <td>
+                      <a href={`/resume/${r.resumeid}`}>{r.name}</a>
                     </td>
-                    <td className="header">
+                    <td>
                       {r.description === null ? null
                         : <EllipsisText text={r.description} length={32} />}
                     </td>
-                    <td className="header">
+                    <td>
                       {
                         // RENDER TAGS
                         r.tags.map((t) => (
@@ -56,7 +56,7 @@ class ResumeList extends React.Component {
                         ))
                       }
                     </td>
-                    <td className="header">
+                    <td>
                       {Moment(r.created).format('d MMM yy')}
                     </td>
                     {/* </div> */}
