@@ -135,11 +135,8 @@ int handle_connection(int connectionfd)
     
     t.assign_tags();
 
-    // connect to dest and exit if not able to connect
-    if (t.connect_dest())
-    {
-        return 0;
-    }
+    // connect to dest
+    while (!t.connect_dest());
     
 
     int send_sock = t.get_dest_sock();

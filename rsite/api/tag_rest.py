@@ -84,12 +84,13 @@ def set_tags(resumeid, entryid, content: str):
         # send msg
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as send_sock:
 
-            # attempt to establish connection with tag server
-            try:
-                send_sock.connect((server_host, server_port))
-            except:
-                print_log("Failed to connect to tag server", "ERROR")
-                return
+            # persistently attempt to establish connection with tag server
+            while True:
+                try:
+                    send_sock.connect((server_host, server_port))
+                    break
+                except:
+                    continue
 
             # register with manager
             send_sock.sendall(msg.encode('utf-8'),)
@@ -111,7 +112,7 @@ def set_tags(resumeid, entryid, content: str):
                     if not data:
                         break
                     message_chunks.append(data)
-            # Decode list-of-byte-strings to UTF8 and parse JSON data
+            # Decode list-of-byte-strings to UTF8 and parse
             message_bytes = b''.join(message_chunks)
             message_decode = message_bytes.decode("utf-8")
 
