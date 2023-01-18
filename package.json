@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "rsite front end",
   "main": "rsite/js/resume.jsx",
-  "author": "awdeorio",
+  "author": "dokastho",
   "license": "MIT",
   "repository": {},
   "devDependencies": {

@@ -7,3 +7,4 @@ node_modules
 part-*
 temp*
 *.sqlite3
+var/*
